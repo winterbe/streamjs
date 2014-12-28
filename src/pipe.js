@@ -1,7 +1,8 @@
 (function (window) {
     "use strict";
 
-    var eop = "END_OF_PIPE";
+    var eop = "END_OF_PIPE",
+        ctx = {};
 
     var Operation = function (fn) {
         this.fn = fn;
@@ -57,56 +58,78 @@
             return ops[ops.length - 1].advance();
         };
 
-        // default op
+        // default op just iterates over original array
         this.add(new Operation(function (arg) {
             return [arg];
         }));
         ops[0].buffer = array.slice();
-    };
 
-    var Pipe = function (array) {
-        var pipeline = new Pipeline(array);
-        var that = this;
+
+
+        //
+        // intermediate operations
+        //
 
         this.filter = function (fn) {
-            pipeline.add(new Operation(function (arg) {
-                var filtered = fn.call({}, arg);
+            this.add(new Operation(function (arg) {
+                var filtered = fn.call(ctx, arg);
                 if (filtered) {
                     return [arg];
                 } else {
                     return [];
                 }
             }));
-            return that;
+            return this;
         };
 
         this.map = function (fn) {
-            pipeline.add(new Operation(function (arg) {
-                var transformed = fn.call({}, arg);
+            this.add(new Operation(function (arg) {
+                var transformed = fn.call(ctx, arg);
                 return [transformed];
             }));
-            return that;
+            return this;
         };
 
         this.flatMap = function (fn) {
-            pipeline.add(new Operation(function (arg) {
-                return fn.call({}, arg);
+            this.add(new Operation(function (arg) {
+                return fn.call(ctx, arg);
             }));
-            return that;
+            return this;
         };
 
-        this.collect = function () {
+
+        //
+        // terminal operations
+        //
+
+        this.toArray = function () {
             var current;
             var result = [];
-            while ((current = pipeline.next()) !== eop) {
+            while ((current = this.next()) !== eop) {
                 result.push(current);
             }
             return result;
         };
+
+        this.findFirst = function () {
+            return this.next();
+        };
+
+        this.findLast = function () {
+            var data = this.toArray();
+            return data[data.length - 1];
+        };
+
+        this.forEach = function (fn) {
+            var current;
+            while ((current = this.next()) !== eop) {
+                fn.call(ctx, current);
+            }
+        };
     };
 
     window.Stream = function (array) {
-        return new Pipe(array);
+        return new Pipeline(array);
     };
 
 }(window));

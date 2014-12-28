@@ -6,7 +6,7 @@ QUnit.test("map", function (assert) {
             .map(function (num) {
                 return "obj" + num;
             })
-            .collect();
+            .toArray();
 
     assert.equal(result.length, 4);
     assert.equal(result[0], 'obj1');
@@ -23,7 +23,7 @@ QUnit.test("filter", function (assert) {
             .filter(function (num) {
                 return num % 2 === 1;
             })
-            .collect();
+            .toArray();
 
     assert.equal(result.length, 2);
     assert.equal(result[0], 1);
@@ -38,7 +38,7 @@ QUnit.test("flatMap", function (assert) {
             .flatMap(function (num) {
                 return [num, num];
             })
-            .collect();
+            .toArray();
 
     assert.equal(result.length, 6);
     assert.equal(result[0], 1);
@@ -60,7 +60,7 @@ QUnit.test("filter map", function (assert) {
             .map(function (num) {
                 return "obj" + num;
             })
-            .collect();
+            .toArray();
 
     assert.equal(result.length, 2);
     assert.equal(result[0], 'obj1');
@@ -83,7 +83,7 @@ QUnit.test("filter map (correct invocation)", function (assert) {
                 numMap++;
                 return "obj" + num;
             })
-            .collect();
+            .toArray();
 
     assert.equal(result.length, 2);
     assert.equal(result[0], 'obj1');
@@ -92,4 +92,39 @@ QUnit.test("filter map (correct invocation)", function (assert) {
     assert.equal(numMap, 2);
 });
 
+QUnit.test("findFirst", function (assert) {
+    var result =
+        Stream([1, 2, 3, 4])
+            .filter(function (num) {
+                return num % 2 === 0;
+            })
+            .findFirst();
 
+    assert.equal(result, 2);
+});
+
+QUnit.test("findLast", function (assert) {
+    var result =
+        Stream([1, 2, 3, 4])
+            .filter(function (num) {
+                return num % 2 === 1;
+            })
+            .findLast();
+
+    assert.equal(result, 3);
+});
+
+QUnit.test("forEach", function (assert) {
+    var data = [];
+
+    Stream([1, 2, 3, 4])
+        .forEach(function (num) {
+            data.push(num);
+        });
+
+    assert.equal(data.length, 4);
+    assert.equal(data[0], 1);
+    assert.equal(data[1], 2);
+    assert.equal(data[2], 3);
+    assert.equal(data[3], 4);
+});
