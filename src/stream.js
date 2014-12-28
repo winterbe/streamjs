@@ -112,12 +112,17 @@
         };
 
         this.findFirst = function () {
+            // TODO test empty stream
             return this.next();
         };
 
         this.findLast = function () {
-            var data = this.toArray();
-            return data[data.length - 1];
+            // TODO test empty stream
+            var current, last;
+            while ((current = this.next()) !== eop) {
+                last = current;
+            }
+            return last;
         };
 
         this.forEach = function (fn) {
@@ -125,6 +130,61 @@
             while ((current = this.next()) !== eop) {
                 fn.call(ctx, current);
             }
+        };
+
+        this.min = function () {
+            var result = null;
+            var current;
+            while ((current = this.next()) !== eop) {
+                if (result === null || current < result) {
+                    result = current;
+                }
+            }
+            return result;
+        };
+
+        this.max = function () {
+            var result = null;
+            var current;
+            while ((current = this.next()) !== eop) {
+                if (result === null || current > result) {
+                    result = current;
+                }
+            }
+            return result;
+        };
+
+        this.allMatch = function (fn) {
+            var current;
+            while ((current = this.next()) !== eop) {
+                var match = fn.call(ctx, current);
+                if (!match) {
+                    return false;
+                }
+            }
+            return true;
+        };
+
+        this.anyMatch = function (fn) {
+            var current;
+            while ((current = this.next()) !== eop) {
+                var match = fn.call(ctx, current);
+                if (match) {
+                    return true;
+                }
+            }
+            return false;
+        };
+
+        this.noneMatch = function (fn) {
+            var current;
+            while ((current = this.next()) !== eop) {
+                var match = fn.call(ctx, current);
+                if (match) {
+                    return false;
+                }
+            }
+            return true;
         };
     };
 

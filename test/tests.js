@@ -128,3 +128,61 @@ QUnit.test("forEach", function (assert) {
     assert.equal(data[2], 3);
     assert.equal(data[3], 4);
 });
+
+QUnit.test("min", function (assert) {
+    var result = Stream([1, 2, 3, 4]).min();
+    assert.equal(result, 1);
+});
+
+QUnit.test("max", function (assert) {
+    var result = Stream([1, 2, 3, 4]).max();
+    assert.equal(result, 4);
+});
+
+QUnit.test("allMatch true", function (assert) {
+    var result = Stream([1, 2, 3, 4])
+        .allMatch(function (num) {
+            return num > 0;
+        });
+    assert.equal(result, true);
+});
+
+QUnit.test("allMatch false", function (assert) {
+    var result = Stream([1, 2, 3, 4])
+        .allMatch(function (num) {
+            return num > 1;
+        });
+    assert.equal(result, false);
+});
+
+QUnit.test("anyMatch true", function (assert) {
+    var result = Stream([1, 2, 3, 4])
+        .anyMatch(function (num) {
+            return num === 4;
+        });
+    assert.equal(result, true);
+});
+
+QUnit.test("anyMatch false", function (assert) {
+    var result = Stream([1, 2, 3, 4])
+        .anyMatch(function (num) {
+            return num === 5;
+        });
+    assert.equal(result, false);
+});
+
+QUnit.test("noneMatch true", function (assert) {
+    var result = Stream([1, 2, 3, 4])
+        .noneMatch(function (num) {
+            return num < 0;
+        });
+    assert.equal(result, true);
+});
+
+QUnit.test("noneMatch false", function (assert) {
+    var result = Stream([1, 2, 3, 4])
+        .noneMatch(function (num) {
+            return num > 3;
+        });
+    assert.equal(result, false);
+});
