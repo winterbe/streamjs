@@ -4,7 +4,41 @@
     var eop = "END_OF_PIPE",
         ctx = {};
 
-    var Operation = function (fn) {
+    var StatefulOp = function (fn) {
+        this.fn = fn;
+        this.buffer = null;
+
+        this.prev = null;
+        this.next = null;
+
+        this.advance = function () {
+            var obj;
+            if (this.buffer === null) {
+                this.buffer = [];
+                while ((obj = this.prev.advance()) !== eop) {
+                    // obj will be piped into buffer
+                }
+                this.fn.call(ctx, this.buffer);
+            }
+
+            if (this.buffer.length === 0) {
+                return eop;
+            }
+
+            obj = this.buffer.shift();
+            if (this.next != null) {
+                return this.next.pipe(obj);
+            }
+
+            return obj;
+        };
+
+        this.pipe = function (obj) {
+            this.buffer.push(obj);
+        };
+    };
+
+    var StatelessOp = function (fn) {
         this.fn = fn;
         this.buffer = [];
 
@@ -59,7 +93,7 @@
         };
 
         // default op just iterates over original array
-        this.add(new Operation(function (arg) {
+        this.add(new StatelessOp(function (arg) {
             return [arg];
         }));
         ops[0].buffer = array.slice();
@@ -71,7 +105,7 @@
         //
 
         this.filter = function (fn) {
-            this.add(new Operation(function (arg) {
+            this.add(new StatelessOp(function (arg) {
                 var filtered = fn.call(ctx, arg);
                 if (filtered) {
                     return [arg];
@@ -83,7 +117,7 @@
         };
 
         this.map = function (fn) {
-            this.add(new Operation(function (arg) {
+            this.add(new StatelessOp(function (arg) {
                 var transformed = fn.call(ctx, arg);
                 return [transformed];
             }));
@@ -91,8 +125,15 @@
         };
 
         this.flatMap = function (fn) {
-            this.add(new Operation(function (arg) {
+            this.add(new StatelessOp(function (arg) {
                 return fn.call(ctx, arg);
+            }));
+            return this;
+        };
+
+        this.sorted = function (comparator) {
+            this.add(new StatefulOp(function (array) {
+                array.sort(comparator);
             }));
             return this;
         };
