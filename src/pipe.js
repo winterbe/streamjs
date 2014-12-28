@@ -64,7 +64,7 @@
         ops[0].buffer = array.slice();
     };
 
-    window.Pipe = function (array) {
+    var Pipe = function (array) {
         var pipeline = new Pipeline(array);
         var that = this;
 
@@ -103,6 +103,10 @@
             }
             return result;
         };
+    };
+
+    window.Stream = function (array) {
+        return new Pipe(array);
     };
 
 }(window));
