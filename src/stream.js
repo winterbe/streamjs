@@ -238,8 +238,22 @@
         };
     };
 
-    window.Stream = function (array) {
+    var Stream = function (array) {
         return new Pipeline(array);
     };
+
+    Stream.range = function (startInclusive, endExclusive) {
+        var array = [];
+        for (var i = startInclusive; i < endExclusive; i++) {
+            array.push(i);
+        }
+        return Stream(array);
+    };
+
+    Stream.rangeClosed = function (startInclusive, endInclusive) {
+        return Stream.range(startInclusive, endInclusive + 1);
+    };
+
+    window.Stream = Stream;
 
 }(window));

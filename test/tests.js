@@ -232,3 +232,22 @@ QUnit.test("collect", function (assert) {
 
     assert.equal(result, "Data: 1 2 3 4 !");
 });
+
+QUnit.test("range", function (assert) {
+    var result = Stream.range(0, 4).toArray();
+    assert.equal(result.length, 4);
+    assert.equal(result[0], 0);
+    assert.equal(result[1], 1);
+    assert.equal(result[2], 2);
+    assert.equal(result[3], 3);
+});
+
+QUnit.test("rangeClosed", function (assert) {
+    var result = Stream.rangeClosed(0, 4).toArray();
+    assert.equal(result.length, 5);
+    assert.equal(result[0], 0);
+    assert.equal(result[1], 1);
+    assert.equal(result[2], 2);
+    assert.equal(result[3], 3);
+    assert.equal(result[4], 4);
+});
