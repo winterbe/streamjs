@@ -227,6 +227,15 @@
             }
             return true;
         };
+
+        this.collect = function (collector) {
+            var subject = collector.supplier.call(ctx);
+            var current;
+            while ((current = this.next()) !== eop) {
+                subject = collector.accumulator.call(ctx, subject, current);
+            }
+            return collector.finisher.call(ctx, subject);
+        };
     };
 
     window.Stream = function (array) {
