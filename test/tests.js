@@ -221,6 +221,28 @@ QUnit.test("sorted (comparator)", function (assert) {
     assert.equal(result[3], 1);
 });
 
+QUnit.test("skip", function (assert) {
+    var result =
+        Stream([1, 2, 3, 4])
+            .skip(2)
+            .toArray();
+
+    assert.equal(result.length, 2);
+    assert.equal(result[0], 3);
+    assert.equal(result[1], 4);
+});
+
+QUnit.test("limit", function (assert) {
+    var result =
+        Stream([1, 2, 3, 4])
+            .limit(2)
+            .toArray();
+
+    assert.equal(result.length, 2);
+    assert.equal(result[0], 1);
+    assert.equal(result[1], 2);
+});
+
 QUnit.test("collect", function (assert) {
     var result =
         Stream([1, 2, 3, 4]).collect({

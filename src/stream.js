@@ -4,12 +4,13 @@
     var eop = "END_OF_PIPE",
         ctx = {};
 
-    var StatefulOp = function (fn) {
-        this.fn = fn;
+    var StatefulOp = function (options) {
         this.buffer = null;
 
         this.prev = null;
         this.next = null;
+
+        this.i = 0;
 
         this.advance = function () {
             var obj;
@@ -17,8 +18,17 @@
                 this.buffer = [];
                 while ((obj = this.prev.advance()) !== eop) {
                     // obj will be piped into buffer
+                    this.i++;
+                    if (options.voter) {
+                        var voted = options.voter.call(ctx, obj, this.i);
+                        if (!voted) {
+                            break;
+                        }
+                    }
                 }
-                this.fn.call(ctx, this.buffer);
+                if (options.finisher) {
+                    options.finisher.call(ctx, this.buffer);
+                }
             }
 
             if (this.buffer.length === 0) {
@@ -34,7 +44,13 @@
         };
 
         this.pipe = function (obj) {
-            this.buffer.push(obj);
+            var filtered = true;
+            if (options.filter) {
+                filtered = options.filter.call(ctx, obj, this.i);
+            }
+            if (filtered) {
+                this.buffer.push(obj);
+            }
         };
     };
 
@@ -137,8 +153,28 @@
         //
 
         this.sorted = function (comparator) {
-            this.add(new StatefulOp(function (array) {
-                array.sort(comparator);
+            this.add(new StatefulOp({
+                finisher: function (array) {
+                    array.sort(comparator);
+                }
+            }));
+            return this;
+        };
+
+        this.skip = function (num) {
+            this.add(new StatefulOp({
+                filter: function (obj, i) {
+                    return i >= num;
+                }
+            }));
+            return this;
+        };
+
+        this.limit = function (num) {
+            this.add(new StatefulOp({
+                voter: function (obj, i) {
+                    return i < num;
+                }
             }));
             return this;
         };
