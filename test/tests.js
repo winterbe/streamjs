@@ -280,3 +280,82 @@ QUnit.test("rangeClosed", function (assert) {
     assert.equal(result[3], 3);
     assert.equal(result[4], 4);
 });
+
+QUnit.test("Optional get 1", function (assert) {
+    var result = Stream.Optional.of(1).get();
+    assert.equal(result, 1);
+});
+
+QUnit.test("Optional get 2", function (assert) {
+    assert.throws(function () {
+        Stream.Optional.ofNullable(null).get();
+    });
+
+    assert.throws(function () {
+        Stream.Optional.ofNullable(undefined).get();
+    });
+});
+
+QUnit.test("Optional of", function (assert) {
+    assert.throws(function () {
+        Stream.Optional.of(null);
+    });
+
+    assert.throws(function () {
+        Stream.Optional.of(undefined);
+    });
+});
+
+QUnit.test("Optional ifPresent 1", function (assert) {
+    var result = null;
+    Stream.Optional.of(1)
+        .ifPresent(function () {
+            result = "called"
+        });
+    assert.equal(result, "called");
+});
+
+QUnit.test("Optional ifPresent 2", function (assert) {
+    var result = null;
+    Stream.Optional.empty()
+        .ifPresent(function () {
+            result = "called"
+        });
+    assert.equal(result, null);
+});
+
+QUnit.test("Optional orElse 1", function (assert) {
+    var result = Stream.Optional.of(1).orElse(2);
+    assert.equal(result, 1);
+});
+
+QUnit.test("Optional orElse 2", function (assert) {
+    var result = Stream.Optional.empty().orElse(2);
+    assert.equal(result, 2);
+});
+
+QUnit.test("Optional orElseGet 1", function (assert) {
+    var result = Stream.Optional.of(1).orElseGet(function () {
+        return 2;
+    });
+    assert.equal(result, 1);
+});
+
+QUnit.test("Optional orElseGet 2", function (assert) {
+    var result = Stream.Optional.empty().orElseGet(function () {
+        return 2;
+    });
+    assert.equal(result, 2);
+});
+
+QUnit.test("Optional orElseThrow 1", function (assert) {
+    var result = Stream.Optional.of(1).orElseThrow("error");
+    assert.equal(result, 1);
+});
+
+QUnit.test("Optional orElseThrow 2", function (assert) {
+    assert.throws(function () {
+        Stream.Optional.empty().orElseThrow("error");
+    });
+});
+
