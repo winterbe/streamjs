@@ -271,6 +271,17 @@ QUnit.test("peek", function (assert) {
     assert.equal(result[3], poke[3]);
 });
 
+QUnit.test("distinct", function (assert) {
+    var result =
+        Stream([1, 3, 3, 1])
+            .distinct()
+            .toArray();
+
+    assert.equal(result.length, 2);
+    assert.equal(result[0], 1);
+    assert.equal(result[1], 3)
+});
+
 QUnit.test("collect", function (assert) {
     var result =
         Stream([1, 2, 3, 4]).collect({

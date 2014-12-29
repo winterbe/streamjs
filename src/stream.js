@@ -105,7 +105,7 @@
 
             var filtered = true;
             if (options.filter) {
-                filtered = options.filter.call(ctx, obj, i);
+                filtered = options.filter.call(ctx, obj, i, buffer);
             }
             if (filtered) {
                 buffer.push(obj);
@@ -236,6 +236,15 @@
         this.peek = function (consumer) {
             this.add(new StatefulOp({
                 consumer: consumer
+            }));
+            return this;
+        };
+
+        this.distinct = function () {
+            this.add(new StatefulOp({
+                filter: function (obj, i, array) {
+                    return array.indexOf(obj) < 0;
+                }
             }));
             return this;
         };
