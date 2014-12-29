@@ -195,6 +195,15 @@
             return result;
         };
 
+        this.sum = function () {
+            var result = 0;
+            var current;
+            while ((current = this.next()) !== eop) {
+                result += current;
+            }
+            return result;
+        };
+
         this.allMatch = function (fn) {
             var current;
             while ((current = this.next()) !== eop) {

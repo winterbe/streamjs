@@ -139,6 +139,11 @@ QUnit.test("max", function (assert) {
     assert.equal(result, 4);
 });
 
+QUnit.test("sum", function (assert) {
+    var result = Stream([1, 2, 3, 4]).sum();
+    assert.equal(result, 10);
+});
+
 QUnit.test("allMatch true", function (assert) {
     var result = Stream([1, 2, 3, 4])
         .allMatch(function (num) {
