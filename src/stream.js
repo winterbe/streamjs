@@ -281,8 +281,7 @@
         };
 
         this.min = function () {
-            var result = null;
-            var current;
+            var current, result = null;
             while ((current = this.next()) !== eop) {
                 if (result === null || current < result) {
                     result = current;
@@ -292,8 +291,7 @@
         };
 
         this.max = function () {
-            var result = null;
-            var current;
+            var current, result = null;
             while ((current = this.next()) !== eop) {
                 if (result === null || current > result) {
                     result = current;
@@ -303,10 +301,17 @@
         };
 
         this.sum = function () {
-            var result = 0;
-            var current;
+            var current, result = 0;
             while ((current = this.next()) !== eop) {
                 result += current;
+            }
+            return result;
+        };
+
+        this.count = function () {
+            var current, result = 0;
+            while ((current = this.next()) !== eop) {
+                result++;
             }
             return result;
         };

@@ -146,6 +146,11 @@ QUnit.test("sum", function (assert) {
     assert.equal(result, 10);
 });
 
+QUnit.test("count", function (assert) {
+    var result = Stream([1, 2, 3, 4]).count();
+    assert.equal(result, 4);
+});
+
 QUnit.test("allMatch true", function (assert) {
     var result = Stream([1, 2, 3, 4])
         .allMatch(function (num) {
