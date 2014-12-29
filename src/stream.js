@@ -101,7 +101,7 @@
 
 
         //
-        // intermediate operations
+        // intermediate operations (stateless)
         //
 
         this.filter = function (fn) {
@@ -130,6 +130,11 @@
             }));
             return this;
         };
+
+
+        //
+        // intermediate operations (stateful)
+        //
 
         this.sorted = function (comparator) {
             this.add(new StatefulOp(function (array) {
