@@ -308,6 +308,15 @@
             return result;
         };
 
+        this.average = function () {
+            var current, count = 0, sum = 0;
+            while ((current = this.next()) !== eop) {
+                sum += current;
+                count++;
+            }
+            return sum / count;
+        };
+
         this.count = function () {
             var current, result = 0;
             while ((current = this.next()) !== eop) {

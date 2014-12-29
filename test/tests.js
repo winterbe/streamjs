@@ -151,6 +151,11 @@ QUnit.test("count", function (assert) {
     assert.equal(result, 4);
 });
 
+QUnit.test("average", function (assert) {
+    var result = Stream([1, 2, 3, 4]).average();
+    assert.equal(result, 2.5);
+});
+
 QUnit.test("allMatch true", function (assert) {
     var result = Stream([1, 2, 3, 4])
         .allMatch(function (num) {
