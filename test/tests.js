@@ -98,7 +98,8 @@ QUnit.test("findFirst", function (assert) {
             .filter(function (num) {
                 return num % 2 === 0;
             })
-            .findFirst();
+            .findFirst()
+            .get();
 
     assert.equal(result, 2);
 });
@@ -109,7 +110,8 @@ QUnit.test("findLast", function (assert) {
             .filter(function (num) {
                 return num % 2 === 1;
             })
-            .findLast();
+            .findLast()
+            .get();
 
     assert.equal(result, 3);
 });

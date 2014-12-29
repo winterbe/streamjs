@@ -4,6 +4,63 @@
     var eop = "END_OF_PIPE",
         ctx = {};
 
+
+    var Optional = function (val) {
+
+        this.isPresent = function () {
+            return val !== null && val !== undefined;
+        };
+
+        this.get = function () {
+            if (!this.isPresent()) {
+                throw "optional value is not present";
+            }
+            return val;
+        };
+
+        this.ifPresent = function (consumer) {
+            if (this.isPresent()) {
+                consumer.call(val, val);
+            }
+        };
+
+        this.orElse = function (otherVal) {
+            if (this.isPresent()) {
+                return val;
+            }
+            return otherVal;
+        };
+
+        this.orElseGet = function (supplier) {
+            if (this.isPresent()) {
+                return val;
+            }
+            return supplier.call(ctx);
+        };
+
+        this.orElseThrow = function (errorMsg) {
+            if (this.isPresent()) {
+                return val;
+            }
+            throw errorMsg;
+        };
+    };
+
+    Optional.of = function (val) {
+        if (val === null || val === undefined) {
+            throw "value must be present";
+        }
+        return new Optional(val);
+    };
+
+    Optional.ofNullable = function (val) {
+        return new Optional(val);
+    };
+
+    Optional.empty = function () {
+        return new Optional(undefined);
+    };
+
     var StatefulOp = function (options) {
         this.buffer = null;
 
@@ -194,17 +251,22 @@
         };
 
         this.findFirst = function () {
-            // TODO test empty stream
-            return this.next();
+            var obj = this.next();
+            if (obj === eop) {
+                return Optional.empty();
+            }
+            return Optional.ofNullable(obj);
         };
 
         this.findLast = function () {
-            // TODO test empty stream
             var current, last;
             while ((current = this.next()) !== eop) {
                 last = current;
             }
-            return last;
+            if (last === eop) {
+                return Optional.empty();
+            }
+            return Optional.ofNullable(last);
         };
 
         this.forEach = function (fn) {
