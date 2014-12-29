@@ -76,27 +76,27 @@
     };
 
     var Pipeline = function (array) {
-        var ops = [];
+        var lastOp = null;
 
         this.add = function (op) {
-            ops.push(op);
-
-            if (ops.length > 1) {
-                var prev = ops[ops.length - 2];
+            if (lastOp !== null) {
+                var prev = lastOp;
                 op.prev = prev;
                 prev.next = op;
             }
+
+            lastOp = op;
         };
 
         this.next = function () {
-            return ops[ops.length - 1].advance();
+            return lastOp.advance();
         };
 
         // default op just iterates over original array
         this.add(new StatelessOp(function (arg) {
             return [arg];
         }));
-        ops[0].buffer = array.slice();
+        lastOp.buffer = array.slice();
 
 
 
