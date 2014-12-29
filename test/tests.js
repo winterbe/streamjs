@@ -245,6 +245,22 @@ QUnit.test("limit", function (assert) {
     assert.equal(result[1], 2);
 });
 
+QUnit.test("peek", function (assert) {
+    var poke = [];
+    var result =
+        Stream([1, 2, 3, 4])
+            .peek(function (num) {
+                poke.push(num);
+            })
+            .toArray();
+
+    assert.equal(result.length, poke.length);
+    assert.equal(result[0], poke[0]);
+    assert.equal(result[1], poke[1]);
+    assert.equal(result[2], poke[2]);
+    assert.equal(result[3], poke[3]);
+});
+
 QUnit.test("collect", function (assert) {
     var result =
         Stream([1, 2, 3, 4]).collect({

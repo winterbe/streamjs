@@ -99,6 +99,10 @@
         };
 
         this.pipe = function (obj) {
+            if (options.consumer) {
+                options.consumer.call(ctx, obj, i);
+            }
+
             var filtered = true;
             if (options.filter) {
                 filtered = options.filter.call(ctx, obj, i);
@@ -225,6 +229,13 @@
                 voter: function (obj, i) {
                     return i < num;
                 }
+            }));
+            return this;
+        };
+
+        this.peek = function (consumer) {
+            this.add(new StatefulOp({
+                consumer: consumer
             }));
             return this;
         };
