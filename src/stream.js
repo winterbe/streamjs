@@ -366,6 +366,8 @@
         return Stream.range(startInclusive, endInclusive + 1);
     };
 
+    Stream.Optional = Optional;
+
     window.Stream = Stream;
 
 }(window));
