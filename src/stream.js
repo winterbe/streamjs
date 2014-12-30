@@ -44,6 +44,42 @@
             }
             throw errorMsg;
         };
+
+        this.filter = function (predicate) {
+            if (this.isPresent()) {
+                var filtered = predicate.call(ctx, val);
+                if (filtered) {
+                    return this;
+                }
+                return Optional.empty();
+            }
+            return this;
+        };
+
+        this.map = function (mapper) {
+            if (this.isPresent()) {
+                var otherVal = mapper.call(ctx, val);
+                if (otherVal instanceof Optional) {
+                    return otherVal;
+                }
+                return Optional.ofNullable(otherVal);
+            }
+            return this;
+        };
+
+        this.flatMap = function (flatMapper) {
+            if (this.isPresent()) {
+                var result = flatMapper.call(ctx, val);
+                for (var i = 0; i < result.length; i++) {
+                    var obj = result[i];
+                    if (!(obj instanceof Optional)) {
+                        result[i] = Optional.ofNullable(obj);
+                    }
+                }
+                return result;
+            }
+            return this;
+        };
     };
 
     Optional.of = function (val) {

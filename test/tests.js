@@ -396,3 +396,24 @@ QUnit.test("Optional orElseThrow 2", function (assert) {
     });
 });
 
+QUnit.test("Optional filter 1", function (assert) {
+    var optional = Stream.Optional.of(3).filter(function (num) {
+        return num > 2;
+    });
+    assert.equal(optional.isPresent(), true);
+    assert.equal(optional.get(), 3);
+});
+
+QUnit.test("Optional filter 2", function (assert) {
+    var optional = Stream.Optional.of(3).filter(function (num) {
+        return num > 3;
+    });
+    assert.equal(optional.isPresent(), false);
+});
+
+QUnit.test("Optional filter 3", function (assert) {
+    var optional = Stream.Optional.empty().filter(function (num) {
+        return num > 3;
+    });
+    assert.equal(optional.isPresent(), false);
+});
