@@ -1,4 +1,4 @@
-Stream.js
+Stream.js [![Travic CI](https://travis-ci.org/winterbe/streamjs.svg?branch=master)](https://travis-ci.org/winterbe/streamjs)
 ========================
 
 > A Collection Pipeline for JavaScript - inspired by the Java 8 Streams API.
