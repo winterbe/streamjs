@@ -395,12 +395,24 @@
         };
 
         this.collect = function (collector) {
-            var subject = collector.supplier.call(ctx);
+            var identity = collector.supplier.call(ctx);
             var current;
             while ((current = this.next()) !== eop) {
-                subject = collector.accumulator.call(ctx, subject, current);
+                identity = collector.accumulator.call(ctx, identity, current);
             }
-            return collector.finisher.call(ctx, subject);
+            if (collector.finisher) {
+                identity = collector.finisher.call(ctx, identity);
+            }
+            return identity;
+        };
+
+        this.reduce = function (identity, accumulator) {
+            return this.collect({
+                supplier: function () {
+                    return identity;
+                },
+                accumulator: accumulator
+            });
         };
     };
 

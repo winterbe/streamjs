@@ -299,6 +299,14 @@ QUnit.test("collect", function (assert) {
     assert.equal(result, "Data: 1 2 3 4 !");
 });
 
+QUnit.test("reduce", function (assert) {
+    var result = Stream([1, 2, 3, 4])
+        .reduce(1000, function (identity, num) {
+            return identity + num;
+        });
+    assert.equal(result, 1010);
+});
+
 QUnit.test("range", function (assert) {
     var result = Stream.range(0, 4).toArray();
     assert.equal(result.length, 4);
