@@ -417,3 +417,33 @@ QUnit.test("Optional filter 3", function (assert) {
     });
     assert.equal(optional.isPresent(), false);
 });
+
+QUnit.test("Optional map 1", function (assert) {
+    var optional = Stream.Optional.of(3).map(function (num) {
+        return "num" + num;
+    });
+    assert.equal(optional.isPresent(), true);
+    assert.equal(optional.get(), "num3");
+});
+
+QUnit.test("Optional map 2", function (assert) {
+    var optional = Stream.Optional.empty().map(function (num) {
+        return "num" + num;
+    });
+    assert.equal(optional.isPresent(), false);
+});
+
+QUnit.test("Optional flatMap 1", function (assert) {
+    var optional = Stream.Optional.of(3).flatMap(function (num) {
+        return Stream.Optional.of("num" + num);
+    });
+    assert.equal(optional.isPresent(), true);
+    assert.equal(optional.get(), "num3");
+});
+
+QUnit.test("Optional flatMap 2", function (assert) {
+    var optional = Stream.Optional.empty().map(function (num) {
+        return Stream.Optional.of("num" + num);
+    });
+    assert.equal(optional.isPresent(), false);
+});

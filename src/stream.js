@@ -58,25 +58,15 @@
 
         this.map = function (mapper) {
             if (this.isPresent()) {
-                var otherVal = mapper.call(ctx, val);
-                if (otherVal instanceof Optional) {
-                    return otherVal;
-                }
-                return Optional.ofNullable(otherVal);
+                var mappedVal = mapper.call(ctx, val);
+                return Optional.ofNullable(mappedVal);
             }
             return this;
         };
 
         this.flatMap = function (flatMapper) {
             if (this.isPresent()) {
-                var result = flatMapper.call(ctx, val);
-                for (var i = 0; i < result.length; i++) {
-                    var obj = result[i];
-                    if (!(obj instanceof Optional)) {
-                        result[i] = Optional.ofNullable(obj);
-                    }
-                }
-                return result;
+                return flatMapper.call(ctx, val);
             }
             return this;
         };
@@ -231,6 +221,7 @@
         };
 
         this.flatMap = function (fn) {
+            // TODO flatMap must return monadic Stream
             this.add(new StatelessOp(function (arg) {
                 return fn.call(ctx, arg);
             }));
