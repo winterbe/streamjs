@@ -136,9 +136,27 @@ QUnit.test("min", function (assert) {
     assert.equal(result, 1);
 });
 
+QUnit.test("min (comparator)", function (assert) {
+    var result = Stream([1, 2, 3, 4]).min(function (a, b) {
+        if (a === b) return 0;
+        if (a > b) return -1;
+        return 1;
+    });
+    assert.equal(result, 4);
+});
+
 QUnit.test("max", function (assert) {
     var result = Stream([1, 2, 3, 4]).max();
     assert.equal(result, 4);
+});
+
+QUnit.test("max (comparator)", function (assert) {
+    var result = Stream([1, 2, 3, 4]).max(function (a, b) {
+        if (a === b) return 0;
+        if (a > b) return -1;
+        return 1;
+    });
+    assert.equal(result, 1);
 });
 
 QUnit.test("sum", function (assert) {

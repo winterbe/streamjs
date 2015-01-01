@@ -316,20 +316,36 @@
             }
         };
 
-        this.min = function () {
+        this.min = function (comparator) {
+            if (!comparator) {
+                comparator = function (a, b) {
+                    if (a === b) return 0;
+                    if (a < b) return -1;
+                    return 1;
+                };
+            }
+
             var current, result = null;
             while ((current = this.next()) !== eop) {
-                if (result === null || current < result) {
+                if (result === null || comparator.call(ctx, current, result) < 0) {
                     result = current;
                 }
             }
             return result;
         };
 
-        this.max = function () {
+        this.max = function (comparator) {
+            if (!comparator) {
+                comparator = function (a, b) {
+                    if (a === b) return 0;
+                    if (a < b) return -1;
+                    return 1;
+                };
+            }
+
             var current, result = null;
             while ((current = this.next()) !== eop) {
-                if (result === null || current > result) {
+                if (result === null || comparator.call(ctx, current, result) > 0) {
                     result = current;
                 }
             }
