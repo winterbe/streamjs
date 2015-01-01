@@ -4,6 +4,13 @@
     var eop = "END_OF_PIPE",
         ctx = {};
 
+    var defaultComparator = function (a, b) {
+        if (a === b) {
+            return 0;
+        }
+        return a > b ? 1 : -1;
+    };
+
 
     var Optional = function (val) {
 
@@ -317,13 +324,7 @@
         };
 
         this.min = function (comparator) {
-            if (!comparator) {
-                comparator = function (a, b) {
-                    if (a === b) return 0;
-                    if (a < b) return -1;
-                    return 1;
-                };
-            }
+            comparator = comparator || defaultComparator;
 
             var current, result = null;
             while ((current = this.next()) !== eop) {
@@ -335,13 +336,7 @@
         };
 
         this.max = function (comparator) {
-            if (!comparator) {
-                comparator = function (a, b) {
-                    if (a === b) return 0;
-                    if (a < b) return -1;
-                    return 1;
-                };
-            }
+            comparator = comparator || defaultComparator;
 
             var current, result = null;
             while ((current = this.next()) !== eop) {
