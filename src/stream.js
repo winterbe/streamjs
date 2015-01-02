@@ -183,6 +183,8 @@
     };
 
     var Pipeline = function (array) {
+        var that = this;
+
         // default op iterates over input array
         var lastOp = new StatelessOp(function (arg) {
             return [arg];
@@ -417,13 +419,35 @@
             return identity;
         };
 
-        this.reduce = function (identity, accumulator) {
-            return this.collect({
-                supplier: function () {
-                    return identity;
-                },
-                accumulator: accumulator
-            });
+        var reduceFirst = function (accumulator) {
+            var current;
+
+            var identity = that.next();
+            if (identity === eop) {
+                return Optional.empty();
+            }
+
+            while ((current = that.next()) !== eop) {
+                identity = accumulator.call(ctx, identity, current);
+            }
+
+            return Optional.ofNullable(identity);
+        };
+
+        this.reduce = function () {
+            var arg0 = arguments[0];
+            var arg1 = arguments[1];
+
+            if (arg1) {
+                return this.collect({
+                    supplier: function () {
+                        return arg0;
+                    },
+                    accumulator: arg1
+                });
+            }
+
+            return reduceFirst(arg0);
         };
     };
 

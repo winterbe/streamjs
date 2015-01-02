@@ -325,6 +325,24 @@ QUnit.test("reduce", function (assert) {
     assert.equal(result, 1010);
 });
 
+QUnit.test("reduce first", function (assert) {
+    var result = Stream([1, 2, 3, 4])
+        .reduce(function (identity, num) {
+            return identity * num;
+        })
+        .get();
+    assert.equal(result, 24);
+});
+
+QUnit.test("reduce first empty", function (assert) {
+    var result = Stream([])
+        .reduce(function (identity, num) {
+            return identity * num;
+        })
+        .orElse("NOTHING");
+    assert.equal(result, "NOTHING");
+});
+
 QUnit.test("range", function (assert) {
     var result = Stream.range(0, 4).toArray();
     assert.equal(result.length, 4);
