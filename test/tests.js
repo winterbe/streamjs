@@ -239,8 +239,8 @@ QUnit.test("sorted (comparator)", function (assert) {
     var result =
         Stream([4, 1, 3, 2])
             .sorted(function (num1, num2) {
-                if (num1 == num2) return 0;
-                return num1 < num2 ? 1 : -1
+                if (num1 === num2) return 0;
+                return num1 < num2 ? 1 : -1;
             })
             .toArray();
 
@@ -297,7 +297,7 @@ QUnit.test("distinct", function (assert) {
 
     assert.equal(result.length, 2);
     assert.equal(result[0], 1);
-    assert.equal(result[1], 3)
+    assert.equal(result[1], 3);
 });
 
 QUnit.test("collect", function (assert) {
@@ -509,7 +509,7 @@ QUnit.test("Optional ifPresent 1", function (assert) {
     var result = null;
     Stream.Optional.of(1)
         .ifPresent(function () {
-            result = "called"
+            result = "called";
         });
     assert.equal(result, "called");
 });
@@ -518,7 +518,7 @@ QUnit.test("Optional ifPresent 2", function (assert) {
     var result = null;
     Stream.Optional.empty()
         .ifPresent(function () {
-            result = "called"
+            result = "called";
         });
     assert.equal(result, null);
 });
