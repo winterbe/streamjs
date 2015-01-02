@@ -3,93 +3,9 @@
     "use strict";
 
 
-    var StatelessOp = function (fn, data) {
-        this.prev = null;
-        this.next = null;
-
-        var buffer = data ? data : [];
-
-        this.advance = function () {
-            if (buffer.length === 0 && this.prev == null) {
-                return eop;
-            }
-
-            if (buffer.length === 0) {
-                return this.prev.advance();
-            }
-
-            var obj = buffer.shift();
-            if (this.next != null) {
-                return this.next.pipe(obj);
-            }
-            return obj;
-        };
-
-        this.pipe = function (obj) {
-            buffer = fn.call(ctx, obj);
-            if (buffer.length === 0) {
-                return this.advance();
-            }
-
-            obj = buffer.shift();
-            if (this.next != null) {
-                return this.next.pipe(obj);
-            }
-            return obj;
-        };
-    };
-
-    var StatefulOp = function (options) {
-        this.prev = null;
-        this.next = null;
-
-        var buffer = null, i = 0;
-
-        this.advance = function () {
-            var obj;
-            if (buffer === null) {
-                buffer = [];
-                while ((obj = this.prev.advance()) !== eop) {
-                    // obj will be added to buffer via this.pipe
-                    i++;
-                    if (options.voter) {
-                        var voted = options.voter.call(ctx, obj, i);
-                        if (!voted) {
-                            break;
-                        }
-                    }
-                }
-                if (options.finisher) {
-                    options.finisher.call(ctx, buffer);
-                }
-            }
-
-            if (buffer.length === 0) {
-                return eop;
-            }
-
-            obj = buffer.shift();
-            if (this.next != null) {
-                return this.next.pipe(obj);
-            }
-
-            return obj;
-        };
-
-        this.pipe = function (obj) {
-            if (options.consumer) {
-                options.consumer.call(ctx, obj, i);
-            }
-
-            var filtered = true;
-            if (options.filter) {
-                filtered = options.filter.call(ctx, obj, i, buffer);
-            }
-            if (filtered) {
-                buffer.push(obj);
-            }
-        };
-    };
+    //
+    // Internal Pipeline (doing all the work)
+    //
 
     var Pipeline = function (array) {
         var that = this;
@@ -377,23 +293,101 @@
                     map[key].push(obj);
                     return map;
                 }
-            })
+            });
         };
     };
 
 
     //
-    // utilities
+    // Generic Pipeline operations
     //
 
-    var eop = "END_OF_PIPE",
-        ctx = {};
+    var StatelessOp = function (fn, data) {
+        this.prev = null;
+        this.next = null;
 
-    var defaultComparator = function (a, b) {
-        if (a === b) {
-            return 0;
-        }
-        return a > b ? 1 : -1;
+        var buffer = data ? data : [];
+
+        this.advance = function () {
+            if (buffer.length === 0 && this.prev === null) {
+                return eop;
+            }
+
+            if (buffer.length === 0) {
+                return this.prev.advance();
+            }
+
+            var obj = buffer.shift();
+            if (this.next !== null) {
+                return this.next.pipe(obj);
+            }
+            return obj;
+        };
+
+        this.pipe = function (obj) {
+            buffer = fn.call(ctx, obj);
+            if (buffer.length === 0) {
+                return this.advance();
+            }
+
+            obj = buffer.shift();
+            if (this.next !== null) {
+                return this.next.pipe(obj);
+            }
+            return obj;
+        };
+    };
+
+    var StatefulOp = function (options) {
+        this.prev = null;
+        this.next = null;
+
+        var buffer = null, i = 0;
+
+        this.advance = function () {
+            var obj;
+            if (buffer === null) {
+                buffer = [];
+                while ((obj = this.prev.advance()) !== eop) {
+                    // obj will be added to buffer via this.pipe
+                    i++;
+                    if (options.voter) {
+                        var voted = options.voter.call(ctx, obj, i);
+                        if (!voted) {
+                            break;
+                        }
+                    }
+                }
+                if (options.finisher) {
+                    options.finisher.call(ctx, buffer);
+                }
+            }
+
+            if (buffer.length === 0) {
+                return eop;
+            }
+
+            obj = buffer.shift();
+            if (this.next !== null) {
+                return this.next.pipe(obj);
+            }
+
+            return obj;
+        };
+
+        this.pipe = function (obj) {
+            if (options.consumer) {
+                options.consumer.call(ctx, obj, i);
+            }
+
+            var filtered = true;
+            if (options.filter) {
+                filtered = options.filter.call(ctx, obj, i, buffer);
+            }
+            if (filtered) {
+                buffer.push(obj);
+            }
+        };
     };
 
 
@@ -480,6 +474,21 @@
 
     Optional.empty = function () {
         return new Optional(undefined);
+    };
+
+
+    //
+    // Common stuff
+    //
+
+    var eop = "END_OF_PIPE",
+        ctx = {};
+
+    var defaultComparator = function (a, b) {
+        if (a === b) {
+            return 0;
+        }
+        return a > b ? 1 : -1;
     };
 
 
