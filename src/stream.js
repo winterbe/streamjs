@@ -1,97 +1,42 @@
 (function (window) {
+
     "use strict";
 
-    var eop = "END_OF_PIPE",
-        ctx = {};
 
-    var defaultComparator = function (a, b) {
-        if (a === b) {
-            return 0;
-        }
-        return a > b ? 1 : -1;
-    };
+    var StatelessOp = function (fn, data) {
+        this.prev = null;
+        this.next = null;
 
+        var buffer = data ? data : [];
 
-    var Optional = function (val) {
-
-        this.isPresent = function () {
-            return val !== null && val !== undefined;
-        };
-
-        this.get = function () {
-            if (!this.isPresent()) {
-                throw "optional value is not present";
+        this.advance = function () {
+            if (buffer.length === 0 && this.prev == null) {
+                return eop;
             }
-            return val;
-        };
 
-        this.ifPresent = function (consumer) {
-            if (this.isPresent()) {
-                consumer.call(val, val);
+            if (buffer.length === 0) {
+                return this.prev.advance();
             }
-        };
 
-        this.orElse = function (otherVal) {
-            if (this.isPresent()) {
-                return val;
+            var obj = buffer.shift();
+            if (this.next != null) {
+                return this.next.pipe(obj);
             }
-            return otherVal;
+            return obj;
         };
 
-        this.orElseGet = function (supplier) {
-            if (this.isPresent()) {
-                return val;
+        this.pipe = function (obj) {
+            buffer = fn.call(ctx, obj);
+            if (buffer.length === 0) {
+                return this.advance();
             }
-            return supplier.call(ctx);
-        };
 
-        this.orElseThrow = function (errorMsg) {
-            if (this.isPresent()) {
-                return val;
+            obj = buffer.shift();
+            if (this.next != null) {
+                return this.next.pipe(obj);
             }
-            throw errorMsg;
+            return obj;
         };
-
-        this.filter = function (predicate) {
-            if (this.isPresent()) {
-                var filtered = predicate.call(ctx, val);
-                if (filtered) {
-                    return this;
-                }
-                return Optional.empty();
-            }
-            return this;
-        };
-
-        this.map = function (mapper) {
-            if (this.isPresent()) {
-                var mappedVal = mapper.call(ctx, val);
-                return Optional.ofNullable(mappedVal);
-            }
-            return this;
-        };
-
-        this.flatMap = function (flatMapper) {
-            if (this.isPresent()) {
-                return flatMapper.call(ctx, val);
-            }
-            return this;
-        };
-    };
-
-    Optional.of = function (val) {
-        if (val === null || val === undefined) {
-            throw "value must be present";
-        }
-        return new Optional(val);
-    };
-
-    Optional.ofNullable = function (val) {
-        return new Optional(val);
-    };
-
-    Optional.empty = function () {
-        return new Optional(undefined);
     };
 
     var StatefulOp = function (options) {
@@ -143,42 +88,6 @@
             if (filtered) {
                 buffer.push(obj);
             }
-        };
-    };
-
-    var StatelessOp = function (fn, data) {
-        this.prev = null;
-        this.next = null;
-
-        var buffer = data ? data : [];
-
-        this.advance = function () {
-            if (buffer.length === 0 && this.prev == null) {
-                return eop;
-            }
-
-            if (buffer.length === 0) {
-                return this.prev.advance();
-            }
-
-            var obj = buffer.shift();
-            if (this.next != null) {
-                return this.next.pipe(obj);
-            }
-            return obj;
-        };
-
-        this.pipe = function (obj) {
-            buffer = fn.call(ctx, obj);
-            if (buffer.length === 0) {
-                return this.advance();
-            }
-
-            obj = buffer.shift();
-            if (this.next != null) {
-                return this.next.pipe(obj);
-            }
-            return obj;
         };
     };
 
@@ -472,6 +381,112 @@
         };
     };
 
+
+    //
+    // utilities
+    //
+
+    var eop = "END_OF_PIPE",
+        ctx = {};
+
+    var defaultComparator = function (a, b) {
+        if (a === b) {
+            return 0;
+        }
+        return a > b ? 1 : -1;
+    };
+
+
+    //
+    // Optional type
+    //
+
+    var Optional = function (val) {
+        this.isPresent = function () {
+            return val !== null && val !== undefined;
+        };
+
+        this.get = function () {
+            if (!this.isPresent()) {
+                throw "optional value is not present";
+            }
+            return val;
+        };
+
+        this.ifPresent = function (consumer) {
+            if (this.isPresent()) {
+                consumer.call(val, val);
+            }
+        };
+
+        this.orElse = function (otherVal) {
+            if (this.isPresent()) {
+                return val;
+            }
+            return otherVal;
+        };
+
+        this.orElseGet = function (supplier) {
+            if (this.isPresent()) {
+                return val;
+            }
+            return supplier.call(ctx);
+        };
+
+        this.orElseThrow = function (errorMsg) {
+            if (this.isPresent()) {
+                return val;
+            }
+            throw errorMsg;
+        };
+
+        this.filter = function (predicate) {
+            if (this.isPresent()) {
+                var filtered = predicate.call(ctx, val);
+                if (filtered) {
+                    return this;
+                }
+                return Optional.empty();
+            }
+            return this;
+        };
+
+        this.map = function (mapper) {
+            if (this.isPresent()) {
+                var mappedVal = mapper.call(ctx, val);
+                return Optional.ofNullable(mappedVal);
+            }
+            return this;
+        };
+
+        this.flatMap = function (flatMapper) {
+            if (this.isPresent()) {
+                return flatMapper.call(ctx, val);
+            }
+            return this;
+        };
+    };
+
+    Optional.of = function (val) {
+        if (val === null || val === undefined) {
+            throw "value must be present";
+        }
+        return new Optional(val);
+    };
+
+    Optional.ofNullable = function (val) {
+        return new Optional(val);
+    };
+
+    Optional.empty = function () {
+        return new Optional(undefined);
+    };
+
+
+    //
+    // Stream function grants access to pipeline
+    //
+
     var Stream = function (array) {
         return new Pipeline(array);
     };
@@ -487,6 +502,11 @@
     Stream.rangeClosed = function (startInclusive, endInclusive) {
         return Stream.range(startInclusive, endInclusive + 1);
     };
+
+
+    //
+    // public variables
+    //
 
     Stream.Optional = Optional;
 

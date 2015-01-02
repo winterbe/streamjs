@@ -343,7 +343,7 @@ QUnit.test("reduce first empty", function (assert) {
     assert.equal(result, "NOTHING");
 });
 
-QUnit.test("groupBy", function (assert) {
+QUnit.test("groupBy 1", function (assert) {
     var data = [
         {firstName: "Peter", lastName: "Parker"},
         {firstName: "Sandra", lastName: "Parker"},
@@ -364,7 +364,7 @@ QUnit.test("groupBy", function (assert) {
     assert.equal(map["Doe"][0], data[2]);
 });
 
-QUnit.test("groupBy with mapSupplier", function (assert) {
+QUnit.test("groupBy 2", function (assert) {
     var data = [
         {firstName: "Peter", lastName: "Parker"},
         {firstName: "Sandra", lastName: "Parker"},
