@@ -295,6 +295,27 @@
                 }
             });
         };
+
+        this.indexBy = function (keyMapper, mergeFunction, map) {
+            return this.collect({
+                supplier: function () {
+                    return map || {};
+                },
+                accumulator: function (map, obj) {
+                    var key = keyMapper.call(ctx, obj);
+                    if (map.hasOwnProperty(key)) {
+                        if (!mergeFunction) {
+                            throw "duplicate mapping found for key: " + key;
+                        }
+                        map[key] = mergeFunction.call(ctx, map[key], obj);
+                        return map;
+                    }
+
+                    map[key] = obj;
+                    return map;
+                }
+            });
+        };
     };
 
 
