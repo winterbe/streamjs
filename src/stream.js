@@ -419,6 +419,22 @@
             return identity;
         };
 
+        this.reduce = function () {
+            var arg0 = arguments[0];
+            var arg1 = arguments[1];
+
+            if (arg1) {
+                return this.collect({
+                    supplier: function () {
+                        return arg0;
+                    },
+                    accumulator: arg1
+                });
+            }
+
+            return reduceFirst(arg0);
+        };
+
         var reduceFirst = function (accumulator) {
             var current;
 
@@ -434,20 +450,25 @@
             return Optional.ofNullable(identity);
         };
 
-        this.reduce = function () {
-            var arg0 = arguments[0];
-            var arg1 = arguments[1];
+        this.groupBy = function (keyMapper, map) {
+            return this.collect({
+                supplier: function () {
+                    return map || {};
+                },
+                accumulator: function (map, obj) {
+                    var key = keyMapper.call(ctx, obj);
+                    if (!map.hasOwnProperty(key)) {
+                        map[key] = [];
+                    }
 
-            if (arg1) {
-                return this.collect({
-                    supplier: function () {
-                        return arg0;
-                    },
-                    accumulator: arg1
-                });
-            }
+                    if (map[key] === undefined) {
+                        map[key] = [];
+                    }
 
-            return reduceFirst(arg0);
+                    map[key].push(obj);
+                    return map;
+                }
+            })
         };
     };
 
