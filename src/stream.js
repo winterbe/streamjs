@@ -12,8 +12,8 @@
 
         // default op iterates over input array
         var lastOp = new StatelessOp(function (arg) {
-            return [arg];
-        }, array.slice());
+            return arg;
+        }, true, array);
 
         this.add = function (op) {
             if (lastOp !== null) {
@@ -38,9 +38,9 @@
             this.add(new StatelessOp(function (arg) {
                 var filtered = fn.call(ctx, arg);
                 if (filtered) {
-                    return [arg];
+                    return arg;
                 } else {
-                    return [];
+                    return null;
                 }
             }));
             return this;
@@ -48,17 +48,15 @@
 
         this.map = function (fn) {
             this.add(new StatelessOp(function (arg) {
-                var transformed = fn.call(ctx, arg);
-                return [transformed];
+                return fn.call(ctx, arg);
             }));
             return this;
         };
 
         this.flatMap = function (fn) {
-            // TODO flatMap must return monadic Stream
             this.add(new StatelessOp(function (arg) {
                 return fn.call(ctx, arg);
-            }));
+            }, true));
             return this;
         };
 
@@ -396,22 +394,20 @@
     // Generic Pipeline operations
     //
 
-    var StatelessOp = function (fn, data) {
+    var StatelessOp = function (fn, flat, data) {
         this.prev = null;
         this.next = null;
 
-        var buffer = data ? data : [];
-
         this.advance = function () {
-            if (buffer.length === 0 && this.prev === null) {
+            if (!isStashed() && this.prev === null) {
                 return eop;
             }
 
-            if (buffer.length === 0) {
+            if (!isStashed()) {
                 return this.prev.advance();
             }
 
-            var obj = buffer.shift();
+            var obj = unstash();
             if (this.next !== null) {
                 return this.next.pipe(obj);
             }
@@ -419,17 +415,69 @@
         };
 
         this.pipe = function (obj) {
-            buffer = fn.call(ctx, obj);
-            if (buffer.length === 0) {
+            var val = fn.call(ctx, obj);
+            stash(val, flat);
+
+            if (!isStashed()) {
                 return this.advance();
             }
 
-            obj = buffer.shift();
+            obj = unstash();
             if (this.next !== null) {
                 return this.next.pipe(obj);
             }
             return obj;
         };
+
+
+        // internal data buffering
+
+        var buffer = null,
+            flatten = false,    // if true buffer array will be iterated
+            origin = 0,         // current buffer index (if flatten)
+            fence = 0;          // max buffer size (if flatten)
+
+        var isStashed = function () {
+            if (buffer === null) {
+                return false;
+            }
+            if (flatten) {
+                return origin < fence;
+            }
+            return true;
+        };
+
+        var unstash = function () {
+            var bufferedVal;
+            if (!flatten) {
+                bufferedVal = buffer;
+                buffer = null;
+                return bufferedVal;
+            }
+
+            bufferedVal = buffer[origin];
+            origin++;
+            if (origin >= fence) {
+                buffer = null;
+                flatten = false;
+                origin = 0;
+                fence = 0;
+            }
+            return bufferedVal;
+        };
+
+        var stash = function (val, flat) {
+            buffer = val;
+            flatten = flat;
+            if (flatten) {
+                fence = buffer.length;
+            }
+        };
+
+
+        if (data) {
+            stash(data, flat);
+        }
     };
 
     var StatefulOp = function (options) {

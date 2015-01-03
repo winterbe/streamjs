@@ -13,6 +13,13 @@ QUnit.test("map", function (assert) {
     assert.equal(result[1], 'obj2');
     assert.equal(result[2], 'obj3');
     assert.equal(result[3], 'obj4');
+
+    // assert original data is untouched
+    assert.equal(data.length, 4);
+    assert.equal(data[0], 1);
+    assert.equal(data[1], 2);
+    assert.equal(data[2], 3);
+    assert.equal(data[3], 4);
 });
 
 QUnit.test("filter", function (assert) {
@@ -28,6 +35,13 @@ QUnit.test("filter", function (assert) {
     assert.equal(result.length, 2);
     assert.equal(result[0], 1);
     assert.equal(result[1], 3);
+
+    // assert original data is untouched
+    assert.equal(data.length, 4);
+    assert.equal(data[0], 1);
+    assert.equal(data[1], 2);
+    assert.equal(data[2], 3);
+    assert.equal(data[3], 4);
 });
 
 QUnit.test("flatMap", function (assert) {
@@ -47,6 +61,12 @@ QUnit.test("flatMap", function (assert) {
     assert.equal(result[3], 2);
     assert.equal(result[4], 3);
     assert.equal(result[5], 3);
+
+    // assert original data is untouched
+    assert.equal(data.length, 3);
+    assert.equal(data[0], 1);
+    assert.equal(data[1], 2);
+    assert.equal(data[2], 3);
 });
 
 QUnit.test("filter map", function (assert) {
@@ -65,6 +85,13 @@ QUnit.test("filter map", function (assert) {
     assert.equal(result.length, 2);
     assert.equal(result[0], 'obj1');
     assert.equal(result[1], 'obj3');
+
+    // assert original data is untouched
+    assert.equal(data.length, 4);
+    assert.equal(data[0], 1);
+    assert.equal(data[1], 2);
+    assert.equal(data[2], 3);
+    assert.equal(data[3], 4);
 });
 
 QUnit.test("filter map (correct invocation)", function (assert) {
