@@ -1,3 +1,9 @@
+/**
+ * Stream.js 0.1.0
+ * https://github.com/winterbe/streamjs
+ * Copyright (c) 2014-2015 Benjamin Winterberg
+ * Stream.js may be freely distributed under the MIT license.
+ */
 (function (window) {
 
     "use strict";
@@ -667,7 +673,16 @@
     // public variables
     //
 
+    Stream.VERSION = "0.1.0";
+
     Stream.Optional = Optional;
+
+    var previousStream = window.Stream;
+
+    Stream.noConflict = function () {
+        window.Stream = previousStream;
+        return Stream;
+    };
 
     window.Stream = Stream;
 

@@ -702,3 +702,13 @@ QUnit.test("Optional flatMap 2", function (assert) {
     });
     assert.equal(optional.isPresent(), false);
 });
+
+QUnit.test("version", function (assert) {
+    assert.equal(Stream.VERSION, "0.1.0");
+});
+
+QUnit.test("noConflict", function (assert) {
+    var ArrayStream = Stream.noConflict();
+    assert.equal(window.Stream, undefined);
+    assert.equal(ArrayStream.VERSION, "0.1.0");
+});
