@@ -234,9 +234,10 @@
 
         this.collect = function (collector) {
             var identity = collector.supplier.call(ctx);
-            var current;
+            var current, first = true;
             while ((current = this.next()) !== eop) {
-                identity = collector.accumulator.call(ctx, identity, current);
+                identity = collector.accumulator.call(ctx, identity, current, first);
+                first = false;
             }
             if (collector.finisher) {
                 identity = collector.finisher.call(ctx, identity);
@@ -350,7 +351,7 @@
                     return [];
                 },
                 accumulator: function (array, obj) {
-                    if (array.length === 0 || array[array.length - 1].length === num) {
+                    if (array.length === 0) {
                         array.push([obj]);
                         return array;
                     }
@@ -363,6 +364,28 @@
 
                     partition.push(obj);
                     return array;
+                }
+            });
+        };
+
+        this.joining = function (options) {
+            var prefix = "", suffix = "", delimiter = "";
+            if (options) {
+                prefix = options.prefix || prefix;
+                suffix = options.suffix || suffix;
+                delimiter = options.delimiter || delimiter;
+            }
+
+            return this.collect({
+                supplier: function () {
+                    return "";
+                },
+                accumulator: function (str, obj, first) {
+                    var delim = first ? '' : delimiter;
+                    return str + delim + String(obj);
+                },
+                finisher: function (str) {
+                    return prefix + str + suffix;
                 }
             });
         };

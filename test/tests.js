@@ -512,6 +512,21 @@ QUnit.test("partitionBy 3", function (assert) {
     });
 });
 
+QUnit.test("joining 1", function (assert) {
+    var result = Stream([1, 2, 3, 4]).joining();
+    assert.equal(result, "1234");
+});
+
+QUnit.test("joining 2", function (assert) {
+    var result = Stream([1, 2, 3, 4])
+        .joining({
+            prefix: "PREFIX_",
+            suffix: "_SUFFIX",
+            delimiter: ","
+        });
+    assert.equal(result, "PREFIX_1,2,3,4_SUFFIX");
+});
+
 QUnit.test("range", function (assert) {
     var result = Stream.range(0, 4).toArray();
     assert.equal(result.length, 4);
