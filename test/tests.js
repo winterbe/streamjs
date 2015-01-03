@@ -460,6 +460,57 @@ QUnit.test("indexBy 4", function (assert) {
     assert.equal(map["customMap"], true);
 });
 
+QUnit.test("partitionBy 1", function (assert) {
+    var data = [
+        {firstName: "Peter", lastName: "Parker"},
+        {firstName: "Sandra", lastName: "Parker"},
+        {firstName: "John", lastName: "Doe"}
+    ];
+
+    var result = Stream(data)
+        .partitionBy(function (person) {
+            return person.lastName === 'Parker';
+        });
+
+    assert.equal(result[true].length, 2);
+    assert.equal(result[false].length, 1);
+    assert.equal(result[true][0], data[0]);
+    assert.equal(result[true][1], data[1]);
+    assert.equal(result[false][0], data[2]);
+});
+
+
+QUnit.test("partitionBy 2", function (assert) {
+    var data = Stream
+        .range(0, 25)
+        .toArray();
+
+    var result = Stream(data)
+        .partitionBy(10);
+
+    assert.equal(result.length, 3);
+    assert.equal(result[0].length, 10);
+    assert.equal(result[1].length, 10);
+    assert.equal(result[2].length, 5);
+
+    for (var i = 0; i < result.length; i++) {
+        var partition = result[i];
+        for (var j = 0; j < partition.length; j++) {
+            var obj = partition[j];
+            assert.equal(obj, j + (i * 10));
+        }
+    }
+});
+
+QUnit.test("partitionBy 3", function (assert) {
+    assert.throws(function () {
+        Stream([]).partitionBy();
+    });
+
+    assert.throws(function () {
+        Stream([]).partitionBy("wrong_arg");
+    });
+});
 
 QUnit.test("range", function (assert) {
     var result = Stream.range(0, 4).toArray();

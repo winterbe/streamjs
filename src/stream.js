@@ -316,6 +316,56 @@
                 }
             });
         };
+
+        this.partitionBy = function () {
+            var arg0 = arguments[0];
+            if (isFunction(arg0)) {
+                return partitionByPredicate(arg0);
+            }
+            if (isNumber(arg0)) {
+                return partitionByNumber(arg0);
+            }
+            throw 'partitionBy requires argument of type function or number';
+        };
+
+        var partitionByPredicate = function (predicate) {
+            return that.collect({
+                supplier: function () {
+                    return {};
+                },
+                accumulator: function (map, obj) {
+                    var result = predicate.call(ctx, obj);
+                    if (!map.hasOwnProperty(result)) {
+                        map[result] = [];
+                    }
+                    map[result].push(obj);
+                    return map;
+                }
+            });
+        };
+
+        var partitionByNumber = function (num) {
+            return that.collect({
+                supplier: function () {
+                    return [];
+                },
+                accumulator: function (array, obj) {
+                    if (array.length === 0 || array[array.length - 1].length === num) {
+                        array.push([obj]);
+                        return array;
+                    }
+
+                    var partition = array[array.length - 1];
+                    if (partition.length === num) {
+                        array.push([obj]);
+                        return array;
+                    }
+
+                    partition.push(obj);
+                    return array;
+                }
+            });
+        };
     };
 
 
@@ -510,6 +560,14 @@
             return 0;
         }
         return a > b ? 1 : -1;
+    };
+
+    var isFunction = function (obj) {
+        return typeof obj === 'function' || false;
+    };
+
+    var isNumber = function (obj) {
+        return Object.prototype.toString.call(obj) === '[object Number]';
     };
 
 
