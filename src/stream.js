@@ -5,8 +5,10 @@
  * Stream.js may be freely distributed under the MIT license.
  */
 (function (window) {
-
     "use strict";
+
+
+    var VERSION = "0.1.0";
 
 
     //
@@ -14,7 +16,7 @@
     //
 
     var Pipeline = function (array) {
-        var that = this;
+        var pipeline = this;
 
         // default op iterates over input array
         var lastOp = new StatelessOp(function (arg) {
@@ -119,26 +121,28 @@
         // terminal operations
         //
 
-        this.toArray = function () {
+        var terminal = {};
+
+        terminal.toArray = function () {
             var current;
             var result = [];
-            while ((current = this.next()) !== eop) {
+            while ((current = pipeline.next()) !== eop) {
                 result.push(current);
             }
             return result;
         };
 
-        this.findFirst = function () {
-            var obj = this.next();
+        terminal.findFirst = function () {
+            var obj = pipeline.next();
             if (obj === eop) {
                 return Optional.empty();
             }
             return Optional.ofNullable(obj);
         };
 
-        this.findLast = function () {
+        terminal.findLast = function () {
             var current, last;
-            while ((current = this.next()) !== eop) {
+            while ((current = pipeline.next()) !== eop) {
                 last = current;
             }
             if (last === eop) {
@@ -147,18 +151,18 @@
             return Optional.ofNullable(last);
         };
 
-        this.forEach = function (fn) {
+        terminal.forEach = function (fn) {
             var current;
-            while ((current = this.next()) !== eop) {
+            while ((current = pipeline.next()) !== eop) {
                 fn.call(ctx, current);
             }
         };
 
-        this.min = function (comparator) {
+        terminal.min = function (comparator) {
             comparator = comparator || defaultComparator;
 
             var current, result = null;
-            while ((current = this.next()) !== eop) {
+            while ((current = pipeline.next()) !== eop) {
                 if (result === null || comparator.call(ctx, current, result) < 0) {
                     result = current;
                 }
@@ -166,11 +170,11 @@
             return result;
         };
 
-        this.max = function (comparator) {
+        terminal.max = function (comparator) {
             comparator = comparator || defaultComparator;
 
             var current, result = null;
-            while ((current = this.next()) !== eop) {
+            while ((current = pipeline.next()) !== eop) {
                 if (result === null || comparator.call(ctx, current, result) > 0) {
                     result = current;
                 }
@@ -178,34 +182,34 @@
             return result;
         };
 
-        this.sum = function () {
+        terminal.sum = function () {
             var current, result = 0;
-            while ((current = this.next()) !== eop) {
+            while ((current = pipeline.next()) !== eop) {
                 result += current;
             }
             return result;
         };
 
-        this.average = function () {
+        terminal.average = function () {
             var current, count = 0, sum = 0;
-            while ((current = this.next()) !== eop) {
+            while ((current = pipeline.next()) !== eop) {
                 sum += current;
                 count++;
             }
             return sum / count;
         };
 
-        this.count = function () {
+        terminal.count = function () {
             var current, result = 0;
-            while ((current = this.next()) !== eop) {
+            while ((current = pipeline.next()) !== eop) {
                 result++;
             }
             return result;
         };
 
-        this.allMatch = function (fn) {
+        terminal.allMatch = function (fn) {
             var current;
-            while ((current = this.next()) !== eop) {
+            while ((current = pipeline.next()) !== eop) {
                 var match = fn.call(ctx, current);
                 if (!match) {
                     return false;
@@ -214,9 +218,9 @@
             return true;
         };
 
-        this.anyMatch = function (fn) {
+        terminal.anyMatch = function (fn) {
             var current;
-            while ((current = this.next()) !== eop) {
+            while ((current = pipeline.next()) !== eop) {
                 var match = fn.call(ctx, current);
                 if (match) {
                     return true;
@@ -225,9 +229,9 @@
             return false;
         };
 
-        this.noneMatch = function (fn) {
+        terminal.noneMatch = function (fn) {
             var current;
-            while ((current = this.next()) !== eop) {
+            while ((current = pipeline.next()) !== eop) {
                 var match = fn.call(ctx, current);
                 if (match) {
                     return false;
@@ -236,10 +240,10 @@
             return true;
         };
 
-        this.collect = function (collector) {
+        terminal.collect = function (collector) {
             var identity = collector.supplier.call(ctx);
             var current, first = true;
-            while ((current = this.next()) !== eop) {
+            while ((current = pipeline.next()) !== eop) {
                 identity = collector.accumulator.call(ctx, identity, current, first);
                 first = false;
             }
@@ -249,12 +253,12 @@
             return identity;
         };
 
-        this.reduce = function () {
+        terminal.reduce = function () {
             var arg0 = arguments[0];
             var arg1 = arguments[1];
 
             if (arg1) {
-                return this.collect({
+                return pipeline.collect({
                     supplier: function () {
                         return arg0;
                     },
@@ -268,20 +272,20 @@
         var reduceFirst = function (accumulator) {
             var current;
 
-            var identity = that.next();
+            var identity = pipeline.next();
             if (identity === eop) {
                 return Optional.empty();
             }
 
-            while ((current = that.next()) !== eop) {
+            while ((current = pipeline.next()) !== eop) {
                 identity = accumulator.call(ctx, identity, current);
             }
 
             return Optional.ofNullable(identity);
         };
 
-        this.groupBy = function (keyMapper, map) {
-            return this.collect({
+        terminal.groupBy = function (keyMapper, map) {
+            return pipeline.collect({
                 supplier: function () {
                     return map || {};
                 },
@@ -301,8 +305,8 @@
             });
         };
 
-        this.indexBy = function (keyMapper, mergeFunction, map) {
-            return this.collect({
+        terminal.indexBy = function (keyMapper, mergeFunction, map) {
+            return pipeline.collect({
                 supplier: function () {
                     return map || {};
                 },
@@ -322,7 +326,7 @@
             });
         };
 
-        this.partitionBy = function () {
+        terminal.partitionBy = function () {
             var arg0 = arguments[0];
             if (isFunction(arg0)) {
                 return partitionByPredicate(arg0);
@@ -334,7 +338,7 @@
         };
 
         var partitionByPredicate = function (predicate) {
-            return that.collect({
+            return pipeline.collect({
                 supplier: function () {
                     return {};
                 },
@@ -350,7 +354,7 @@
         };
 
         var partitionByNumber = function (num) {
-            return that.collect({
+            return pipeline.collect({
                 supplier: function () {
                     return [];
                 },
@@ -372,7 +376,7 @@
             });
         };
 
-        this.joining = function (options) {
+        terminal.joining = function (options) {
             var prefix = "", suffix = "", delimiter = "";
             if (options) {
                 prefix = options.prefix || prefix;
@@ -380,7 +384,7 @@
                 delimiter = options.delimiter || delimiter;
             }
 
-            return this.collect({
+            return pipeline.collect({
                 supplier: function () {
                     return "";
                 },
@@ -393,6 +397,36 @@
                 }
             });
         };
+
+
+        //
+        // assert stream can only be consumed once by proxing all terminal operations
+        //
+
+        var consumed = false;
+
+        var assertNotConsumed = function () {
+            if (consumed) {
+                throw "stream has already been operated upon";
+            }
+        };
+
+        var terminalProxy = function (terminalFn) {
+            return function () {
+                try {
+                    assertNotConsumed();
+                    return terminalFn.apply(pipeline, arguments);
+                } finally {
+                    consumed = true;
+                }
+            };
+        };
+
+        for (var name in terminal) {
+            if (terminal.hasOwnProperty(name)) {
+                this[name] = terminalProxy(terminal[name]);
+            }
+        }
     };
 
 
@@ -673,7 +707,7 @@
     // public variables
     //
 
-    Stream.VERSION = "0.1.0";
+    Stream.VERSION = VERSION;
 
     Stream.Optional = Optional;
 

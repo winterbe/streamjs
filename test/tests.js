@@ -554,6 +554,14 @@ QUnit.test("joining 2", function (assert) {
     assert.equal(result, "PREFIX_1,2,3,4_SUFFIX");
 });
 
+QUnit.test("toArray twice", function (assert) {
+    assert.throws(function () {
+        var stream = Stream([1, 2, 3, 4]);
+        stream.toArray();
+        stream.toArray();
+    });
+});
+
 QUnit.test("range", function (assert) {
     var result = Stream.range(0, 4).toArray();
     assert.equal(result.length, 4);
