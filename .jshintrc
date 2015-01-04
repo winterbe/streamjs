@@ -1,0 +1,6 @@
+{
+    "newcap"        : false,
+    "sub"           : true,
+    "browser"       : true,
+    "globals"       : { "QUnit": true, "Stream": true }
+}

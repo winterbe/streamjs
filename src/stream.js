@@ -381,7 +381,7 @@
             if (options) {
                 prefix = options.prefix || prefix;
                 suffix = options.suffix || suffix;
-                delimiter = options.delimiter || delimiter;
+                delimiter = options.delimiter || delimiter;
             }
 
             return pipeline.collect({
