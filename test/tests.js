@@ -22,6 +22,20 @@ QUnit.test("map", function (assert) {
     assert.equal(data[3], 4);
 });
 
+QUnit.test("map: wrong args", function (assert) {
+    assert.throws(function () {
+        Stream([]).map();
+    });
+
+    assert.throws(function () {
+        Stream([]).map(123);
+    });
+
+    assert.throws(function () {
+        Stream([]).map({});
+    });
+});
+
 QUnit.test("filter", function (assert) {
     var data = [1, 2, 3, 4];
 
@@ -42,6 +56,54 @@ QUnit.test("filter", function (assert) {
     assert.equal(data[1], 2);
     assert.equal(data[2], 3);
     assert.equal(data[3], 4);
+});
+
+QUnit.test("filter: wrong args", function (assert) {
+    assert.throws(function () {
+        Stream([]).filter();
+    });
+
+    assert.throws(function () {
+        Stream([]).filter(123);
+    });
+
+    assert.throws(function () {
+        Stream([]).filter({});
+    });
+});
+
+QUnit.test("filter: wrong return type", function (assert) {
+    assert.throws(function () {
+        Stream([1, 2, 3])
+            .filter(function () {
+                return "test";
+            })
+            .toArray();
+    });
+
+    assert.throws(function () {
+        Stream([1, 2, 3])
+            .filter(function () {
+                return 1;
+            })
+            .toArray();
+    });
+
+    assert.throws(function () {
+        Stream([1, 2, 3])
+            .filter(function () {
+                return {};
+            })
+            .toArray();
+    });
+
+    assert.throws(function () {
+        Stream([1, 2, 3])
+            .filter(function () {
+
+            })
+            .toArray();
+    });
 });
 
 QUnit.test("flatMap", function (assert) {
@@ -67,6 +129,54 @@ QUnit.test("flatMap", function (assert) {
     assert.equal(data[0], 1);
     assert.equal(data[1], 2);
     assert.equal(data[2], 3);
+});
+
+QUnit.test("flatMap: wrong args", function (assert) {
+    assert.throws(function () {
+        Stream([]).flatMap();
+    });
+
+    assert.throws(function () {
+        Stream([]).flatMap(123);
+    });
+
+    assert.throws(function () {
+        Stream([]).flatMap({});
+    });
+});
+
+QUnit.test("flatMap: wrong return type", function (assert) {
+    assert.throws(function () {
+        Stream([1, 2, 3])
+            .flatMap(function () {
+                return "test";
+            })
+            .toArray();
+    });
+
+    assert.throws(function () {
+        Stream([1, 2, 3])
+            .flatMap(function () {
+                return 1;
+            })
+            .toArray();
+    });
+
+    assert.throws(function () {
+        Stream([1, 2, 3])
+            .flatMap(function () {
+                return {};
+            })
+            .toArray();
+    });
+
+    assert.throws(function () {
+        Stream([1, 2, 3])
+            .flatMap(function () {
+
+            })
+            .toArray();
+    });
 });
 
 QUnit.test("filter map", function (assert) {

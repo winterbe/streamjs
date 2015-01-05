@@ -42,9 +42,11 @@
         // intermediate operations (stateless)
         //
 
-        this.filter = function (fn) {
+        this.filter = function (predicate) {
+            assertFn(predicate, "predicate function argument required for filter");
             this.add(new StatelessOp(function (arg) {
-                var filtered = fn.call(ctx, arg);
+                var filtered = predicate.call(ctx, arg);
+                assertBoolean(filtered, "filter predicate function must return boolean, but is: " + filtered);
                 if (filtered) {
                     return arg;
                 } else {
@@ -54,16 +56,20 @@
             return this;
         };
 
-        this.map = function (fn) {
+        this.map = function (mapper) {
+            assertFn(transformer, "mapper function argument required for map");
             this.add(new StatelessOp(function (arg) {
-                return fn.call(ctx, arg);
+                return mapper.call(ctx, arg);
             }));
             return this;
         };
 
-        this.flatMap = function (fn) {
+        this.flatMap = function (mapper) {
+            assertFn(mapper, "mapper function argument required for flatMap");
             this.add(new StatelessOp(function (arg) {
-                return fn.call(ctx, arg);
+                var result = mapper.call(ctx, arg);
+                assertArray(result, "flatMap mapper function must return array, but is: " + result);
+                return result;
             }, true));
             return this;
         };
@@ -673,12 +679,38 @@
         return a > b ? 1 : -1;
     };
 
+    var assertFn = function (obj, errorMsg) {
+        if (!isFunction(obj)) {
+            throw errorMsg;
+        }
+    };
+
+    var assertBoolean = function (obj, errorMsg) {
+        if (!isBoolean(obj)) {
+            throw errorMsg;
+        }
+    };
+
+    var assertArray = function (obj, errorMsg) {
+        if (!isArray(obj)) {
+            throw errorMsg;
+        }
+    };
+
     var isFunction = function (obj) {
         return typeof obj === 'function' || false;
     };
 
+    var isBoolean = function (obj) {
+        return obj === true || obj === false || Object.prototype.toString.call(obj) === '[object Boolean]';
+    };
+
     var isNumber = function (obj) {
         return Object.prototype.toString.call(obj) === '[object Number]';
+    };
+
+    var isArray = Array.isArray || function (obj) {
+        return Object.prototype.toString.call(obj) === '[object Array]';
     };
 
 
