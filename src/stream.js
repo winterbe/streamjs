@@ -46,7 +46,6 @@
             assertFn(predicate, "predicate function argument required for filter");
             this.add(new StatelessOp(function (arg) {
                 var filtered = predicate.call(ctx, arg);
-                assertBoolean(filtered, "filter predicate function must return boolean, but is: " + filtered);
                 if (filtered) {
                     return arg;
                 } else {
@@ -57,7 +56,7 @@
         };
 
         this.map = function (mapper) {
-            assertFn(transformer, "mapper function argument required for map");
+            assertFn(mapper, "mapper function argument required for map");
             this.add(new StatelessOp(function (arg) {
                 return mapper.call(ctx, arg);
             }));
@@ -67,9 +66,7 @@
         this.flatMap = function (mapper) {
             assertFn(mapper, "mapper function argument required for flatMap");
             this.add(new StatelessOp(function (arg) {
-                var result = mapper.call(ctx, arg);
-                assertArray(result, "flatMap mapper function must return array, but is: " + result);
-                return result;
+                return mapper.call(ctx, arg);
             }, true));
             return this;
         };
@@ -685,32 +682,12 @@
         }
     };
 
-    var assertBoolean = function (obj, errorMsg) {
-        if (!isBoolean(obj)) {
-            throw errorMsg;
-        }
-    };
-
-    var assertArray = function (obj, errorMsg) {
-        if (!isArray(obj)) {
-            throw errorMsg;
-        }
-    };
-
     var isFunction = function (obj) {
         return typeof obj === 'function' || false;
     };
 
-    var isBoolean = function (obj) {
-        return obj === true || obj === false || Object.prototype.toString.call(obj) === '[object Boolean]';
-    };
-
     var isNumber = function (obj) {
         return Object.prototype.toString.call(obj) === '[object Number]';
-    };
-
-    var isArray = Array.isArray || function (obj) {
-        return Object.prototype.toString.call(obj) === '[object Array]';
     };
 
 

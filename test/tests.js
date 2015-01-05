@@ -72,40 +72,6 @@ QUnit.test("filter: wrong args", function (assert) {
     });
 });
 
-QUnit.test("filter: wrong return type", function (assert) {
-    assert.throws(function () {
-        Stream([1, 2, 3])
-            .filter(function () {
-                return "test";
-            })
-            .toArray();
-    });
-
-    assert.throws(function () {
-        Stream([1, 2, 3])
-            .filter(function () {
-                return 1;
-            })
-            .toArray();
-    });
-
-    assert.throws(function () {
-        Stream([1, 2, 3])
-            .filter(function () {
-                return {};
-            })
-            .toArray();
-    });
-
-    assert.throws(function () {
-        Stream([1, 2, 3])
-            .filter(function () {
-
-            })
-            .toArray();
-    });
-});
-
 QUnit.test("flatMap", function (assert) {
     var data = [1, 2, 3];
 
@@ -142,40 +108,6 @@ QUnit.test("flatMap: wrong args", function (assert) {
 
     assert.throws(function () {
         Stream([]).flatMap({});
-    });
-});
-
-QUnit.test("flatMap: wrong return type", function (assert) {
-    assert.throws(function () {
-        Stream([1, 2, 3])
-            .flatMap(function () {
-                return "test";
-            })
-            .toArray();
-    });
-
-    assert.throws(function () {
-        Stream([1, 2, 3])
-            .flatMap(function () {
-                return 1;
-            })
-            .toArray();
-    });
-
-    assert.throws(function () {
-        Stream([1, 2, 3])
-            .flatMap(function () {
-                return {};
-            })
-            .toArray();
-    });
-
-    assert.throws(function () {
-        Stream([1, 2, 3])
-            .flatMap(function () {
-
-            })
-            .toArray();
     });
 });
 
