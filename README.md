@@ -1,7 +1,7 @@
 Stream.js [![Travic CI](https://travis-ci.org/winterbe/streamjs.svg?branch=master)](https://travis-ci.org/winterbe/streamjs)
 ========================
 
-> An Object Streaming Pipeline for JavaScript - inspired by the Java 8 Streams API
+> An Object Streaming Pipeline for JavaScript - inspired by the [Java 8 Streams API](http://winterbe.com/posts/2014/07/31/java8-stream-tutorial-examples/)
 
 ```javascript
 Stream([5, 9, 2, 4, 8, 1])
@@ -15,9 +15,72 @@ Stream([5, 9, 2, 4, 8, 1])
    .toArray();
 ```
 
-## About
+## Introduction
 
-Stream.js is currently under heavy development, but not yet ready for production. The main goal is to create a pendant of the Java 8 Streams API for the browser so you can use the same stream operations both on the backend and on the frontend. Although the API is very similar to Java 8, implementations are completely rewritten in JavaScript.
+Stream.js is an object streaming pipeline for JavaScript. The API is very similar to the [Java 8 Streams API](http://winterbe.com/posts/2014/07/31/java8-stream-tutorial-examples/), however the implementation is completely rewritten in JavaScript. The main goal of this project is to provide a pendant to Java 8 Streams usable in modern browsers, so Java developers can reuse their knowledge when working on web frontends.
+
+## Installation
+
+Stream.js can be installed manually by downloading the [latest release](https://github.com/winterbe/streamjs/releases) from GitHub. The `dist` folder contains both the minified script and a source map file. Alternatively you can install Stream.js with Bower:
+
+```bash
+$ bower install streamjs
+```
+
+## API Doc
+
+Stream.js defines a single namespace `Stream` with various constructors to create a new stream from different input sources like arrays, maps or number ranges. Streams are monadic types with various useful operations which can be chained to perform complex operations upon the input elements. Operations are either intermediate or terminal. Intermediate operations return the stream itself to construct operation chains. Terminal operations return a single result. Some terminal operations return a special `Optional` type which is described later.
+
+#### Constructors
+
+- Stream
+- Stream.range
+
+#### Intermediate Operations
+
+- filter
+- map
+- flatMap
+- sorted
+- distinct
+- limit
+- skip
+- peek
+
+#### Terminal Operations
+
+- toArray
+- forEach
+- findFirst
+- min
+- max
+- sum
+- average
+- count
+- allMatch
+- anyMatch
+- noneMatch
+- collect
+- reduce
+- groupBy
+- indexBy
+- partitionBy
+- joining
+ 
+#### Optional
+
+- Optional.of
+- Optional.ofNullable
+- Optional.empty
+- get
+- isPresent
+- ifPresent
+- orElse
+- orElseGet
+- orElseThrow
+- filter
+- map
+- flatMap
 
 ## Creator
 
