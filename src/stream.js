@@ -15,13 +15,13 @@
     // Internal Pipeline (doing all the work)
     //
 
-    var Pipeline = function (array) {
+    var Pipeline = function (collection) {
         var pipeline = this;
 
         // default op iterates over input array
         var lastOp = new StatelessOp(function (arg) {
             return arg;
-        }, true, array);
+        }, true, collection);
 
         this.add = function (op) {
             if (lastOp !== null) {
@@ -477,6 +477,7 @@
 
         var buffer = null,
             flatten = false,    // if true buffer array will be iterated
+            keys = null,        // in case we iterate over object hash
             origin = 0,         // current buffer index (if flatten)
             fence = 0;          // max buffer size (if flatten)
 
@@ -498,10 +499,11 @@
                 return bufferedVal;
             }
 
-            bufferedVal = buffer[origin];
+            bufferedVal = nextBufferedVal();
             origin++;
             if (origin >= fence) {
                 buffer = null;
+                keys = null;
                 flatten = false;
                 origin = 0;
                 fence = 0;
@@ -509,11 +511,27 @@
             return bufferedVal;
         };
 
+        var nextBufferedVal = function () {
+            if (isArray(buffer)) {
+                return buffer[origin];
+            }
+            var key = keys[origin];
+            return buffer[key];
+        };
+
         var stash = function (val, flat) {
             buffer = val;
             flatten = flat;
-            if (flatten) {
+
+            if (!flatten) {
+                return;
+            }
+
+            if (isArray(buffer)) {
                 fence = buffer.length;
+            } else if (isObject(buffer)) {
+                keys = Object.keys(buffer);
+                fence = keys.length;
             }
         };
 
@@ -688,6 +706,14 @@
 
     var isNumber = function (obj) {
         return Object.prototype.toString.call(obj) === '[object Number]';
+    };
+
+    var isArray = Array.isArray || function (obj) {
+            return Object.prototype.toString.call(obj) === '[object Array]';
+        };
+
+    var isObject = function (obj) {
+        return typeof obj === 'object' && !!obj;
     };
 
 

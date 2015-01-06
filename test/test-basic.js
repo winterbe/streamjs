@@ -1,3 +1,24 @@
+QUnit.test("input: array", function (assert) {
+    var input = [1, 2, 3];
+    var result = Stream(input).toArray();
+    assert.equal(result.length, 3);
+    assert.equal(result[0], 1);
+    assert.equal(result[1], 2);
+    assert.equal(result[2], 3);
+});
+
+QUnit.test("input: object hash", function (assert) {
+    var input = {
+        foo: 1, bar: 2, foobar: 3
+    };
+
+    var result = Stream(input).toArray();
+    assert.equal(result.length, 3);
+    assert.equal(result[0], 1);
+    assert.equal(result[1], 2);
+    assert.equal(result[2], 3);
+});
+
 QUnit.test("map", function (assert) {
     var data = [1, 2, 3, 4];
 
