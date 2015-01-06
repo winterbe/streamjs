@@ -29,7 +29,7 @@ $ bower install streamjs
 
 ## API Doc
 
-Stream.js defines a single namespace `Stream` with various constructors to create a new stream from different input sources like arrays, maps or number ranges. Streams are monadic types with various useful operations which can be chained to perform complex operations upon the input elements. Operations are either intermediate or terminal. Intermediate operations return the stream itself to construct operation chains. Terminal operations return a single result. Some terminal operations return a special `Optional` type which is described later.
+Stream.js defines a single namespace `Stream` with various constructors to create new streams from different input sources like arrays, maps or number ranges. Streams are monadic types with a bunch of useful operations which can be chained to perform complex operations upon the input elements. Operations are either intermediate or terminal. Intermediate operations return the stream itself to construct operation chains. Terminal operations return a single result. Some terminal operations return a special `Optional` type which is described later.
 
 #### Constructors
 
