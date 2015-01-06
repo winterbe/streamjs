@@ -42,9 +42,10 @@
         // intermediate operations (stateless)
         //
 
-        this.filter = function (fn) {
+        this.filter = function (predicate) {
+            assertFn(predicate, "predicate function argument required for filter");
             this.add(new StatelessOp(function (arg) {
-                var filtered = fn.call(ctx, arg);
+                var filtered = predicate.call(ctx, arg);
                 if (filtered) {
                     return arg;
                 } else {
@@ -54,16 +55,18 @@
             return this;
         };
 
-        this.map = function (fn) {
+        this.map = function (mapper) {
+            assertFn(mapper, "mapper function argument required for map");
             this.add(new StatelessOp(function (arg) {
-                return fn.call(ctx, arg);
+                return mapper.call(ctx, arg);
             }));
             return this;
         };
 
-        this.flatMap = function (fn) {
+        this.flatMap = function (mapper) {
+            assertFn(mapper, "mapper function argument required for flatMap");
             this.add(new StatelessOp(function (arg) {
-                return fn.call(ctx, arg);
+                return mapper.call(ctx, arg);
             }, true));
             return this;
         };
@@ -671,6 +674,12 @@
             return 0;
         }
         return a > b ? 1 : -1;
+    };
+
+    var assertFn = function (obj, errorMsg) {
+        if (!isFunction(obj)) {
+            throw errorMsg;
+        }
     };
 
     var isFunction = function (obj) {
