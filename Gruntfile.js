@@ -4,7 +4,9 @@ module.exports = function (grunt) {
         pkg: grunt.file.readJSON('package.json'),
         uglify: {
             options: {
-                banner: '/*! Stream.js <%= grunt.template.today("yyyy-mm-dd") %> */\n'
+                banner: '/*! Stream.js <%= grunt.template.today("yyyy-mm-dd") %> */\n',
+                sourceMap: true,
+                sourceMapIncludeSources: true
             },
             dist: {
                 files: {
