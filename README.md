@@ -21,7 +21,7 @@ Stream.js is an object streaming pipeline for JavaScript. The API is very simila
 
 ## Installation
 
-Stream.js can be installed manually by downloading the [latest release](https://github.com/winterbe/streamjs/releases) from GitHub. The `dist` folder contains both the minified script and a source map file. Alternatively you can install Stream.js with Bower:
+Stream.js can be installed manually by downloading the [latest release](https://github.com/winterbe/streamjs/releases) from GitHub. The `dist` folder contains both the minified script and a source map file. Alternatively you can install Stream.js with [Bower](http://bower.io/):
 
 ```bash
 $ bower install streamjs
