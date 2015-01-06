@@ -645,11 +645,11 @@ QUnit.test("rangeClosed", function (assert) {
 });
 
 QUnit.test("version", function (assert) {
-    assert.equal(Stream.VERSION, "0.1.0");
+    assert.equal(Stream.VERSION, "0.2.0");
 });
 
 QUnit.test("noConflict", function (assert) {
     var ArrayStream = Stream.noConflict();
     assert.equal(window.Stream, undefined);
-    assert.equal(ArrayStream.VERSION, "0.1.0");
+    assert.equal(ArrayStream.VERSION, "0.2.0");
 });
