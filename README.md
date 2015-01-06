@@ -1,7 +1,7 @@
 Stream.js [![Travic CI](https://travis-ci.org/winterbe/streamjs.svg?branch=master)](https://travis-ci.org/winterbe/streamjs)
 ========================
 
-> A Collection Pipeline for JavaScript - inspired by the Java 8 Streams API.
+> An Object Streaming Pipeline for JavaScript - inspired by the Java 8 Streams API
 
 ```javascript
 Stream([5, 9, 2, 4, 8, 1])
