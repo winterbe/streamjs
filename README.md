@@ -15,7 +15,9 @@ Stream([5, 9, 2, 4, 8, 1])
    .toArray();
 ```
 
-[Twitter](https://twitter.com/benontherun) - [Blog](http://winterbe.com)
+<p align="center">
+   <a href="https://twitter.com/benontherun">Twitter</a> - <a href="https://plus.google.com/105973259367211176218/posts">Google+</a> - <a href="http://winterbe.com">Blog</a>
+</p>
 
 # Introduction
 
