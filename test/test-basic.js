@@ -462,29 +462,6 @@ QUnit.test("groupBy 1", function (assert) {
     assert.equal(map["Doe"][0], data[2]);
 });
 
-QUnit.test("groupBy 2", function (assert) {
-    var data = [
-        {firstName: "Peter", lastName: "Parker"},
-        {firstName: "Sandra", lastName: "Parker"},
-        {firstName: "John", lastName: "Doe"}
-    ];
-
-    var map = Stream(data)
-        .groupBy(function (obj) {
-            return obj["lastName"];
-        }, {customMap: true});
-
-    assert.equal(map.hasOwnProperty("Parker"), true);
-    assert.equal(map.hasOwnProperty("Doe"), true);
-    assert.equal(map.hasOwnProperty("customMap"), true);
-    assert.equal(map["customMap"], true);
-    assert.equal(map["Parker"].length, 2);
-    assert.equal(map["Doe"].length, 1);
-    assert.equal(map["Parker"][0], data[0]);
-    assert.equal(map["Parker"][1], data[1]);
-    assert.equal(map["Doe"][0], data[2]);
-});
-
 QUnit.test("indexBy 1", function (assert) {
     var data = [
         {firstName: "Peter", lastName: "Parker"},
@@ -535,27 +512,6 @@ QUnit.test("indexBy 3", function (assert) {
     assert.equal(map.hasOwnProperty("Doe"), true);
     assert.equal(map["Parker"], data[0]);
     assert.equal(map["Doe"], data[2]);
-});
-
-QUnit.test("indexBy 4", function (assert) {
-    var data = [
-        {firstName: "Peter", lastName: "Parker"},
-        {firstName: "Sandra", lastName: "Parker"},
-        {firstName: "John", lastName: "Doe"}
-    ];
-
-    var map = Stream(data)
-        .indexBy(function (obj) {
-            return obj["lastName"];
-        }, function (val1) {
-            return val1;
-        }, {customMap: true});
-
-    assert.equal(map.hasOwnProperty("Parker"), true);
-    assert.equal(map.hasOwnProperty("Doe"), true);
-    assert.equal(map["Parker"], data[0]);
-    assert.equal(map["Doe"], data[2]);
-    assert.equal(map["customMap"], true);
 });
 
 QUnit.test("partitionBy 1", function (assert) {

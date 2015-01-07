@@ -287,10 +287,10 @@
             return Optional.ofNullable(identity);
         };
 
-        terminal.groupBy = function (keyMapper, map) {
+        terminal.groupBy = function (keyMapper) {
             return pipeline.collect({
                 supplier: function () {
-                    return map || {};
+                    return {};
                 },
                 accumulator: function (map, obj) {
                     var key = keyMapper.call(ctx, obj);
@@ -308,10 +308,10 @@
             });
         };
 
-        terminal.indexBy = function (keyMapper, mergeFunction, map) {
+        terminal.indexBy = function (keyMapper, mergeFunction) {
             return pipeline.collect({
                 supplier: function () {
-                    return map || {};
+                    return {};
                 },
                 accumulator: function (map, obj) {
                     var key = keyMapper.call(ctx, obj);
