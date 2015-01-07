@@ -3,7 +3,7 @@ Stream.js [![Travic CI](https://travis-ci.org/winterbe/streamjs.svg?branch=maste
 
 > An Object Streaming Pipeline for JavaScript - inspired by the Java 8 Streams API
 
-```javascript
+```js
 Stream([5, 9, 2, 4, 8, 1])
    .filter(function (num) {
       return num % 2 === 1;
@@ -58,55 +58,147 @@ Stream([1, 2, 3, 4])
 
 ## Constructors
 
-- Stream
-- Stream.range
-- Stream.rangeClosed
+The following constructor functions can be used to create different kind of streams.
+
+### Stream(collection)
+
+Returns a new stream for the given collection. Collection can either be an array or an object hash (map).
+
+#### Stream.range(startInclusive, endExclusive)
+
+Returns a new stream for the given number range.
+
+#### Stream.rangeClosed(startInclusive, endInclusive)
+
+Returns a new stream for the given number range.
 
 ## Intermediate Operations
 
-- filter
-- map
-- flatMap
-- sorted
-- distinct
-- limit
-- skip
-- peek
+Intermediate operations all return a stream, thus enabling you to chain multiple operations one after another without using semicolons.
 
-#### Terminal Operations
+#### filter(predicate)
 
-- toArray
-- forEach
-- findFirst
-- min
-- max
-- sum
-- average
-- count
-- allMatch
-- anyMatch
-- noneMatch
-- collect
-- reduce
-- groupBy
-- indexBy
-- partitionBy
-- joining
+Filters the elements of the stream to match the given predicate function and returns the stream.
+
+#### map(mappingFn)
+
+Applies the given mapping function to each element of the stream and returns the stream.
+
+#### flatMap(flatMappingFn)
+
+Applies the given mapping function to each element of the stream and replaces the elements with the contents of returned values, then returns the stream.
+
+#### sorted()
+
+Sorts the elements of the stream according to the natural order and returns the stream.
+
+#### sorted(comparator)
+
+Sorts the elements of the stream according to the given comparator and returns the stream.
+
+#### distinct()
+
+Returns the stream consisting of the distinct elements of this stream.
+
+#### limit(maxSize)
+
+Truncates the elements of the stream to be no longer than `maxSize` and returns the stream.
+
+#### skip(n)
+
+Discards the first `n` elements and returns the stream.
+
+#### peek(consumer)
+
+Performs the consumer function for each element and returns the stream.
+
+## Terminal Operations
+
+Terminal operations return a result (or nothing), so each streaming pipeline consists of 0 to n intermediate operations followed by exactly one terminal operation.
+
+#### toArray()
+
+Returns an array containing the elements of the stream.
+
+#### forEach(consumer)
+
+Performs the consumer function for each element of the stream.
+
+#### findFirst()
+
+Returns an `Optional` wrapping the first element of the stream or `Optional.empty()` if the stream is empty.
+
+#### min()
+
+Returns an `Optional` wrapping the minimum element of the stream (according the natural order) or `Optional.empty()` if the stream is empty.
+
+#### min(comparator)
+
+Returns an `Optional` wrapping the minimum element of the stream (according the given comparator function) or `Optional.empty()` if the stream is empty.
+
+#### max()
+
+Returns an `Optional` wrapping the maximum element of the stream (according the natural order) or `Optional.empty()` if the stream is empty.
+
+#### max(comparator)
+
+Returns an `Optional` wrapping the maximum element of the stream (according the given comparator function) or `Optional.empty()` if the stream is empty.
+
+#### sum()
+
+Returns the sum of all elements in this stream.
+
+#### average()
+
+Returns an `Optional` wrapping the arithmetic mean of all elements of this stream or `Optional.empty()` if the stream is empty.
+
+#### count()
+
+Returns the number of elements of the stream.
+
+#### allMatch(predicate)
+
+Returns whether all elements of the stream match the given predicate function.
+
+#### anyMatch(predicate)
+
+Returns whether any element of the stream matches the given predicate function.
+
+#### noneMatch(predicate)
+
+Returns whether no element of the stream matches the given predicate function.
+
+#### collect(collector)
+
+Performs a generalized reduction operation denoted by the given collector and returns the reduced value. A collector consists of a supplier function, an accumulator function and an optional finisher function.
+
+#### reduce(identity, accumulator)
+
+Performs a reduction operation using the provide `identity` object as initial value and the accumulator function and returns the reduced value.
+
+#### reduce(accumulator)
+
+Performs a reduction operation using the first element of the stream as as initial value and the accumulator function and returns the reduced value wrapped as `Optional`.
+
+#### groupBy
+#### indexBy
+#### partitionBy
+#### joining
  
-## Optional
+## Stream.Optional
 
-- Optional.of
-- Optional.ofNullable
-- Optional.empty
-- get
-- isPresent
-- ifPresent
-- orElse
-- orElseGet
-- orElseThrow
-- filter
-- map
-- flatMap
+#### Optional.of(value)
+#### Optional.ofNullable(value)
+#### Optional.empty()
+#### get()
+#### isPresent()
+#### ifPresent(consumer)
+#### orElse(value)
+#### orElseGet(supplier)
+#### orElseThrow(error)
+#### filter(predicate)
+#### map(mappingFn)
+#### flatMap(mappingFn)
 
 
 # Copyright and license
