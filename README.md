@@ -39,6 +39,17 @@ Stream.js is built around a lazily evaluated operation pipeline. Instead of perf
 
 Stream operations are lazily evaluated to avoid examining all the data when it's not necessary. Streams always perform the minimal amount of operations to gain results. E.g. in a `filter -> map -> findFirst` stream you don't have to filter and map the whole data. Instead `map` and `findFirst` will only executed once before returning a single result. This results in **increased performance** when operation apon large amounts of input elements.
 
+```js
+Stream([1, 2, 3, 4])
+   .filter(function(num) {   // called twice
+      return num % 2 === 0;
+   })
+   .map(function(even) {     // called once
+      return "even" + even;
+   })
+   .findFirst();             // called once
+```
+
 # API Doc
 
 #### Constructors
