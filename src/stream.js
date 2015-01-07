@@ -170,7 +170,7 @@
                     result = current;
                 }
             }
-            return result;
+            return Optional.ofNullable(result);
         };
 
         terminal.max = function (comparator) {
@@ -182,7 +182,7 @@
                     result = current;
                 }
             }
-            return result;
+            return Optional.ofNullable(result);
         };
 
         terminal.sum = function () {

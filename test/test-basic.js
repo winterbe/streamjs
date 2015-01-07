@@ -222,30 +222,38 @@ QUnit.test("forEach", function (assert) {
 });
 
 QUnit.test("min", function (assert) {
-    var result = Stream([1, 2, 3, 4]).min();
+    var result = Stream([1, 2, 3, 4])
+        .min()
+        .get();
     assert.equal(result, 1);
 });
 
 QUnit.test("min (comparator)", function (assert) {
-    var result = Stream([1, 2, 3, 4]).min(function (a, b) {
-        if (a === b) return 0;
-        if (a > b) return -1;
-        return 1;
-    });
+    var result = Stream([1, 2, 3, 4])
+        .min(function (a, b) {
+            if (a === b) return 0;
+            if (a > b) return -1;
+            return 1;
+        })
+        .get();
     assert.equal(result, 4);
 });
 
 QUnit.test("max", function (assert) {
-    var result = Stream([1, 2, 3, 4]).max();
+    var result = Stream([1, 2, 3, 4])
+        .max()
+        .get();
     assert.equal(result, 4);
 });
 
 QUnit.test("max (comparator)", function (assert) {
-    var result = Stream([1, 2, 3, 4]).max(function (a, b) {
-        if (a === b) return 0;
-        if (a > b) return -1;
-        return 1;
-    });
+    var result = Stream([1, 2, 3, 4])
+        .max(function (a, b) {
+            if (a === b) return 0;
+            if (a > b) return -1;
+            return 1;
+        })
+        .get();
     assert.equal(result, 1);
 });
 
