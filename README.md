@@ -10,7 +10,7 @@ Stream([5, 9, 2, 4, 8, 1])
    })
    .sorted()
    .map(function (num) {
-      return "obj" + num;
+      return "odd" + num;
    })
    .toArray();
 ```
