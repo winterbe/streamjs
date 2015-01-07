@@ -15,6 +15,8 @@ Stream([5, 9, 2, 4, 8, 1])
    .toArray();
 ```
 
+[Twitter](https://twitter.com/benontherun) - [Blog](http://winterbe.com)
+
 # Introduction
 
 Stream.js is an object streaming pipeline for JavaScript. The API is very similar to the [Java 8 Streams API](http://winterbe.com/posts/2014/07/31/java8-stream-tutorial-examples/), however the implementation is completely rewritten in JavaScript. The main goal of this project is to provide a pendant to Java 8 Streams usable in modern browsers, so Java developers can reuse their knowledge when working on web frontends.
@@ -52,12 +54,13 @@ Stream([1, 2, 3, 4])
 
 # API Doc
 
-#### Constructors
+## Constructors
 
 - Stream
 - Stream.range
+- Stream.rangeClosed
 
-#### Intermediate Operations
+## Intermediate Operations
 
 - filter
 - map
@@ -88,7 +91,7 @@ Stream([1, 2, 3, 4])
 - partitionBy
 - joining
  
-#### Optional
+## Optional
 
 - Optional.of
 - Optional.ofNullable
@@ -103,15 +106,7 @@ Stream([1, 2, 3, 4])
 - map
 - flatMap
 
-## Creator
 
-Benjamin Winterberg
+# Copyright and license
 
-* http://winterbe.com
-* https://twitter.com/benontherun
-* https://plus.google.com/u/0/105973259367211176218
-
-
-## Copyright and license
-
-Code is released under MIT license and copyright (c) 2014 by Benjamin Winterberg.
+Created and copyright (c) 2014-2015 by Benjamin Winterberg. Stream.js may be freely distributed under the MIT license.
