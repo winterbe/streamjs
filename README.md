@@ -180,10 +180,19 @@ Performs a reduction operation using the provide `identity` object as initial va
 
 Performs a reduction operation using the first element of the stream as as initial value and the accumulator function and returns the reduced value wrapped as `Optional`.
 
-#### groupBy
-#### indexBy
-#### partitionBy
-#### joining
+#### groupBy(keyMapper)
+
+Groups all elements of the stream by applying the given keyMapper function and returns an object map, assigning an array value for each key.
+
+#### indexBy(keyMapper, mergeFunction)
+
+Groups all elements of the stream by applying the given keyMapper function and returns an object map, assigning a single value for each key. Multiple values for the same key will be merged using the given merge function.
+
+#### partitionBy(predicate)
+
+#### partitionBy(size)
+
+#### joining(options)
  
 ## Stream.Optional
 
