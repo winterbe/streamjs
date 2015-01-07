@@ -16,7 +16,7 @@ Stream([5, 9, 2, 4, 8, 1])
 ```
 
 <p align="center">
-   Follow on <a href="https://twitter.com/benontherun">Twitter</a> for Updates
+   <i>Follow on <a href="https://twitter.com/benontherun">Twitter</a> for Updates</i>
 </p>
 
 # Introduction
