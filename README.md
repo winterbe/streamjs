@@ -35,7 +35,9 @@ Stream.js defines a single namespace `Stream` with various constructors to creat
 
 What's the difference between Stream.js and other functional libraries like Underscore.js?
 
-Stream.js is built around a lazily evaluated operation pipeline. Instead of performing each operation one by one on the whole input collection, each object will be passed vertically upon the chain. Interim results will not be stored in internal collections (except for some stateful operations like `sorted`). Instead objects will just be passed along the pipeline.
+Stream.js is built around a lazily evaluated operation pipeline. Instead of performing each operation  on the whole input collection consecutively, each object will be passed vertically upon the chain. Interim results will not be stored in internal collections (except for some stateful operations like `sorted`). Instead objects will just be passed along the pipeline. This results in **minimized memory consumption** and internal state.
+
+Stream operations are lazily evaluated to avoid examining all the data when it's not necessary. Streams always perform the minimal amount of operations to gain results. E.g. in a `filter -> map -> findFirst` stream you don't have to filter and map the whole data. Instead `map` and `findFirst` will only executed once before returning a single result. This results in **increased performance** when operation apon large amounts of input elements.
 
 # API Doc
 
