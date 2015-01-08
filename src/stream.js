@@ -4,11 +4,12 @@
  * Copyright (c) 2014-2015 Benjamin Winterberg
  * Stream.js may be freely distributed under the MIT license.
  */
-(function (window) {
+(function () {
     "use strict";
 
 
-    var VERSION = "0.3.0";
+    var root = this,
+        VERSION = "0.3.0";
 
 
     //
@@ -780,10 +781,6 @@
     };
 
 
-    //
-    // public variables
-    //
-
     Stream.VERSION = VERSION;
 
     Stream.Optional = Optional;
@@ -795,6 +792,21 @@
         return Stream;
     };
 
-    window.Stream = Stream;
 
-}(window));
+    //
+    // expose Stream
+    //
+
+    if (typeof module !== 'undefined' && module.exports) {
+        module.exports = Stream;
+    }
+    else if (typeof define === 'function' && define.amd) {
+        define('streamjs', [], function () {
+            return Stream;
+        });
+    }
+    else {
+        root.Stream = Stream;
+    }
+
+}.call(this));
