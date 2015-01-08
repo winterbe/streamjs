@@ -199,7 +199,10 @@
                 sum += current;
                 count++;
             }
-            return sum / count;
+            if (sum === 0 || count === 0) {
+                return Optional.empty();
+            }
+            return Optional.of(sum / count);
         };
 
         terminal.count = function () {
@@ -541,6 +544,10 @@
         }
     };
 
+    Pipeline.prototype.toString = function () {
+        return "[object Stream]";
+    };
+
     var StatefulOp = function (options) {
         this.prev = null;
         this.next = null;
@@ -662,6 +669,10 @@
             }
             return this;
         };
+    };
+
+    Optional.prototype.toString = function () {
+        return "[object Optional]";
     };
 
     Optional.of = function (val) {

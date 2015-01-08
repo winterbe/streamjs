@@ -222,10 +222,9 @@ QUnit.test("forEach", function (assert) {
 });
 
 QUnit.test("min", function (assert) {
-    var result = Stream([1, 2, 3, 4])
-        .min()
-        .get();
-    assert.equal(result, 1);
+    var result = Stream([1, 2, 3, 4]).min();
+    assert.equal(result, "[object Optional]");
+    assert.equal(result.get(), 1);
 });
 
 QUnit.test("min (comparator)", function (assert) {
@@ -240,10 +239,9 @@ QUnit.test("min (comparator)", function (assert) {
 });
 
 QUnit.test("max", function (assert) {
-    var result = Stream([1, 2, 3, 4])
-        .max()
-        .get();
-    assert.equal(result, 4);
+    var result = Stream([1, 2, 3, 4]).max();
+    assert.equal(result, "[object Optional]");
+    assert.equal(result.get(), 4);
 });
 
 QUnit.test("max (comparator)", function (assert) {
@@ -269,7 +267,13 @@ QUnit.test("count", function (assert) {
 
 QUnit.test("average", function (assert) {
     var result = Stream([1, 2, 3, 4]).average();
-    assert.equal(result, 2.5);
+    assert.equal(result, "[object Optional]");
+    assert.equal(result.get(), 2.5);
+});
+
+QUnit.test("average", function (assert) {
+    var result = Stream([]).average();
+    assert.equal(result.isPresent(), false);
 });
 
 QUnit.test("allMatch true", function (assert) {
@@ -427,9 +431,9 @@ QUnit.test("reduce first", function (assert) {
     var result = Stream([1, 2, 3, 4])
         .reduce(function (identity, num) {
             return identity * num;
-        })
-        .get();
-    assert.equal(result, 24);
+        });
+    assert.equal(result, "[object Optional]");
+    assert.equal(result.get(), 24);
 });
 
 QUnit.test("reduce first empty", function (assert) {
@@ -606,6 +610,11 @@ QUnit.test("rangeClosed", function (assert) {
     assert.equal(result[2], 2);
     assert.equal(result[3], 3);
     assert.equal(result[4], 4);
+});
+
+QUnit.test("toString", function (assert) {
+    var stream = Stream([]);
+    assert.equal(stream.toString(), "[object Stream]");
 });
 
 QUnit.test("version", function (assert) {

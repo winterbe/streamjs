@@ -127,3 +127,8 @@ QUnit.test("Optional flatMap 2", function (assert) {
     });
     assert.equal(optional.isPresent(), false);
 });
+
+QUnit.test("toString", function (assert) {
+    var optional = Stream.Optional.empty();
+    assert.equal(optional.toString(), "[object Optional]");
+});
