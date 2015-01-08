@@ -672,4 +672,5 @@ QUnit.test("noConflict", function (assert) {
     var ArrayStream = Stream.noConflict();
     assert.equal(window.Stream, undefined);
     assert.ok(ArrayStream !== undefined);
+    window.Stream = ArrayStream;
 });
