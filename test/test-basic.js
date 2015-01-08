@@ -593,6 +593,37 @@ QUnit.test("toArray twice", function (assert) {
     });
 });
 
+QUnit.test("generate", function (assert) {
+    var result = Stream
+        .generate(Math.random)
+        .limit(10)
+        .toArray();
+
+    assert.equal(result.length, 10);
+});
+
+QUnit.test("iterate", function (assert) {
+    var result = Stream
+        .iterate(1, function (seed) {
+            return seed * 2;
+        })
+        .limit(11)
+        .toArray();
+
+    assert.equal(result.length, 11);
+    assert.equal(result[0], 1);
+    assert.equal(result[1], 2);
+    assert.equal(result[2], 4);
+    assert.equal(result[3], 8);
+    assert.equal(result[4], 16);
+    assert.equal(result[5], 32);
+    assert.equal(result[6], 64);
+    assert.equal(result[7], 128);
+    assert.equal(result[8], 256);
+    assert.equal(result[9], 512);
+    assert.equal(result[10], 1024);
+});
+
 QUnit.test("of", function (assert) {
     var result =
         Stream.of(1, 2, 3, 4)

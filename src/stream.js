@@ -15,13 +15,19 @@
     // Internal Pipeline (doing all the work)
     //
 
-    var Pipeline = function (collection) {
-        var pipeline = this;
+    var Pipeline = function (input) {
+        var pipeline = this, lastOp;
 
-        // default op iterates over input array
-        var lastOp = new StatelessOp(function (arg) {
-            return arg;
-        }, true, collection);
+        // default op iterates over input elements
+        if (isFunction(input)) {
+            lastOp = new GeneratorOp(function () {
+                return input.call(ctx);
+            });
+        } else {
+            lastOp = new StatelessOp(function (arg) {
+                return arg;
+            }, true, input);
+        }
 
         this.add = function (op) {
             if (lastOp !== null) {
@@ -428,10 +434,24 @@
         }
     };
 
+    Pipeline.prototype.toString = function () {
+        return "[object Stream]";
+    };
+
 
     //
     // Generic Pipeline operations
     //
+
+    var GeneratorOp = function (fn) {
+        this.prev = null;
+        this.next = null;
+
+        this.advance = function () {
+            var val = fn.call(ctx);
+            return this.next.pipe(val);
+        };
+    };
 
     var StatelessOp = function (fn, flat, data) {
         this.prev = null;
@@ -535,10 +555,6 @@
         if (data) {
             stash(data, flat);
         }
-    };
-
-    Pipeline.prototype.toString = function () {
-        return "[object Stream]";
     };
 
     var StatefulOp = function (options) {
@@ -725,8 +741,8 @@
     // Stream function grants access to pipeline
     //
 
-    var Stream = function (array) {
-        return new Pipeline(array);
+    var Stream = function (input) {
+        return new Pipeline(input);
     };
 
     Stream.range = function (startInclusive, endExclusive) {
@@ -742,7 +758,25 @@
     };
 
     Stream.of = function () {
-        return Stream(arguments);
+        // TODO passing arguments directly works in Chrome but fails with Phantom.js
+        var args = Array.prototype.slice.call(arguments);
+        return Stream(args);
+    };
+
+    Stream.generate = function (supplier) {
+        return Stream(supplier);
+    };
+
+    Stream.iterate = function (seed, fn) {
+        var first = true, current = seed;
+        return Stream(function () {
+            if (first) {
+                first = false;
+                return seed;
+            }
+            current = fn.call(ctx, current);
+            return current;
+        });
     };
 
 
