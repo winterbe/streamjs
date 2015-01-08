@@ -29,7 +29,15 @@ $ bower install streamjs
 
 # How Streams work
 
-Stream.js defines a single function `Stream` to create new streams from different input sources like _arrays_, _maps_ or _number ranges_. Streams are monadic types with a bunch of useful operations. Those functions can be chained one after another to make complex computations upon the input elements. Operations are either *intermediate* or *terminal*. Intermediate operations are lazy return the stream itself to enable method chaining. Terminal operations return a single result (or nothing at all). Some terminal operations return a special monadic `Optional` type which is described later.
+Stream.js defines a single function `Stream` to create new streams from different input sources like _arrays_, _maps_ or _number ranges_:
+
+```js
+Stream([1, 2, 3]);
+Stream({a: 1, b: 2, c: 3});
+Stream.range(1, 4);
+```
+
+Streams are monadic types with a bunch of useful operations. Those functions can be chained one after another to make complex computations upon the input elements. Operations are either *intermediate* or *terminal*. Intermediate operations are lazy and return the stream itself to enable method chaining. Terminal operations return a single result (or nothing at all). Some terminal operations return a special monadic `Optional` type which is described later.
 
 # Why Stream.js?
 
