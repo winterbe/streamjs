@@ -21,7 +21,7 @@ Stream([5, 9, 2, 4, 8, 1])
 
 # Getting started
 
-Stream.js can be installed manually by downloading the [latest release](https://github.com/winterbe/streamjs/releases) from GitHub. The `dist` folder contains both the minified script and a source map file. Alternatively you can install Stream.js with [Bower](http://bower.io/):
+Stream.js requires ECMAScript 5 and works in all modern browsers. You can install Stream.js manually by downloading the [latest release](https://github.com/winterbe/streamjs/releases) from GitHub. The `dist` folder contains both the minified script and a source map file for debugging. Alternatively you can install Stream.js with [Bower](http://bower.io/):
 
 ```bash
 $ bower install streamjs
@@ -204,10 +204,6 @@ Groups all elements of the stream by applying the given keyMapper function and r
 ##### filter(predicate)
 ##### map(mappingFn)
 ##### flatMap(mappingFn)
-
-# Compatibility
-
-Stream.js targets ECMAScript 5 javascript engines and is tested in all modern browsers. See `test` folder for a bunch of automated QUnit tests.
 
 # Copyright and license
 
