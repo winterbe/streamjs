@@ -1,7 +1,7 @@
-Stream.js [![Travic CI](https://travis-ci.org/winterbe/streamjs.svg?branch=master)](https://travis-ci.org/winterbe/streamjs) [![Bower version](https://badge.fury.io/bo/streamjs.svg)](http://badge.fury.io/bo/streamjs)
+Stream.js
 ========================
 
-> An Object Streaming Pipeline for JavaScript - inspired by the [Java 8 Streams API](http://winterbe.com/posts/2014/07/31/java8-stream-tutorial-examples/)
+[![Travic CI](https://travis-ci.org/winterbe/streamjs.svg?branch=master)](https://travis-ci.org/winterbe/streamjs) [![Bower version](https://badge.fury.io/bo/streamjs.svg)](http://badge.fury.io/bo/streamjs)
 
 ```js
 Stream([5, 9, 2, 4, 8, 1])
@@ -14,6 +14,8 @@ Stream([5, 9, 2, 4, 8, 1])
    })
    .toArray();
 ```
+
+> An Object Streaming Pipeline for JavaScript - inspired by the [Java 8 Streams API](http://winterbe.com/posts/2014/07/31/java8-stream-tutorial-examples/)
 
 <p align="center">
    <i>Follow on <a href="https://twitter.com/benontherun">Twitter</a> for Updates</i>
