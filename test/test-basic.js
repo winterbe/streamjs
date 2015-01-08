@@ -593,6 +593,22 @@ QUnit.test("toArray twice", function (assert) {
     });
 });
 
+QUnit.test("of", function (assert) {
+    var result =
+        Stream.of(1, 2, 3, 4)
+            .filter(function (num) {
+                return num % 2 === 1;
+            })
+            .map(function (num) {
+                return "odd" + num;
+            })
+            .toArray();
+
+    assert.equal(result.length, 2);
+    assert.equal(result[0], "odd1");
+    assert.equal(result[1], "odd3");
+});
+
 QUnit.test("range", function (assert) {
     var result = Stream.range(0, 4).toArray();
     assert.equal(result.length, 4);

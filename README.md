@@ -34,6 +34,7 @@ Stream.js defines a single function `Stream` to create new streams from differen
 ```js
 Stream([1, 2, 3]);
 Stream({a: 1, b: 2, c: 3});
+Stream.of(1, 2, 3);
 Stream.range(1, 4);
 ```
 
@@ -67,6 +68,10 @@ The following constructor functions can be used to create different kind of stre
 ##### Stream(collection)
 
 Returns a new stream for the given collection. Collection can either be an array or an object hash (map).
+
+##### Stream.of(args...)
+
+Returns a new stream for the given arguments.
 
 ##### Stream.range(startInclusive, endExclusive)
 

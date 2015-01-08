@@ -127,8 +127,7 @@
         var terminal = {};
 
         terminal.toArray = function () {
-            var current;
-            var result = [];
+            var current, result = [];
             while ((current = pipeline.next()) !== eop) {
                 result.push(current);
             }
@@ -163,7 +162,6 @@
 
         terminal.min = function (comparator) {
             comparator = comparator || defaultComparator;
-
             var current, result = null;
             while ((current = pipeline.next()) !== eop) {
                 if (result === null || comparator.call(ctx, current, result) < 0) {
@@ -175,7 +173,6 @@
 
         terminal.max = function (comparator) {
             comparator = comparator || defaultComparator;
-
             var current, result = null;
             while ((current = pipeline.next()) !== eop) {
                 if (result === null || comparator.call(ctx, current, result) > 0) {
@@ -411,16 +408,12 @@
 
         var consumed = false;
 
-        var assertNotConsumed = function () {
-            if (consumed) {
-                throw "stream has already been operated upon";
-            }
-        };
-
         var terminalProxy = function (terminalFn) {
             return function () {
                 try {
-                    assertNotConsumed();
+                    if (consumed) {
+                        throw "stream has already been operated upon";
+                    }
                     return terminalFn.apply(pipeline, arguments);
                 } finally {
                     consumed = true;
@@ -746,6 +739,10 @@
 
     Stream.rangeClosed = function (startInclusive, endInclusive) {
         return Stream.range(startInclusive, endInclusive + 1);
+    };
+
+    Stream.of = function () {
+        return Stream(arguments);
     };
 
 
