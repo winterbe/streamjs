@@ -1,5 +1,5 @@
 /**
- * Stream.js 0.2.0
+ * Stream.js 0.3.0
  * https://github.com/winterbe/streamjs
  * Copyright (c) 2014-2015 Benjamin Winterberg
  * Stream.js may be freely distributed under the MIT license.
@@ -8,7 +8,7 @@
     "use strict";
 
 
-    var VERSION = "0.2.0";
+    var VERSION = "0.3.0";
 
 
     //
