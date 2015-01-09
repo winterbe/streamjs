@@ -6,11 +6,11 @@ module.exports = function (grunt) {
             options: {
                 banner: '/*! Stream.js <%= grunt.template.today("yyyy-mm-dd") %> */\n',
                 sourceMap: true,
-                sourceMapIncludeSources: true
+                sourceMapIncludeSources: false
             },
             dist: {
                 files: {
-                    'dist/stream.min.js': ['src/stream.js']
+                    'src/stream.min.js': ['src/stream.js']
                 }
             }
         },
@@ -18,7 +18,7 @@ module.exports = function (grunt) {
             files: ['test/**/*.html']
         },
         jshint: {
-            files: ['src/**/*.js', 'test/**/*.js'],
+            files: ['src/stream.js', 'test/**/*.js'],
             options: {
                 jshintrc: '.jshintrc'
             }

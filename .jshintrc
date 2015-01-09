@@ -2,5 +2,5 @@
     "newcap"        : false,
     "sub"           : true,
     "browser"       : true,
-    "globals"       : { "QUnit": true, "Stream": true }
+    "globals"       : { "QUnit": true, "Stream": true, "module": true, "define": true }
 }

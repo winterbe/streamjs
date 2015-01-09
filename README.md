@@ -21,7 +21,7 @@ Stream([5, 9, 2, 4, 8, 1])
 
 # Getting started
 
-Stream.js requires ECMAScript 5 and works in all modern browsers. You can install Stream.js manually by downloading the [latest release](https://github.com/winterbe/streamjs/releases) from GitHub. The `dist` folder contains both the minified script and a source map file for debugging. Alternatively you can install Stream.js with [Bower](http://bower.io/):
+Stream.js requires ECMAScript 5 and works in all modern browsers. You can install Stream.js manually by downloading the [latest release](https://github.com/winterbe/streamjs/releases) from GitHub. The `src` folder contains the minified script and a source map file for debugging. Alternatively you can install Stream.js with [Bower](http://bower.io/):
 
 ```bash
 $ bower install streamjs
