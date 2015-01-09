@@ -29,9 +29,7 @@ $ bower install streamjs
 
 # How Streams work
 
-Stream.js defines a single function `Stream` to create new streams from different input sources like _arrays_, _maps_ or _number ranges_:
-
-##### Collection Streams
+Stream.js defines a single function `Stream` to create new streams from different input collections like _arrays_, _maps_ or _number ranges_:
 
 ```js
 Stream([1, 2, 3]);
@@ -42,9 +40,7 @@ Stream.range(1, 4);
 
 Streams are monadic types with a bunch of useful operations. Those functions can be chained one after another to make complex computations upon the input elements. Operations are either *intermediate* or *terminal*. Intermediate operations are lazy and return the stream itself to enable method chaining. Terminal operations return a single result (or nothing at all). Some terminal operations return a special monadic `Optional` type which is described later.
 
-Streams are not limited to finite data sources like collections. You can also create infinite streams of elements by utilizing generator or iterator functions.
-
-##### Infinite Streams
+Streams are not limited to finite data sources like collections. You can also create *infinite* streams of elements by utilizing generator or iterator functions.
 
 ```js
 Stream.generate(function() {
@@ -225,9 +221,15 @@ Groups all elements of the stream by applying the given keyMapper function and r
 
 ##### partitionBy(predicate)
 
+Groups all elements of the stream by the results of applying the given predicate to each element of the stream, returning an object with two keys `true` and `false`.
+
 ##### partitionBy(size)
 
+Groups all elements of the stream by chunks of the given size, returning an array of arrays.
+
 ##### joining(options)
+
+Joins all elements of the stream into a string, using the following non-required options: `options.delimiter`, `options.prefix`, `options.suffix`.
  
 ## Stream.Optional
 
