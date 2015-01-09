@@ -194,18 +194,6 @@ QUnit.test("findFirst", function (assert) {
     assert.equal(result, 2);
 });
 
-QUnit.test("findLast", function (assert) {
-    var result =
-        Stream([1, 2, 3, 4])
-            .filter(function (num) {
-                return num % 2 === 1;
-            })
-            .findLast()
-            .get();
-
-    assert.equal(result, 3);
-});
-
 QUnit.test("forEach", function (assert) {
     var data = [];
 
@@ -466,14 +454,14 @@ QUnit.test("groupBy 1", function (assert) {
     assert.equal(map["Doe"][0], data[2]);
 });
 
-QUnit.test("indexBy 1", function (assert) {
+QUnit.test("toMap 1", function (assert) {
     var data = [
         {firstName: "Peter", lastName: "Parker"},
         {firstName: "John", lastName: "Doe"}
     ];
 
     var map = Stream(data)
-        .indexBy(function (obj) {
+        .toMap(function (obj) {
             return obj["lastName"];
         });
 
@@ -483,7 +471,7 @@ QUnit.test("indexBy 1", function (assert) {
     assert.equal(map["Doe"], data[1]);
 });
 
-QUnit.test("indexBy 2", function (assert) {
+QUnit.test("toMap 2", function (assert) {
     var data = [
         {firstName: "Peter", lastName: "Parker"},
         {firstName: "Sandra", lastName: "Parker"},
@@ -492,13 +480,13 @@ QUnit.test("indexBy 2", function (assert) {
 
     assert.throws(function () {
         Stream(data)
-            .indexBy(function (obj) {
+            .toMap(function (obj) {
                 return obj["lastName"];
             });
     });
 });
 
-QUnit.test("indexBy 3", function (assert) {
+QUnit.test("toMap 3", function (assert) {
     var data = [
         {firstName: "Peter", lastName: "Parker"},
         {firstName: "Sandra", lastName: "Parker"},
@@ -659,13 +647,27 @@ QUnit.test("rangeClosed", function (assert) {
     assert.equal(result[4], 4);
 });
 
+QUnit.test("aliases", function (assert) {
+    var stream = Stream([]);
+    assert.strictEqual(stream.toMap, stream.indexBy);
+    assert.strictEqual(stream.partitioningBy, stream.partitionBy);
+    assert.strictEqual(stream.groupingBy, stream.groupBy);
+    assert.strictEqual(stream.each, stream.forEach);
+    assert.strictEqual(stream.toList, stream.toArray);
+    assert.strictEqual(stream.sorted, stream.sort);
+    assert.strictEqual(stream.count, stream.size);
+    assert.strictEqual(stream.avg, stream.average);
+    assert.strictEqual(stream.join, stream.joining);
+    assert.strictEqual(stream.findAny, stream.findFirst);
+});
+
 QUnit.test("toString", function (assert) {
     var stream = Stream([]);
     assert.equal(stream.toString(), "[object Stream]");
 });
 
 QUnit.test("version", function (assert) {
-    assert.equal(Stream.VERSION, "0.3.0");
+    assert.equal(Stream.VERSION, "0.4.0");
 });
 
 QUnit.test("noConflict", function (assert) {

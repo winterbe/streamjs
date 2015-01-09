@@ -1,5 +1,5 @@
 /**
- * Stream.js 0.3.0
+ * Stream.js 0.4.0
  * https://github.com/winterbe/streamjs
  * Copyright (c) 2014-2015 Benjamin Winterberg
  * Stream.js may be freely distributed under the MIT license.
@@ -9,7 +9,7 @@
 
 
     var root = this,
-        VERSION = "0.3.0";
+        VERSION = "0.4.0";
 
 
     //
@@ -147,17 +147,6 @@
                 return Optional.empty();
             }
             return Optional.ofNullable(obj);
-        };
-
-        terminal.findLast = function () {
-            var current, last;
-            while ((current = pipeline.next()) !== eop) {
-                last = current;
-            }
-            if (last === eop) {
-                return Optional.empty();
-            }
-            return Optional.ofNullable(last);
         };
 
         terminal.forEach = function (fn) {
@@ -315,7 +304,7 @@
             });
         };
 
-        terminal.indexBy = function (keyMapper, mergeFunction) {
+        terminal.toMap = function (keyMapper, mergeFunction) {
             return pipeline.collect({
                 supplier: function () {
                     return {};
@@ -433,6 +422,22 @@
                 this[name] = terminalProxy(terminal[name]);
             }
         }
+
+
+        //
+        // aliases
+        //
+
+        this.indexBy = this.toMap;
+        this.partitioningBy = this.partitionBy;
+        this.groupingBy = this.groupBy;
+        this.each = this.forEach;
+        this.toList = this.toArray;
+        this.join = this.joining;
+        this.avg = this.average;
+        this.sort = this.sorted;
+        this.size = this.count;
+        this.findAny = this.findFirst;
     };
 
     Pipeline.prototype.toString = function () {
@@ -759,7 +764,6 @@
     };
 
     Stream.of = function () {
-        // TODO passing arguments directly works in Chrome but fails with Phantom.js
         var args = Array.prototype.slice.call(arguments);
         return Stream(args);
     };

@@ -123,9 +123,13 @@ Applies the given mapping function to each element of the stream and replaces th
 
 Sorts the elements of the stream according to the natural order and returns the stream.
 
+Alias: `sort`
+
 ##### sorted(comparator)
 
 Sorts the elements of the stream according to the given comparator and returns the stream.
+
+Alias: `sort`
 
 ##### distinct()
 
@@ -151,13 +155,19 @@ Terminal operations return a result (or nothing), so each streaming pipeline con
 
 Returns an array containing the elements of the stream.
 
+Alias: `toList`
+
 ##### forEach(consumer)
 
 Performs the consumer function for each element of the stream.
 
+Alias: `each`
+
 ##### findFirst()
 
 Returns an `Optional` wrapping the first element of the stream or `Optional.empty()` if the stream is empty.
+
+Alias: `findAny`
 
 ##### min()
 
@@ -183,9 +193,13 @@ Returns the sum of all elements in this stream.
 
 Returns an `Optional` wrapping the arithmetic mean of all elements of this stream or `Optional.empty()` if the stream is empty.
 
+Alias: `avg`
+
 ##### count()
 
 Returns the number of elements of the stream.
+
+Alias: `size`
 
 ##### allMatch(predicate)
 
@@ -211,25 +225,35 @@ Performs a reduction operation using the provided `identity` object as initial v
 
 Performs a reduction operation using the first element of the stream as as initial value and the accumulator function and returns the reduced value wrapped as `Optional`.
 
-##### groupBy(keyMapper)
+##### groupingBy(keyMapper)
 
 Groups all elements of the stream by applying the given keyMapper function and returns an object map, assigning an array value for each key.
 
-##### indexBy(keyMapper, mergeFunction)
+Alias: `groupBy`
+
+##### toMap(keyMapper, mergeFunction)
 
 Groups all elements of the stream by applying the given keyMapper function and returns an object map, assigning a single value for each key. Multiple values for the same key will be merged using the given merge function.
 
-##### partitionBy(predicate)
+Alias: `indexBy`
+
+##### partitioningBy(predicate)
 
 Groups all elements of the stream by the results of applying the given predicate to each element of the stream, returning an object with two keys `true` and `false`.
 
-##### partitionBy(size)
+Alias: `partitionBy`
+
+##### partitioningBy(size)
 
 Groups all elements of the stream by chunks of the given size, returning an array of arrays.
+
+Alias: `partitionBy`
 
 ##### joining(options)
 
 Joins all elements of the stream into a string, using the following non-required options: `options.delimiter`, `options.prefix`, `options.suffix`.
+
+Alias: `join`
  
 ## Stream.Optional
 
