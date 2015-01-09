@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Streamjs : Object Streaming Pipeline for JavaScript - inspired by the Java 8 Streams API">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Streamjs</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/winterbe/streamjs">View on GitHub</a>
+
+          <h1 id="project_title">Streamjs</h1>
+          <h2 id="project_tagline">Object Streaming Pipeline for JavaScript - inspired by the Java 8 Streams API</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/winterbe/streamjs/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/winterbe/streamjs/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a id="streamjs" class="anchor" href="#streamjs" aria-hidden="true"><span class="octicon octicon-link"></span></a>Stream.js</h1>
+
+<blockquote>
+<p>An Object Streaming Pipeline for JavaScript - inspired by the <a href="http://winterbe.com/posts/2014/07/31/java8-stream-tutorial-examples/">Java 8 Streams API</a></p>
+</blockquote>
+
+<div class="highlight highlight-js"><pre>Stream([<span class="pl-c1">5</span>, <span class="pl-c1">9</span>, <span class="pl-c1">2</span>, <span class="pl-c1">4</span>, <span class="pl-c1">8</span>, <span class="pl-c1">1</span>])
+   .filter(<span class="pl-st">function</span> (<span class="pl-vpf">num</span>) {
+      <span class="pl-k">return</span> num <span class="pl-k">%</span> <span class="pl-c1">2</span> <span class="pl-k">===</span> <span class="pl-c1">1</span>;
+   })
+   .sorted()
+   .map(<span class="pl-st">function</span> (<span class="pl-vpf">num</span>) {
+      <span class="pl-k">return</span> <span class="pl-s1"><span class="pl-pds">"</span>odd<span class="pl-pds">"</span></span> <span class="pl-k">+</span> num;
+   })
+   .toArray();</pre></div>
+
+<p align="center">
+   <i>Follow on <a href="https://twitter.com/benontherun">Twitter</a> for Updates</i>
+</p>
+
+<h1>
+<a id="getting-started" class="anchor" href="#getting-started" aria-hidden="true"><span class="octicon octicon-link"></span></a>Getting started</h1>
+
+<p>Stream.js requires ECMAScript 5 and works in all modern browsers. You can install Stream.js manually by downloading the <a href="https://github.com/winterbe/streamjs/releases">latest release</a> from GitHub. The <code>src</code> folder contains the minified script and a source map file for debugging. Alternatively you can install Stream.js with <a href="http://bower.io/">Bower</a>:</p>
+
+<div class="highlight highlight-bash"><pre>$ bower install streamjs</pre></div>
+
+<h1>
+<a id="how-streams-work" class="anchor" href="#how-streams-work" aria-hidden="true"><span class="octicon octicon-link"></span></a>How Streams work</h1>
+
+<p>Stream.js defines a single function <code>Stream</code> to create new streams from different input collections like <em>arrays</em>, <em>maps</em> or <em>number ranges</em>:</p>
+
+<div class="highlight highlight-js"><pre>Stream([<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>]);
+Stream({a<span class="pl-k">:</span> <span class="pl-c1">1</span>, b<span class="pl-k">:</span> <span class="pl-c1">2</span>, c<span class="pl-k">:</span> <span class="pl-c1">3</span>});
+Stream.of(<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>);
+Stream.range(<span class="pl-c1">1</span>, <span class="pl-c1">4</span>);</pre></div>
+
+<p>Streams are monadic types with a bunch of useful operations. Those functions can be chained one after another to make complex computations upon the input elements. Operations are either <em>intermediate</em> or <em>terminal</em>. Intermediate operations are lazy and return the stream itself to enable method chaining. Terminal operations return a single result (or nothing at all). Some terminal operations return a special monadic <code>Optional</code> type which is described later.</p>
+
+<p>Streams are not limited to finite data sources like collections. You can also create <em>infinite</em> streams of elements by utilizing generator or iterator functions.</p>
+
+<div class="highlight highlight-js"><pre>Stream.generate(<span class="pl-st">function</span>() {
+   <span class="pl-k">return</span> <span class="pl-c1">1337</span> <span class="pl-k">*</span> <span class="pl-s3">Math</span>.<span class="pl-s3">random</span>();
+);</pre></div>
+
+<div class="highlight highlight-js"><pre>Stream.iterate(<span class="pl-c1">1</span>, <span class="pl-st">function</span> (<span class="pl-vpf">seed</span>) {
+   <span class="pl-k">return</span> seed <span class="pl-k">*</span> <span class="pl-c1">2</span>;
+});</pre></div>
+
+<h1>
+<a id="why-streamjs" class="anchor" href="#why-streamjs" aria-hidden="true"><span class="octicon octicon-link"></span></a>Why Stream.js?</h1>
+
+<p>What's so different between Stream.js and other functional libraries like Underscore.js?</p>
+
+<p>Stream.js is built around a lazily evaluated operation pipeline. Instead of consecutively performing each operation on the whole input collection, objects are passed vertically and one by one upon the chain. Interim results will <em>not</em> be stored in internal collections (except for some stateful operations like <code>sorted</code>). Instead objects are directly piped into the resulting object as specified by the terminal operation. This results in <strong>minimized memory consumption</strong> and internal state.</p>
+
+<p>Stream operations are lazily evaluated to avoid examining all of the input data when it's not necessary. Streams always perform the minimal amount of operations to gain results. E.g. in a <code>filter - map - findFirst</code> stream you don't have to filter and map the whole data. Instead <code>map</code> and <code>findFirst</code> will only executed once before returning the single result. This results in <strong>increased performance</strong> when operation upon large amounts of input elements.</p>
+
+<div class="highlight highlight-js"><pre>Stream([<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>, <span class="pl-c1">4</span>])
+   .filter(<span class="pl-st">function</span>(<span class="pl-vpf">num</span>) {   <span class="pl-c">// called twice</span>
+      <span class="pl-k">return</span> num <span class="pl-k">%</span> <span class="pl-c1">2</span> <span class="pl-k">===</span> <span class="pl-c1">0</span>;
+   })
+   .map(<span class="pl-st">function</span>(<span class="pl-vpf">even</span>) {     <span class="pl-c">// called once</span>
+      <span class="pl-k">return</span> <span class="pl-s1"><span class="pl-pds">"</span>even<span class="pl-pds">"</span></span> <span class="pl-k">+</span> even;
+   })
+   .findFirst();             <span class="pl-c">// called once</span></pre></div>
+
+<h1>
+<a id="api-doc" class="anchor" href="#api-doc" aria-hidden="true"><span class="octicon octicon-link"></span></a>API Doc</h1>
+
+<h2>
+<a id="constructors" class="anchor" href="#constructors" aria-hidden="true"><span class="octicon octicon-link"></span></a>Constructors</h2>
+
+<p>The following constructor functions can be used to create different kind of streams.</p>
+
+<h5>
+<a id="streamcollection" class="anchor" href="#streamcollection" aria-hidden="true"><span class="octicon octicon-link"></span></a>Stream(collection)</h5>
+
+<p>Returns a new stream for the given collection. Collection can either be an array or an object hash (map).</p>
+
+<h5>
+<a id="streamofargs" class="anchor" href="#streamofargs" aria-hidden="true"><span class="octicon octicon-link"></span></a>Stream.of(args...)</h5>
+
+<p>Returns a new stream for the given arguments.</p>
+
+<h5>
+<a id="streamrangestartinclusive-endexclusive" class="anchor" href="#streamrangestartinclusive-endexclusive" aria-hidden="true"><span class="octicon octicon-link"></span></a>Stream.range(startInclusive, endExclusive)</h5>
+
+<p>Returns a new stream for the given number range.</p>
+
+<h5>
+<a id="streamrangeclosedstartinclusive-endinclusive" class="anchor" href="#streamrangeclosedstartinclusive-endinclusive" aria-hidden="true"><span class="octicon octicon-link"></span></a>Stream.rangeClosed(startInclusive, endInclusive)</h5>
+
+<p>Returns a new stream for the given number range.</p>
+
+<h5>
+<a id="streamgeneratesupplier" class="anchor" href="#streamgeneratesupplier" aria-hidden="true"><span class="octicon octicon-link"></span></a>Stream.generate(supplier)</h5>
+
+<p>Returns a new infinite stream. The elements of the stream are generated by the given supplier function.</p>
+
+<h5>
+<a id="streamiterateseed-fn" class="anchor" href="#streamiterateseed-fn" aria-hidden="true"><span class="octicon octicon-link"></span></a>Stream.iterate(seed, fn)</h5>
+
+<p>Returns a new infinite stream. The elements of the stream are generated by utilizing the given iterator function, starting with <code>seed</code> at n=0, then calling fn(seed) for n=1, fn(fn(seed)) for n=2 etc.</p>
+
+<h2>
+<a id="intermediate-operations" class="anchor" href="#intermediate-operations" aria-hidden="true"><span class="octicon octicon-link"></span></a>Intermediate Operations</h2>
+
+<p>Intermediate operations all return a stream, thus enabling you to chain multiple operations one after another without using semicolons.</p>
+
+<h5>
+<a id="filterpredicate" class="anchor" href="#filterpredicate" aria-hidden="true"><span class="octicon octicon-link"></span></a>filter(predicate)</h5>
+
+<p>Filters the elements of the stream to match the given predicate function and returns the stream.</p>
+
+<h5>
+<a id="mapmappingfn" class="anchor" href="#mapmappingfn" aria-hidden="true"><span class="octicon octicon-link"></span></a>map(mappingFn)</h5>
+
+<p>Applies the given mapping function to each element of the stream and returns the stream.</p>
+
+<h5>
+<a id="flatmapflatmappingfn" class="anchor" href="#flatmapflatmappingfn" aria-hidden="true"><span class="octicon octicon-link"></span></a>flatMap(flatMappingFn)</h5>
+
+<p>Applies the given mapping function to each element of the stream and replaces the elements with the contents of returned values, then returns the stream.</p>
+
+<h5>
+<a id="sorted" class="anchor" href="#sorted" aria-hidden="true"><span class="octicon octicon-link"></span></a>sorted()</h5>
+
+<p>Sorts the elements of the stream according to the natural order and returns the stream.</p>
+
+<p>Alias: <code>sort</code></p>
+
+<h5>
+<a id="sortedcomparator" class="anchor" href="#sortedcomparator" aria-hidden="true"><span class="octicon octicon-link"></span></a>sorted(comparator)</h5>
+
+<p>Sorts the elements of the stream according to the given comparator and returns the stream.</p>
+
+<p>Alias: <code>sort</code></p>
+
+<h5>
+<a id="distinct" class="anchor" href="#distinct" aria-hidden="true"><span class="octicon octicon-link"></span></a>distinct()</h5>
+
+<p>Returns the stream consisting of the distinct elements of this stream.</p>
+
+<h5>
+<a id="limitmaxsize" class="anchor" href="#limitmaxsize" aria-hidden="true"><span class="octicon octicon-link"></span></a>limit(maxSize)</h5>
+
+<p>Truncates the elements of the stream to be no longer than <code>maxSize</code> and returns the stream.</p>
+
+<h5>
+<a id="skipn" class="anchor" href="#skipn" aria-hidden="true"><span class="octicon octicon-link"></span></a>skip(n)</h5>
+
+<p>Discards the first <code>n</code> elements and returns the stream.</p>
+
+<h5>
+<a id="peekconsumer" class="anchor" href="#peekconsumer" aria-hidden="true"><span class="octicon octicon-link"></span></a>peek(consumer)</h5>
+
+<p>Performs the consumer function for each element and returns the stream.</p>
+
+<h2>
+<a id="terminal-operations" class="anchor" href="#terminal-operations" aria-hidden="true"><span class="octicon octicon-link"></span></a>Terminal Operations</h2>
+
+<p>Terminal operations return a result (or nothing), so each streaming pipeline consists of 0 to n intermediate operations followed by exactly one terminal operation.</p>
+
+<h5>
+<a id="toarray" class="anchor" href="#toarray" aria-hidden="true"><span class="octicon octicon-link"></span></a>toArray()</h5>
+
+<p>Returns an array containing the elements of the stream.</p>
+
+<p>Alias: <code>toList</code></p>
+
+<h5>
+<a id="foreachconsumer" class="anchor" href="#foreachconsumer" aria-hidden="true"><span class="octicon octicon-link"></span></a>forEach(consumer)</h5>
+
+<p>Performs the consumer function for each element of the stream.</p>
+
+<p>Alias: <code>each</code></p>
+
+<h5>
+<a id="findfirst" class="anchor" href="#findfirst" aria-hidden="true"><span class="octicon octicon-link"></span></a>findFirst()</h5>
+
+<p>Returns an <code>Optional</code> wrapping the first element of the stream or <code>Optional.empty()</code> if the stream is empty.</p>
+
+<p>Alias: <code>findAny</code></p>
+
+<h5>
+<a id="min" class="anchor" href="#min" aria-hidden="true"><span class="octicon octicon-link"></span></a>min()</h5>
+
+<p>Returns an <code>Optional</code> wrapping the minimum element of the stream (according the natural order) or <code>Optional.empty()</code> if the stream is empty.</p>
+
+<h5>
+<a id="mincomparator" class="anchor" href="#mincomparator" aria-hidden="true"><span class="octicon octicon-link"></span></a>min(comparator)</h5>
+
+<p>Returns an <code>Optional</code> wrapping the minimum element of the stream (according the given comparator function) or <code>Optional.empty()</code> if the stream is empty.</p>
+
+<h5>
+<a id="max" class="anchor" href="#max" aria-hidden="true"><span class="octicon octicon-link"></span></a>max()</h5>
+
+<p>Returns an <code>Optional</code> wrapping the maximum element of the stream (according the natural order) or <code>Optional.empty()</code> if the stream is empty.</p>
+
+<h5>
+<a id="maxcomparator" class="anchor" href="#maxcomparator" aria-hidden="true"><span class="octicon octicon-link"></span></a>max(comparator)</h5>
+
+<p>Returns an <code>Optional</code> wrapping the maximum element of the stream (according the given comparator function) or <code>Optional.empty()</code> if the stream is empty.</p>
+
+<h5>
+<a id="sum" class="anchor" href="#sum" aria-hidden="true"><span class="octicon octicon-link"></span></a>sum()</h5>
+
+<p>Returns the sum of all elements in this stream.</p>
+
+<h5>
+<a id="average" class="anchor" href="#average" aria-hidden="true"><span class="octicon octicon-link"></span></a>average()</h5>
+
+<p>Returns an <code>Optional</code> wrapping the arithmetic mean of all elements of this stream or <code>Optional.empty()</code> if the stream is empty.</p>
+
+<p>Alias: <code>avg</code></p>
+
+<h5>
+<a id="count" class="anchor" href="#count" aria-hidden="true"><span class="octicon octicon-link"></span></a>count()</h5>
+
+<p>Returns the number of elements of the stream.</p>
+
+<p>Alias: <code>size</code></p>
+
+<h5>
+<a id="allmatchpredicate" class="anchor" href="#allmatchpredicate" aria-hidden="true"><span class="octicon octicon-link"></span></a>allMatch(predicate)</h5>
+
+<p>Returns whether all elements of the stream match the given predicate function.</p>
+
+<h5>
+<a id="anymatchpredicate" class="anchor" href="#anymatchpredicate" aria-hidden="true"><span class="octicon octicon-link"></span></a>anyMatch(predicate)</h5>
+
+<p>Returns whether any element of the stream matches the given predicate function.</p>
+
+<h5>
+<a id="nonematchpredicate" class="anchor" href="#nonematchpredicate" aria-hidden="true"><span class="octicon octicon-link"></span></a>noneMatch(predicate)</h5>
+
+<p>Returns whether no element of the stream matches the given predicate function.</p>
+
+<h5>
+<a id="collectcollector" class="anchor" href="#collectcollector" aria-hidden="true"><span class="octicon octicon-link"></span></a>collect(collector)</h5>
+
+<p>Performs a generalized reduction operation denoted by the given collector and returns the reduced value. A collector consists of a supplier function, an accumulator function and an optional finisher function.</p>
+
+<h5>
+<a id="reduceidentity-accumulator" class="anchor" href="#reduceidentity-accumulator" aria-hidden="true"><span class="octicon octicon-link"></span></a>reduce(identity, accumulator)</h5>
+
+<p>Performs a reduction operation using the provided <code>identity</code> object as initial value and the accumulator function and returns the reduced value.</p>
+
+<h5>
+<a id="reduceaccumulator" class="anchor" href="#reduceaccumulator" aria-hidden="true"><span class="octicon octicon-link"></span></a>reduce(accumulator)</h5>
+
+<p>Performs a reduction operation using the first element of the stream as as initial value and the accumulator function and returns the reduced value wrapped as <code>Optional</code>.</p>
+
+<h5>
+<a id="groupingbykeymapper" class="anchor" href="#groupingbykeymapper" aria-hidden="true"><span class="octicon octicon-link"></span></a>groupingBy(keyMapper)</h5>
+
+<p>Groups all elements of the stream by applying the given keyMapper function and returns an object map, assigning an array value for each key.</p>
+
+<p>Alias: <code>groupBy</code></p>
+
+<h5>
+<a id="tomapkeymapper-mergefunction" class="anchor" href="#tomapkeymapper-mergefunction" aria-hidden="true"><span class="octicon octicon-link"></span></a>toMap(keyMapper, mergeFunction)</h5>
+
+<p>Groups all elements of the stream by applying the given keyMapper function and returns an object map, assigning a single value for each key. Multiple values for the same key will be merged using the given merge function.</p>
+
+<p>Alias: <code>indexBy</code></p>
+
+<h5>
+<a id="partitioningbypredicate" class="anchor" href="#partitioningbypredicate" aria-hidden="true"><span class="octicon octicon-link"></span></a>partitioningBy(predicate)</h5>
+
+<p>Groups all elements of the stream by the results of applying the given predicate to each element of the stream, returning an object with two keys <code>true</code> and <code>false</code>.</p>
+
+<p>Alias: <code>partitionBy</code></p>
+
+<h5>
+<a id="partitioningbysize" class="anchor" href="#partitioningbysize" aria-hidden="true"><span class="octicon octicon-link"></span></a>partitioningBy(size)</h5>
+
+<p>Groups all elements of the stream by chunks of the given size, returning an array of arrays.</p>
+
+<p>Alias: <code>partitionBy</code></p>
+
+<h5>
+<a id="joiningoptions" class="anchor" href="#joiningoptions" aria-hidden="true"><span class="octicon octicon-link"></span></a>joining(options)</h5>
+
+<p>Joins all elements of the stream into a string, using the following non-required options: <code>options.delimiter</code>, <code>options.prefix</code>, <code>options.suffix</code>.</p>
+
+<p>Alias: <code>join</code></p>
+
+<h2>
+<a id="streamoptional" class="anchor" href="#streamoptional" aria-hidden="true"><span class="octicon octicon-link"></span></a>Stream.Optional</h2>
+
+<h5>
+<a id="optionalofvalue" class="anchor" href="#optionalofvalue" aria-hidden="true"><span class="octicon octicon-link"></span></a>Optional.of(value)</h5>
+
+<h5>
+<a id="optionalofnullablevalue" class="anchor" href="#optionalofnullablevalue" aria-hidden="true"><span class="octicon octicon-link"></span></a>Optional.ofNullable(value)</h5>
+
+<h5>
+<a id="optionalempty" class="anchor" href="#optionalempty" aria-hidden="true"><span class="octicon octicon-link"></span></a>Optional.empty()</h5>
+
+<h5>
+<a id="get" class="anchor" href="#get" aria-hidden="true"><span class="octicon octicon-link"></span></a>get()</h5>
+
+<h5>
+<a id="ispresent" class="anchor" href="#ispresent" aria-hidden="true"><span class="octicon octicon-link"></span></a>isPresent()</h5>
+
+<h5>
+<a id="ifpresentconsumer" class="anchor" href="#ifpresentconsumer" aria-hidden="true"><span class="octicon octicon-link"></span></a>ifPresent(consumer)</h5>
+
+<h5>
+<a id="orelsevalue" class="anchor" href="#orelsevalue" aria-hidden="true"><span class="octicon octicon-link"></span></a>orElse(value)</h5>
+
+<h5>
+<a id="orelsegetsupplier" class="anchor" href="#orelsegetsupplier" aria-hidden="true"><span class="octicon octicon-link"></span></a>orElseGet(supplier)</h5>
+
+<h5>
+<a id="orelsethrowerror" class="anchor" href="#orelsethrowerror" aria-hidden="true"><span class="octicon octicon-link"></span></a>orElseThrow(error)</h5>
+
+<h5>
+<a id="filterpredicate-1" class="anchor" href="#filterpredicate-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>filter(predicate)</h5>
+
+<h5>
+<a id="mapmappingfn-1" class="anchor" href="#mapmappingfn-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>map(mappingFn)</h5>
+
+<h5>
+<a id="flatmapmappingfn" class="anchor" href="#flatmapmappingfn" aria-hidden="true"><span class="octicon octicon-link"></span></a>flatMap(mappingFn)</h5>
+
+<h1>
+<a id="copyright-and-license" class="anchor" href="#copyright-and-license" aria-hidden="true"><span class="octicon octicon-link"></span></a>Copyright and license</h1>
+
+<p>Created and copyright (c) 2014-2015 by Benjamin Winterberg. Stream.js may be freely distributed under the MIT license.</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Streamjs maintained by <a href="https://github.com/winterbe">winterbe</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-48569937-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+
+  </body>
+</html>
