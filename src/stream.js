@@ -7,9 +7,11 @@
 (function () {
     "use strict";
 
-
     var root = this,
-        VERSION = "0.4.0";
+        version = "0.4.0",
+        ctx = {},
+        eop = {},
+        nil = {};
 
 
     //
@@ -56,7 +58,7 @@
                 if (filtered) {
                     return arg;
                 } else {
-                    return null;
+                    return nil;
                 }
             }));
             return this;
@@ -497,14 +499,14 @@
 
         // internal data buffering
 
-        var buffer = null,
+        var buffer = nil,
             flatten = false,    // if true buffer array will be iterated
-            keys = null,        // in case we iterate over object hash
+            keys = nil,        // in case we iterate over object hash
             origin = 0,         // current buffer index (if flatten)
             fence = 0;          // max buffer size (if flatten)
 
         var isStashed = function () {
-            if (buffer === null) {
+            if (buffer === nil) {
                 return false;
             }
             if (flatten) {
@@ -517,15 +519,15 @@
             var bufferedVal;
             if (!flatten) {
                 bufferedVal = buffer;
-                buffer = null;
+                buffer = nil;
                 return bufferedVal;
             }
 
             bufferedVal = nextBufferedVal();
             origin++;
             if (origin >= fence) {
-                buffer = null;
-                keys = null;
+                buffer = nil;
+                keys = nil;
                 flatten = false;
                 origin = 0;
                 fence = 0;
@@ -710,9 +712,6 @@
     // Common stuff
     //
 
-    var eop = "END_OF_PIPE",
-        ctx = {};
-
     var defaultComparator = function (a, b) {
         if (a === b) {
             return 0;
@@ -785,8 +784,7 @@
     };
 
 
-    Stream.VERSION = VERSION;
-
+    Stream.VERSION = version;
     Stream.Optional = Optional;
 
     var previousStream = window.Stream;
