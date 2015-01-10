@@ -52,7 +52,6 @@
         //
 
         this.filter = function (predicate) {
-            assertFn(predicate, "predicate function argument required for filter");
             this.add(new StatelessOp(function (arg) {
                 var filtered = predicate.call(ctx, arg);
                 if (filtered) {
@@ -65,7 +64,6 @@
         };
 
         this.map = function (mapper) {
-            assertFn(mapper, "mapper function argument required for map");
             this.add(new StatelessOp(function (arg) {
                 return mapper.call(ctx, arg);
             }));
@@ -73,7 +71,6 @@
         };
 
         this.flatMap = function (mapper) {
-            assertFn(mapper, "mapper function argument required for flatMap");
             this.add(new StatelessOp(function (arg) {
                 return mapper.call(ctx, arg);
             }, true));
@@ -717,12 +714,6 @@
             return 0;
         }
         return a > b ? 1 : -1;
-    };
-
-    var assertFn = function (obj, errorMsg) {
-        if (!isFunction(obj)) {
-            throw errorMsg;
-        }
     };
 
     var isFunction = function (obj) {
