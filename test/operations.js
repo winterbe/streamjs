@@ -22,12 +22,11 @@ QUnit.test("input object", function (assert) {
 QUnit.test("filter num array", function (assert) {
     var data = [1, 2, 3, 4];
 
-    var result =
-        Stream(data)
-            .filter(function (num) {
-                return num % 2 === 1;
-            })
-            .toArray();
+    var result = Stream(data)
+        .filter(function (num) {
+            return num % 2 === 1;
+        })
+        .toArray();
 
     assert.equal(result.length, 2);
     assert.equal(result[0], 1);
@@ -44,12 +43,11 @@ QUnit.test("filter num array", function (assert) {
 QUnit.test("filter object array", function (assert) {
     var data = [{a: 1}, {a: 2}, {a: 3}, {a: 4}];
 
-    var result =
-        Stream(data)
-            .filter(function (obj) {
-                return obj.a % 2 === 1;
-            })
-            .toArray();
+    var result = Stream(data)
+        .filter(function (obj) {
+            return obj.a % 2 === 1;
+        })
+        .toArray();
 
     assert.equal(result.length, 2);
     assert.equal(result[0].a, 1);
@@ -66,12 +64,11 @@ QUnit.test("filter object array", function (assert) {
 QUnit.test("filter object", function (assert) {
     var data = {a: 1, b: 2, c: 3, d: 4};
 
-    var result =
-        Stream(data)
-            .filter(function (num) {
-                return num % 2 === 1;
-            })
-            .toArray();
+    var result = Stream(data)
+        .filter(function (num) {
+            return num % 2 === 1;
+        })
+        .toArray();
 
     assert.equal(result.length, 2);
     assert.equal(result[0], 1);
@@ -111,12 +108,11 @@ QUnit.test("filter with null", function (assert) {
 QUnit.test("map num array", function (assert) {
     var data = [1, 2, 3, 4];
 
-    var result =
-        Stream(data)
-            .map(function (num) {
-                return "obj" + num;
-            })
-            .toArray();
+    var result = Stream(data)
+        .map(function (num) {
+            return "obj" + num;
+        })
+        .toArray();
 
     assert.equal(result.length, 4);
     assert.equal(result[0], 'obj1');
@@ -135,12 +131,11 @@ QUnit.test("map num array", function (assert) {
 QUnit.test("map object array", function (assert) {
     var data = [{a: 1}, {a: 2}, {a: 3}, {a: 4}];
 
-    var result =
-        Stream(data)
-            .map(function (obj) {
-                return {b: obj.a};
-            })
-            .toArray();
+    var result = Stream(data)
+        .map(function (obj) {
+            return {b: obj.a};
+        })
+        .toArray();
 
     assert.equal(result.length, 4);
     assert.equal(result[0].b, 1);
@@ -157,12 +152,11 @@ QUnit.test("map object array", function (assert) {
 });
 
 QUnit.test("map empty array", function (assert) {
-    var result =
-        Stream([])
-            .map(function (num) {
-                return "obj" + num;
-            })
-            .toArray();
+    var result = Stream([])
+        .map(function (num) {
+            return "obj" + num;
+        })
+        .toArray();
 
     assert.equal(result.length, 0);
 });
@@ -170,12 +164,11 @@ QUnit.test("map empty array", function (assert) {
 QUnit.test("map with null", function (assert) {
     var data = [1, null, undefined, 4];
 
-    var result =
-        Stream(data)
-            .map(function (val) {
-                return "map_" + val;
-            })
-            .toArray();
+    var result = Stream(data)
+        .map(function (val) {
+            return "map_" + val;
+        })
+        .toArray();
 
     assert.equal(result.length, 4);
     assert.equal(result[0], 'map_1');
@@ -218,12 +211,11 @@ QUnit.test("flatMap num array", function (assert) {
 QUnit.test("flatMap object array", function (assert) {
     var data = [{a: 1}, {a: 2}, {a: 3}, {a: 4}];
 
-    var result =
-        Stream(data)
-            .flatMap(function (obj) {
-                return [{b: obj.a}, {b: obj.a}];
-            })
-            .toArray();
+    var result = Stream(data)
+        .flatMap(function (obj) {
+            return [{b: obj.a}, {b: obj.a}];
+        })
+        .toArray();
 
     assert.equal(result.length, 8);
     assert.equal(result[0].b, 1);
@@ -266,16 +258,43 @@ QUnit.test("flatMap no array return", function (assert) {
     assert.equal(result[2], "3");
 });
 
-QUnit.test("findFirst", function (assert) {
-    var result =
-        Stream([1, 2, 3, 4])
-            .filter(function (num) {
-                return num % 2 === 0;
-            })
-            .findFirst()
-            .get();
+QUnit.test("flatMap returns object", function (assert) {
+    var result = Stream([1])
+        .flatMap(function (num) {
+            return {a: num, b: num};
+        })
+        .toArray();
 
-    assert.equal(result, 2);
+    assert.equal(result.length, 2);
+    assert.equal(result[0], 1);
+    assert.equal(result[1], 1);
+});
+
+QUnit.test("findFirst", function (assert) {
+    var result = Stream([1, 2, 3, 4])
+        .filter(function (num) {
+            return num % 2 === 0;
+        })
+        .findFirst();
+
+    assert.equal(result, "[object Optional]");
+    assert.equal(result.isPresent(), true);
+    assert.equal(result.get(), 2);
+});
+
+QUnit.test("findFirst empty", function (assert) {
+    var result = Stream([]).findFirst();
+
+    assert.equal(result, "[object Optional]");
+    assert.equal(result.isPresent(), false);
+});
+
+QUnit.test("findFirst object", function (assert) {
+    var result = Stream({a: 1, b: 2}).findFirst();
+
+    assert.equal(result, "[object Optional]");
+    assert.equal(result.isPresent(), true);
+    assert.equal(result.get(), 1);
 });
 
 QUnit.test("forEach", function (assert) {
@@ -293,10 +312,28 @@ QUnit.test("forEach", function (assert) {
     assert.equal(data[3], 4);
 });
 
+QUnit.test("forEach empty", function (assert) {
+    var called = false;
+
+    Stream([])
+        .forEach(function () {
+            called = true;
+        });
+
+    assert.equal(called, false);
+});
+
 QUnit.test("min", function (assert) {
     var result = Stream([1, 2, 3, 4]).min();
     assert.equal(result, "[object Optional]");
+    assert.equal(result.isPresent(), true);
     assert.equal(result.get(), 1);
+});
+
+QUnit.test("min empty", function (assert) {
+    var result = Stream([]).min();
+    assert.equal(result, "[object Optional]");
+    assert.equal(result.isPresent(), false);
 });
 
 QUnit.test("min (comparator)", function (assert) {
@@ -305,15 +342,24 @@ QUnit.test("min (comparator)", function (assert) {
             if (a === b) return 0;
             if (a > b) return -1;
             return 1;
-        })
-        .get();
-    assert.equal(result, 4);
+        });
+
+    assert.equal(result, "[object Optional]");
+    assert.equal(result.isPresent(), true);
+    assert.equal(result.get(), 4);
 });
 
 QUnit.test("max", function (assert) {
     var result = Stream([1, 2, 3, 4]).max();
     assert.equal(result, "[object Optional]");
+    assert.equal(result.isPresent(), true);
     assert.equal(result.get(), 4);
+});
+
+QUnit.test("max empty", function (assert) {
+    var result = Stream([]).max();
+    assert.equal(result, "[object Optional]");
+    assert.equal(result.isPresent(), false);
 });
 
 QUnit.test("max (comparator)", function (assert) {
@@ -322,9 +368,11 @@ QUnit.test("max (comparator)", function (assert) {
             if (a === b) return 0;
             if (a > b) return -1;
             return 1;
-        })
-        .get();
-    assert.equal(result, 1);
+        });
+
+    assert.equal(result, "[object Optional]");
+    assert.equal(result.isPresent(), true);
+    assert.equal(result.get(), 1);
 });
 
 QUnit.test("sum", function (assert) {
@@ -332,19 +380,31 @@ QUnit.test("sum", function (assert) {
     assert.equal(result, 10);
 });
 
+QUnit.test("sum empty", function (assert) {
+    var result = Stream([]).sum();
+    assert.equal(result, 0);
+});
+
 QUnit.test("count", function (assert) {
     var result = Stream([1, 2, 3, 4]).count();
     assert.equal(result, 4);
 });
 
-QUnit.test("average", function (assert) {
-    var result = Stream([1, 2, 3, 4]).average();
-    assert.equal(result, "[object Optional]");
-    assert.equal(result.get(), 2.5);
+QUnit.test("count empty", function (assert) {
+    var result = Stream([]).count();
+    assert.equal(result, 0);
 });
 
 QUnit.test("average", function (assert) {
+    var result = Stream([1, 2, 3, 4]).average();
+    assert.equal(result, "[object Optional]");
+    assert.equal(result.isPresent(), true);
+    assert.equal(result.get(), 2.5);
+});
+
+QUnit.test("average empty", function (assert) {
     var result = Stream([]).average();
+    assert.equal(result, "[object Optional]");
     assert.equal(result.isPresent(), false);
 });
 
@@ -364,6 +424,14 @@ QUnit.test("allMatch false", function (assert) {
     assert.equal(result, false);
 });
 
+QUnit.test("allMatch empty", function (assert) {
+    var result = Stream([])
+        .allMatch(function (num) {
+            return num > 1;
+        });
+    assert.equal(result, true);
+});
+
 QUnit.test("anyMatch true", function (assert) {
     var result = Stream([1, 2, 3, 4])
         .anyMatch(function (num) {
@@ -376,6 +444,14 @@ QUnit.test("anyMatch false", function (assert) {
     var result = Stream([1, 2, 3, 4])
         .anyMatch(function (num) {
             return num === 5;
+        });
+    assert.equal(result, false);
+});
+
+QUnit.test("anyMatch empty", function (assert) {
+    var result = Stream([])
+        .anyMatch(function (num) {
+            return num > 1;
         });
     assert.equal(result, false);
 });
@@ -396,11 +472,18 @@ QUnit.test("noneMatch false", function (assert) {
     assert.equal(result, false);
 });
 
+QUnit.test("noneMatch empty", function (assert) {
+    var result = Stream([])
+        .noneMatch(function (num) {
+            return num > 1;
+        });
+    assert.equal(result, true);
+});
+
 QUnit.test("sorted", function (assert) {
-    var result =
-        Stream([4, 1, 3, 2])
-            .sorted()
-            .toArray();
+    var result = Stream([4, 1, 3, 2])
+        .sorted()
+        .toArray();
 
     assert.equal(result.length, 4);
     assert.equal(result[0], 1);
@@ -410,19 +493,26 @@ QUnit.test("sorted", function (assert) {
 });
 
 QUnit.test("sorted (comparator)", function (assert) {
-    var result =
-        Stream([4, 1, 3, 2])
-            .sorted(function (num1, num2) {
-                if (num1 === num2) return 0;
-                return num1 < num2 ? 1 : -1;
-            })
-            .toArray();
+    var result = Stream([4, 1, 3, 2])
+        .sorted(function (num1, num2) {
+            if (num1 === num2) return 0;
+            return num1 < num2 ? 1 : -1;
+        })
+        .toArray();
 
     assert.equal(result.length, 4);
     assert.equal(result[0], 4);
     assert.equal(result[1], 3);
     assert.equal(result[2], 2);
     assert.equal(result[3], 1);
+});
+
+QUnit.test("sorted empty", function (assert) {
+    var result = Stream([])
+        .sorted()
+        .toArray();
+
+    assert.equal(result.length, 0);
 });
 
 QUnit.test("skip", function (assert) {
