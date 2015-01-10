@@ -1,4 +1,4 @@
-QUnit.test("input: array", function (assert) {
+QUnit.test("input array", function (assert) {
     var input = [1, 2, 3];
     var result = Stream(input).toArray();
     assert.equal(result.length, 3);
@@ -7,7 +7,7 @@ QUnit.test("input: array", function (assert) {
     assert.equal(result[2], 3);
 });
 
-QUnit.test("input: object hash", function (assert) {
+QUnit.test("input object", function (assert) {
     var input = {
         foo: 1, bar: 2, foobar: 3
     };
@@ -17,30 +17,6 @@ QUnit.test("input: object hash", function (assert) {
     assert.equal(result[0], 1);
     assert.equal(result[1], 2);
     assert.equal(result[2], 3);
-});
-
-QUnit.test("map", function (assert) {
-    var data = [1, 2, 3, 4];
-
-    var result =
-        Stream(data)
-            .map(function (num) {
-                return "obj" + num;
-            })
-            .toArray();
-
-    assert.equal(result.length, 4);
-    assert.equal(result[0], 'obj1');
-    assert.equal(result[1], 'obj2');
-    assert.equal(result[2], 'obj3');
-    assert.equal(result[3], 'obj4');
-
-    // assert original data is untouched
-    assert.equal(data.length, 4);
-    assert.equal(data[0], 1);
-    assert.equal(data[1], 2);
-    assert.equal(data[2], 3);
-    assert.equal(data[3], 4);
 });
 
 QUnit.test("filter num array", function (assert) {
@@ -130,6 +106,89 @@ QUnit.test("filter with null", function (assert) {
     assert.equal(result[1], null);
     assert.equal(result[2], undefined);
     assert.equal(result[3], 2);
+});
+
+QUnit.test("map num array", function (assert) {
+    var data = [1, 2, 3, 4];
+
+    var result =
+        Stream(data)
+            .map(function (num) {
+                return "obj" + num;
+            })
+            .toArray();
+
+    assert.equal(result.length, 4);
+    assert.equal(result[0], 'obj1');
+    assert.equal(result[1], 'obj2');
+    assert.equal(result[2], 'obj3');
+    assert.equal(result[3], 'obj4');
+
+    // assert original data is untouched
+    assert.equal(data.length, 4);
+    assert.equal(data[0], 1);
+    assert.equal(data[1], 2);
+    assert.equal(data[2], 3);
+    assert.equal(data[3], 4);
+});
+
+QUnit.test("map num array", function (assert) {
+    var data = [{a: 1}, {a: 2}, {a: 3}, {a: 4}];
+
+    var result =
+        Stream(data)
+            .map(function (obj) {
+                return {b: obj.a};
+            })
+            .toArray();
+
+    assert.equal(result.length, 4);
+    assert.equal(result[0].b, 1);
+    assert.equal(result[1].b, 2);
+    assert.equal(result[2].b, 3);
+    assert.equal(result[3].b, 4);
+
+    // assert original data is untouched
+    assert.equal(data.length, 4);
+    assert.equal(data[0].a, 1);
+    assert.equal(data[1].a, 2);
+    assert.equal(data[2].a, 3);
+    assert.equal(data[3].a, 4);
+});
+
+QUnit.test("map empty array", function (assert) {
+    var result =
+        Stream([])
+            .map(function (num) {
+                return "obj" + num;
+            })
+            .toArray();
+
+    assert.equal(result.length, 0);
+});
+
+QUnit.test("map with null", function (assert) {
+    var data = [1, null, undefined, 4];
+
+    var result =
+        Stream(data)
+            .map(function (val) {
+                return "map_" + val;
+            })
+            .toArray();
+
+    assert.equal(result.length, 4);
+    assert.equal(result[0], 'map_1');
+    assert.equal(result[1], 'map_null');
+    assert.equal(result[2], 'map_undefined');
+    assert.equal(result[3], 'map_4');
+
+    // assert original data is untouched
+    assert.equal(data.length, 4);
+    assert.equal(data[0], 1);
+    assert.equal(data[1], null);
+    assert.equal(data[2], undefined);
+    assert.equal(data[3], 4);
 });
 
 QUnit.test("flatMap", function (assert) {
