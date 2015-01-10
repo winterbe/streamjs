@@ -498,7 +498,7 @@
 
         var buffer = nil,
             flatten = false,    // if true buffer array will be iterated
-            keys = nil,        // in case we iterate over object hash
+            keys = nil,         // in case we iterate over object hash
             origin = 0,         // current buffer index (if flatten)
             fence = 0;          // max buffer size (if flatten)
 
@@ -542,17 +542,21 @@
 
         var stash = function (val, flat) {
             buffer = val;
-            flatten = flat;
 
-            if (!flatten) {
+            if (!flat) {
                 return;
             }
 
             if (isArray(buffer)) {
                 fence = buffer.length;
+                flatten = flat;
             } else if (isObject(buffer)) {
                 keys = Object.keys(buffer);
                 fence = keys.length;
+                flatten = flat;
+            } else {
+                // in case flatMap returns no collection
+                flatten = false;
             }
         };
 
