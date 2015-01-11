@@ -955,6 +955,19 @@ QUnit.test("of", function (assert) {
     assert.equal(result[1], "odd3");
 });
 
+QUnit.test("input string", function (assert) {
+    var result = Stream("abcd")
+        .filter(function (c) {
+            return c !== 'b';
+        })
+        .map(function (c) {
+            return c.toUpperCase();
+        })
+        .joining();
+
+    assert.equal(result, "ACD");
+});
+
 QUnit.test("empty", function (assert) {
     var result = Stream.empty().toArray();
     assert.equal(result.length, 0);

@@ -22,11 +22,18 @@
         var pipeline = this, lastOp;
 
         // default op iterates over input elements
+
         if (isFunction(input)) {
             lastOp = new GeneratorOp(function () {
                 return input.call(ctx);
             });
-        } else {
+        }
+        else if (isString(input)) {
+            lastOp = new StatelessOp(function (arg) {
+                return arg;
+            }, true, input.split(''));
+        }
+        else {
             lastOp = new StatelessOp(function (arg) {
                 return arg;
             }, true, input);
@@ -727,6 +734,10 @@
             return 0;
         }
         return a > b ? 1 : -1;
+    };
+
+    var isString = function (obj) {
+        return Object.prototype.toString.call(obj) === '[object String]';
     };
 
     var isFunction = function (obj) {

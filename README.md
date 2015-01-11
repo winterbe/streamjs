@@ -83,6 +83,10 @@ The following constructor functions can be used to create different kind of stre
 
 Returns a new stream for the given collection. Collection can either be an array or an object hash (map).
 
+##### Stream(string)
+
+Returns a new stream for the given string. The string will be splitted by characters.
+
 ##### Stream.of(args...)
 
 Returns a new stream for the given arguments.
