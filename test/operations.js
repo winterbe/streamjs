@@ -871,12 +871,17 @@ QUnit.test("partitionBy size empty", function (assert) {
     assert.equal(Object.keys(result).length, 0);
 });
 
-QUnit.test("joining 1", function (assert) {
+QUnit.test("joining", function (assert) {
     var result = Stream([1, 2, 3, 4]).joining();
     assert.equal(result, "1234");
 });
 
-QUnit.test("joining 2", function (assert) {
+QUnit.test("joining empty", function (assert) {
+    var result = Stream([]).joining();
+    assert.equal(result, "");
+});
+
+QUnit.test("joining with options", function (assert) {
     var result = Stream([1, 2, 3, 4])
         .joining({
             prefix: "PREFIX_",
@@ -884,6 +889,16 @@ QUnit.test("joining 2", function (assert) {
             delimiter: ","
         });
     assert.equal(result, "PREFIX_1,2,3,4_SUFFIX");
+});
+
+QUnit.test("joining empty with options", function (assert) {
+    var result = Stream([])
+        .joining({
+            prefix: "PREFIX_",
+            suffix: "_SUFFIX",
+            delimiter: ","
+        });
+    assert.equal(result, "PREFIX__SUFFIX");
 });
 
 QUnit.test("toArray twice", function (assert) {
@@ -926,15 +941,14 @@ QUnit.test("iterate", function (assert) {
 });
 
 QUnit.test("of", function (assert) {
-    var result =
-        Stream.of(1, 2, 3, 4)
-            .filter(function (num) {
-                return num % 2 === 1;
-            })
-            .map(function (num) {
-                return "odd" + num;
-            })
-            .toArray();
+    var result = Stream.of(1, 2, 3, 4)
+        .filter(function (num) {
+            return num % 2 === 1;
+        })
+        .map(function (num) {
+            return "odd" + num;
+        })
+        .toArray();
 
     assert.equal(result.length, 2);
     assert.equal(result[0], "odd1");
