@@ -613,12 +613,11 @@ QUnit.test("limit negative", function (assert) {
 
 QUnit.test("peek", function (assert) {
     var poke = [];
-    var result =
-        Stream([1, 2, 3, 4])
-            .peek(function (num) {
-                poke.push(num);
-            })
-            .toArray();
+    var result = Stream([1, 2, 3, 4])
+        .peek(function (num) {
+            poke.push(num);
+        })
+        .toArray();
 
     assert.equal(result.length, poke.length);
     assert.equal(result[0], poke[0]);
@@ -627,32 +626,66 @@ QUnit.test("peek", function (assert) {
     assert.equal(result[3], poke[3]);
 });
 
+QUnit.test("peek empty", function (assert) {
+    var poke = [];
+    var result = Stream([])
+        .peek(function (num) {
+            poke.push(num);
+        })
+        .toArray();
+
+    assert.equal(poke.length, 0);
+    assert.equal(result.length, 0);
+});
+
 QUnit.test("distinct", function (assert) {
-    var result =
-        Stream([1, 3, 3, 1])
-            .distinct()
-            .toArray();
+    var result = Stream([1, 3, 3, 1])
+        .distinct()
+        .toArray();
 
     assert.equal(result.length, 2);
     assert.equal(result[0], 1);
     assert.equal(result[1], 3);
 });
 
+QUnit.test("distinct empty", function (assert) {
+    var result = Stream([])
+        .distinct()
+        .toArray();
+
+    assert.equal(result.length, 0);
+});
+
 QUnit.test("collect", function (assert) {
-    var result =
-        Stream([1, 2, 3, 4]).collect({
-            supplier: function () {
-                return "Data: ";
-            },
-            accumulator: function (val, num) {
-                return val + num + " ";
-            },
-            finisher: function (val) {
-                return val + "!";
-            }
-        });
+    var result = Stream([1, 2, 3, 4]).collect({
+        supplier: function () {
+            return "Data: ";
+        },
+        accumulator: function (val, num) {
+            return val + num + " ";
+        },
+        finisher: function (val) {
+            return val + "!";
+        }
+    });
 
     assert.equal(result, "Data: 1 2 3 4 !");
+});
+
+QUnit.test("collect empty", function (assert) {
+    var result = Stream([]).collect({
+        supplier: function () {
+            return "Data: ";
+        },
+        accumulator: function (val, num) {
+            return val + num + " ";
+        },
+        finisher: function (val) {
+            return val + "!";
+        }
+    });
+
+    assert.equal(result, "Data: !");
 });
 
 QUnit.test("reduce", function (assert) {
@@ -661,6 +694,14 @@ QUnit.test("reduce", function (assert) {
             return identity + num;
         });
     assert.equal(result, 1010);
+});
+
+QUnit.test("reduce empty", function (assert) {
+    var result = Stream([])
+        .reduce(1000, function (identity, num) {
+            return identity + num;
+        });
+    assert.equal(result, 1000);
 });
 
 QUnit.test("reduce first", function (assert) {
@@ -681,7 +722,7 @@ QUnit.test("reduce first empty", function (assert) {
     assert.equal(result, "NOTHING");
 });
 
-QUnit.test("groupBy 1", function (assert) {
+QUnit.test("groupBy", function (assert) {
     var data = [
         {firstName: "Peter", lastName: "Parker"},
         {firstName: "Sandra", lastName: "Parker"},
@@ -702,7 +743,16 @@ QUnit.test("groupBy 1", function (assert) {
     assert.equal(map["Doe"][0], data[2]);
 });
 
-QUnit.test("toMap 1", function (assert) {
+QUnit.test("groupBy empty", function (assert) {
+    var map = Stream([])
+        .groupBy(function (obj) {
+            return obj["lastName"];
+        });
+
+    assert.equal(Object.keys(map).length, 0);
+});
+
+QUnit.test("toMap", function (assert) {
     var data = [
         {firstName: "Peter", lastName: "Parker"},
         {firstName: "John", lastName: "Doe"}
@@ -719,7 +769,16 @@ QUnit.test("toMap 1", function (assert) {
     assert.equal(map["Doe"], data[1]);
 });
 
-QUnit.test("toMap 2", function (assert) {
+QUnit.test("toMap empty", function (assert) {
+    var map = Stream([])
+        .toMap(function (obj) {
+            return obj["lastName"];
+        });
+
+    assert.equal(Object.keys(map).length, 0);
+});
+
+QUnit.test("toMap duplicate key", function (assert) {
     var data = [
         {firstName: "Peter", lastName: "Parker"},
         {firstName: "Sandra", lastName: "Parker"},
@@ -734,7 +793,7 @@ QUnit.test("toMap 2", function (assert) {
     });
 });
 
-QUnit.test("toMap 3", function (assert) {
+QUnit.test("toMap duplicate key merge", function (assert) {
     var data = [
         {firstName: "Peter", lastName: "Parker"},
         {firstName: "Sandra", lastName: "Parker"},
@@ -754,7 +813,7 @@ QUnit.test("toMap 3", function (assert) {
     assert.equal(map["Doe"], data[2]);
 });
 
-QUnit.test("partitionBy 1", function (assert) {
+QUnit.test("partitionBy predicate", function (assert) {
     var data = [
         {firstName: "Peter", lastName: "Parker"},
         {firstName: "Sandra", lastName: "Parker"},
@@ -773,8 +832,17 @@ QUnit.test("partitionBy 1", function (assert) {
     assert.equal(result[false][0], data[2]);
 });
 
+QUnit.test("partitionBy predicate empty", function (assert) {
+    var result = Stream([])
+        .partitionBy(function (person) {
+            return person.lastName === 'Parker';
+        });
 
-QUnit.test("partitionBy 2", function (assert) {
+    assert.equal(result[true].length, 0);
+    assert.equal(result[false].length, 0);
+});
+
+QUnit.test("partitionBy size", function (assert) {
     var data = Stream
         .range(0, 25)
         .toArray();
@@ -796,14 +864,11 @@ QUnit.test("partitionBy 2", function (assert) {
     }
 });
 
-QUnit.test("partitionBy 3", function (assert) {
-    assert.throws(function () {
-        Stream([]).partitionBy();
-    });
+QUnit.test("partitionBy size empty", function (assert) {
+    var result = Stream([])
+        .partitionBy(10);
 
-    assert.throws(function () {
-        Stream([]).partitionBy("wrong_arg");
-    });
+    assert.equal(Object.keys(result).length, 0);
 });
 
 QUnit.test("joining 1", function (assert) {

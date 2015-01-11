@@ -338,7 +338,9 @@
         var partitionByPredicate = function (predicate) {
             return pipeline.collect({
                 supplier: function () {
-                    return {};
+                    return {
+                        true: [], false: []
+                    };
                 },
                 accumulator: function (map, obj) {
                     var result = predicate.call(ctx, obj);
