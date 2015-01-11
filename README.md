@@ -87,6 +87,10 @@ Returns a new stream for the given collection. Collection can either be an array
 
 Returns a new stream for the given arguments.
 
+##### Stream.empty
+
+Returns a new empty stream.
+
 ##### Stream.range(startInclusive, endExclusive)
 
 Returns a new stream for the given number range.

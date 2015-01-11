@@ -955,6 +955,11 @@ QUnit.test("of", function (assert) {
     assert.equal(result[1], "odd3");
 });
 
+QUnit.test("empty", function (assert) {
+    var result = Stream.empty().toArray();
+    assert.equal(result.length, 0);
+});
+
 QUnit.test("range", function (assert) {
     var result = Stream.range(0, 4).toArray();
     assert.equal(result.length, 4);

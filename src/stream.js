@@ -787,6 +787,10 @@
         });
     };
 
+    Stream.empty = function () {
+        return Stream([]);
+    };
+
 
     Stream.VERSION = version;
     Stream.Optional = Optional;
