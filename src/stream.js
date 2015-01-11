@@ -604,6 +604,13 @@
         };
 
         this.pipe = function (obj) {
+            if (options.voter) {
+                var voted = options.voter.call(ctx, obj, i);
+                if (!voted) {
+                    return;
+                }
+            }
+
             if (options.consumer) {
                 options.consumer.call(ctx, obj, i);
             }
