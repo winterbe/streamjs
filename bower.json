@@ -1,6 +1,6 @@
 {
   "name": "streamjs",
-  "version": "0.4.1",
+  "version": "1.0.0",
   "homepage": "https://github.com/winterbe/streamjs",
   "authors": ["Benjamin Winterberg"],
   "description": "A Collection Pipeline for JavaScript - inspired by the Java 8 Streams API.",

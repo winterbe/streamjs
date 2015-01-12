@@ -1,5 +1,5 @@
 /**
- * Stream.js 0.4.1
+ * Stream.js 1.0.0
  * https://github.com/winterbe/streamjs
  * Copyright (c) 2014-2015 Benjamin Winterberg
  * Stream.js may be freely distributed under the MIT license.
@@ -8,7 +8,7 @@
     "use strict";
 
     var root = this,
-        version = "0.4.1",
+        version = "1.0.0",
         ctx = {},
         eop = {},
         nil = {};
@@ -346,7 +346,7 @@
             return pipeline.collect({
                 supplier: function () {
                     return {
-                        true: [], false: []
+                        "true": [], "false": []
                     };
                 },
                 accumulator: function (map, obj) {
