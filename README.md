@@ -21,7 +21,7 @@ Stream([5, 9, 2, 4, 8, 1])
 
 # Getting started
 
-Stream.js requires ECMAScript 5 and works in all modern browsers. You can install Stream.js manually by downloading the [latest release](https://github.com/winterbe/streamjs/releases) from GitHub. The `src` folder contains the minified script and a source map file for debugging. Alternatively you can install Stream.js with [Bower](http://bower.io/):
+Stream.js is based on ECMAScript 5 and works in all modern browsers. You can install Stream.js manually by downloading the [latest release](https://github.com/winterbe/streamjs/releases) from GitHub. The `src` folder contains the minified script and a source map file for debugging. Alternatively you can install Stream.js with [Bower](http://bower.io/):
 
 ```bash
 $ bower install streamjs
@@ -123,9 +123,9 @@ Filters the elements of the stream to match the given predicate function and ret
 
 Applies the given mapping function to each element of the stream and returns the stream.
 
-##### flatMap(flatMappingFn)
+##### flatMap(mappingFn)
 
-Applies the given mapping function to each element of the stream and replaces the elements with the contents of returned values, then returns the stream.
+Applies the given mapping function to each element of the stream and flattens the results by replacing each element with the contents of the element in case of collections, then returns the stream.
 
 ##### sorted()
 
@@ -265,18 +265,55 @@ Alias: `join`
  
 ## Stream.Optional
 
+Wraps a single value which may be `null` or `undefined`.
+
 ##### Optional.of(value)
+
+Creates a new optional wrapper for the given non-null and non-undefined value.
+
 ##### Optional.ofNullable(value)
+
+Creates a new optional wrapper for the given value. The value may be null or undefined.
+
 ##### Optional.empty()
+
+Creates a new empty optional wrapper (same as `Optional.ofNullable(null)`).
+
 ##### get()
+
+Returns the value if a value is present, otherwise throws an error.
+
 ##### isPresent()
+
+Check if a value is present.
+
 ##### ifPresent(consumer)
-##### orElse(value)
+
+Invoke the given consumer function for the specified value if present.
+
+##### orElse(other)
+
+Returns the value if present, otherwise return the given `other` value.
+
 ##### orElseGet(supplier)
+
+Returns the value if present, otherwise return the result of invoking the supplier function.
+
 ##### orElseThrow(error)
+
+Returns the value if present, otherwise throw the given error.
+
 ##### filter(predicate)
+
+If a value is present and value matches the given predicate function, returns this optional, otherwise return an empty optional.
+
 ##### map(mappingFn)
+
+If a value is present apply the given mapping function and wrap the resulting value with an optional.
+
 ##### flatMap(mappingFn)
+
+If a value is present apply the given optional-returning mapping function, and return the optional result or empty.
 
 # Copyright and license
 
