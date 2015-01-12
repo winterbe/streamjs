@@ -1,36 +1,33 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-
   <head>
-    <meta charset='utf-8'>
+    <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="description" content="Streamjs : Object Streaming Pipeline for JavaScript - inspired by the Java 8 Streams API">
+    <title>Stream.js by winterbe</title>
 
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
-
-    <title>Streamjs</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
   </head>
-
   <body>
+    <div class="wrapper">
+      <header>
+        <h1>Stream.js</h1>
+        <p>Object Streaming Pipeline for JavaScript - inspired by Java 8 Streams</p>
 
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/winterbe/streamjs">View on GitHub</a>
+        <p class="view"><a href="https://github.com/winterbe/streamjs">View the Project on GitHub <small>winterbe/streamjs</small></a></p>
 
-          <h1 id="project_title">Streamjs</h1>
-          <h2 id="project_tagline">Object Streaming Pipeline for JavaScript - inspired by the Java 8 Streams API</h2>
 
-            <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/winterbe/streamjs/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/winterbe/streamjs/tarball/master">Download this project as a tar.gz file</a>
-            </section>
-        </header>
-    </div>
-
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
+        <ul>
+          <li><a href="https://github.com/winterbe/streamjs/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/winterbe/streamjs/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/winterbe/streamjs">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
         <h1>
 <a id="streamjs" class="anchor" href="#streamjs" aria-hidden="true"><span class="octicon octicon-link"></span></a>Stream.js</h1>
 
@@ -55,7 +52,7 @@
 <h1>
 <a id="getting-started" class="anchor" href="#getting-started" aria-hidden="true"><span class="octicon octicon-link"></span></a>Getting started</h1>
 
-<p>Stream.js requires ECMAScript 5 and works in all modern browsers. You can install Stream.js manually by downloading the <a href="https://github.com/winterbe/streamjs/releases">latest release</a> from GitHub. The <code>src</code> folder contains the minified script and a source map file for debugging. Alternatively you can install Stream.js with <a href="http://bower.io/">Bower</a>:</p>
+<p>Stream.js is based on ECMAScript 5 and works in all modern browsers. You can install Stream.js manually by downloading the <a href="https://github.com/winterbe/streamjs/releases">latest release</a> from GitHub. The <code>src</code> folder contains the minified script and a source map file for debugging. Alternatively you can install Stream.js with <a href="http://bower.io/">Bower</a>:</p>
 
 <div class="highlight highlight-bash"><pre>$ bower install streamjs</pre></div>
 
@@ -113,9 +110,19 @@ Stream.range(<span class="pl-c1">1</span>, <span class="pl-c1">4</span>);</pre><
 <p>Returns a new stream for the given collection. Collection can either be an array or an object hash (map).</p>
 
 <h5>
+<a id="streamstring" class="anchor" href="#streamstring" aria-hidden="true"><span class="octicon octicon-link"></span></a>Stream(string)</h5>
+
+<p>Returns a new stream for the given string. The string will be splitted by characters.</p>
+
+<h5>
 <a id="streamofargs" class="anchor" href="#streamofargs" aria-hidden="true"><span class="octicon octicon-link"></span></a>Stream.of(args...)</h5>
 
 <p>Returns a new stream for the given arguments.</p>
+
+<h5>
+<a id="streamempty" class="anchor" href="#streamempty" aria-hidden="true"><span class="octicon octicon-link"></span></a>Stream.empty</h5>
+
+<p>Returns a new empty stream.</p>
 
 <h5>
 <a id="streamrangestartinclusive-endexclusive" class="anchor" href="#streamrangestartinclusive-endexclusive" aria-hidden="true"><span class="octicon octicon-link"></span></a>Stream.range(startInclusive, endExclusive)</h5>
@@ -153,9 +160,9 @@ Stream.range(<span class="pl-c1">1</span>, <span class="pl-c1">4</span>);</pre><
 <p>Applies the given mapping function to each element of the stream and returns the stream.</p>
 
 <h5>
-<a id="flatmapflatmappingfn" class="anchor" href="#flatmapflatmappingfn" aria-hidden="true"><span class="octicon octicon-link"></span></a>flatMap(flatMappingFn)</h5>
+<a id="flatmapmappingfn" class="anchor" href="#flatmapmappingfn" aria-hidden="true"><span class="octicon octicon-link"></span></a>flatMap(mappingFn)</h5>
 
-<p>Applies the given mapping function to each element of the stream and replaces the elements with the contents of returned values, then returns the stream.</p>
+<p>Applies the given mapping function to each element of the stream and flattens the results by replacing each element with the contents of the element in case of collections, then returns the stream.</p>
 
 <h5>
 <a id="sorted" class="anchor" href="#sorted" aria-hidden="true"><span class="octicon octicon-link"></span></a>sorted()</h5>
@@ -324,57 +331,79 @@ Stream.range(<span class="pl-c1">1</span>, <span class="pl-c1">4</span>);</pre><
 <h2>
 <a id="streamoptional" class="anchor" href="#streamoptional" aria-hidden="true"><span class="octicon octicon-link"></span></a>Stream.Optional</h2>
 
+<p>Wraps a single value which may be <code>null</code> or <code>undefined</code>.</p>
+
 <h5>
 <a id="optionalofvalue" class="anchor" href="#optionalofvalue" aria-hidden="true"><span class="octicon octicon-link"></span></a>Optional.of(value)</h5>
+
+<p>Creates a new optional wrapper for the given non-null and non-undefined value.</p>
 
 <h5>
 <a id="optionalofnullablevalue" class="anchor" href="#optionalofnullablevalue" aria-hidden="true"><span class="octicon octicon-link"></span></a>Optional.ofNullable(value)</h5>
 
+<p>Creates a new optional wrapper for the given value. The value may be null or undefined.</p>
+
 <h5>
 <a id="optionalempty" class="anchor" href="#optionalempty" aria-hidden="true"><span class="octicon octicon-link"></span></a>Optional.empty()</h5>
+
+<p>Creates a new empty optional wrapper (same as <code>Optional.ofNullable(null)</code>).</p>
 
 <h5>
 <a id="get" class="anchor" href="#get" aria-hidden="true"><span class="octicon octicon-link"></span></a>get()</h5>
 
+<p>Returns the value if a value is present, otherwise throws an error.</p>
+
 <h5>
 <a id="ispresent" class="anchor" href="#ispresent" aria-hidden="true"><span class="octicon octicon-link"></span></a>isPresent()</h5>
+
+<p>Check if a value is present.</p>
 
 <h5>
 <a id="ifpresentconsumer" class="anchor" href="#ifpresentconsumer" aria-hidden="true"><span class="octicon octicon-link"></span></a>ifPresent(consumer)</h5>
 
+<p>Invoke the given consumer function for the specified value if present.</p>
+
 <h5>
-<a id="orelsevalue" class="anchor" href="#orelsevalue" aria-hidden="true"><span class="octicon octicon-link"></span></a>orElse(value)</h5>
+<a id="orelseother" class="anchor" href="#orelseother" aria-hidden="true"><span class="octicon octicon-link"></span></a>orElse(other)</h5>
+
+<p>Returns the value if present, otherwise return the given <code>other</code> value.</p>
 
 <h5>
 <a id="orelsegetsupplier" class="anchor" href="#orelsegetsupplier" aria-hidden="true"><span class="octicon octicon-link"></span></a>orElseGet(supplier)</h5>
 
+<p>Returns the value if present, otherwise return the result of invoking the supplier function.</p>
+
 <h5>
 <a id="orelsethrowerror" class="anchor" href="#orelsethrowerror" aria-hidden="true"><span class="octicon octicon-link"></span></a>orElseThrow(error)</h5>
+
+<p>Returns the value if present, otherwise throw the given error.</p>
 
 <h5>
 <a id="filterpredicate-1" class="anchor" href="#filterpredicate-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>filter(predicate)</h5>
 
+<p>If a value is present and value matches the given predicate function, returns this optional, otherwise return an empty optional.</p>
+
 <h5>
 <a id="mapmappingfn-1" class="anchor" href="#mapmappingfn-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>map(mappingFn)</h5>
 
+<p>If a value is present apply the given mapping function and wrap the resulting value with an optional.</p>
+
 <h5>
-<a id="flatmapmappingfn" class="anchor" href="#flatmapmappingfn" aria-hidden="true"><span class="octicon octicon-link"></span></a>flatMap(mappingFn)</h5>
+<a id="flatmapmappingfn-1" class="anchor" href="#flatmapmappingfn-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>flatMap(mappingFn)</h5>
+
+<p>If a value is present apply the given optional-returning mapping function, and return the optional result or empty.</p>
 
 <h1>
 <a id="copyright-and-license" class="anchor" href="#copyright-and-license" aria-hidden="true"><span class="octicon octicon-link"></span></a>Copyright and license</h1>
 
 <p>Created and copyright (c) 2014-2015 by Benjamin Winterberg. Stream.js may be freely distributed under the MIT license.</p>
       </section>
-    </div>
-
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p class="copyright">Streamjs maintained by <a href="https://github.com/winterbe">winterbe</a></p>
-        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/winterbe">winterbe</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
       </footer>
     </div>
-
+    <script src="javascripts/scale.fix.js"></script>
               <script type="text/javascript">
             var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
             document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
@@ -385,7 +414,6 @@ Stream.range(<span class="pl-c1">1</span>, <span class="pl-c1">4</span>);</pre><
             pageTracker._trackPageview();
             } catch(err) {}
           </script>
-
 
   </body>
 </html>
