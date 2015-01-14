@@ -10,18 +10,13 @@
     var root = this,
         version = "1.0.0",
         ctx = {},
-        eop = {},
         nil = {};
-
-
-
 
 
 
     var Iterator = function () {
 
     };
-
     Iterator.of = function (data) {
         if (isArray(data)) {
             return new ArrayIterator(data);
@@ -32,13 +27,11 @@
         return new ValueIterator(data);
     };
 
+
     var ArrayIterator = function (array) {
         this.initialize(array);
     };
-
     ArrayIterator.prototype = new Iterator();
-    ArrayIterator.prototype.constructor = Iterator;
-
     ArrayIterator.prototype.next = function () {
         if (this.origin >= this.fence) {
             return nil;
@@ -51,27 +44,23 @@
             this.origin++;
         }
     };
-
     ArrayIterator.prototype.initialize = function (array) {
         this.data = array || [];
         this.origin = 0;
         this.fence = this.data.length;
     };
 
+
     var ObjectIterator = function (object) {
         this.initialize(object);
     };
-
     ObjectIterator.prototype = new Iterator();
-    ObjectIterator.prototype.constructor = Iterator;
-
     ObjectIterator.prototype.initialize = function (object) {
         this.data = object || {};
         this.keys = Object.keys(object);
         this.origin = 0;
         this.fence = this.keys.length;
     };
-
     ObjectIterator.prototype.next = function () {
         if (this.origin >= this.fence) {
             return nil;
@@ -90,15 +79,11 @@
     var ValueIterator = function (value) {
         this.initialize(value);
     };
-
     ValueIterator.prototype = new Iterator();
-    ValueIterator.prototype.constructor = Iterator;
-
     ValueIterator.prototype.initialize = function (value) {
         this.value = value;
         this.done = false;
     };
-
     ValueIterator.prototype.next = function () {
         if (!this.done) {
             this.done = true;
@@ -118,14 +103,11 @@
     var IteratorOp = function (data) {
         this.iterator = Iterator.of(data);
     };
-
     IteratorOp.prototype = new PipelineOp();
-    IteratorOp.prototype.constructor = PipelineOp;
-
     IteratorOp.prototype.advance = function () {
         var obj = this.iterator.next();
         if (obj === nil) {
-            return eop;
+            return obj;
         }
         if (this.next === null) {
             return obj;
@@ -137,14 +119,10 @@
     var MapOp = function (fn) {
         this.fn = fn;
     };
-
     MapOp.prototype = new PipelineOp();
-    MapOp.prototype.constructor = PipelineOp;
-
     MapOp.prototype.advance = function () {
         return this.prev.advance();
     };
-
     MapOp.prototype.pipe = function (obj) {
         var result = this.fn.call(ctx, obj);
         if (this.next === null) {
@@ -158,10 +136,7 @@
         this.fn = fn;
         this.iterator = null;
     };
-
     FlatOp.prototype = new PipelineOp();
-    FlatOp.prototype.constructor = PipelineOp;
-
     FlatOp.prototype.advance = function () {
         if (this.iterator === null) {
             return this.prev.advance();
@@ -176,7 +151,6 @@
         }
         return this.next.pipe(obj);
     };
-
     FlatOp.prototype.pipe = function (obj) {
         this.iterator = Iterator.of(obj);
         var current = this.iterator.next();
@@ -193,14 +167,10 @@
     var FilterOp = function (fn) {
         this.fn = fn;
     };
-
     FilterOp.prototype = new PipelineOp();
-    FilterOp.prototype.constructor = PipelineOp;
-
     FilterOp.prototype.advance = function () {
         return this.prev.advance();
     };
-
     FilterOp.prototype.pipe = function (obj) {
         var filtered = this.fn.call(ctx, obj);
         if (!filtered) {
@@ -210,6 +180,76 @@
             return obj;
         }
         return this.next.pipe(obj);
+    };
+
+
+    var GeneratorOp = function (fn) {
+        this.prev = null;
+        this.next = null;
+
+        this.advance = function () {
+            var val = fn.call(ctx);
+            return this.next.pipe(val);
+        };
+    };
+
+    var StatefulOp = function (options) {
+        this.prev = null;
+        this.next = null;
+
+        var buffer = null, i = 0;
+
+        this.advance = function () {
+            var obj;
+            if (buffer === null) {
+                buffer = [];
+                while ((obj = this.prev.advance()) !== nil) {
+                    // obj will be added to buffer via this.pipe
+                    i++;
+                    if (options.voter) {
+                        var voted = options.voter.call(ctx, obj, i);
+                        if (!voted) {
+                            break;
+                        }
+                    }
+                }
+                if (options.finisher) {
+                    options.finisher.call(ctx, buffer);
+                }
+            }
+
+            if (buffer.length === 0) {
+                return nil;
+            }
+
+            obj = buffer.shift();
+            if (this.next !== null) {
+                return this.next.pipe(obj);
+            }
+
+            return obj;
+        };
+
+        this.pipe = function (obj) {
+            if (options.voter) {
+                var voted = options.voter.call(ctx, obj, i);
+                if (!voted) {
+                    return;
+                }
+            }
+
+            if (options.consumer) {
+                options.consumer.call(ctx, obj, i);
+            }
+
+            var filtered = true;
+            if (options.filter) {
+                filtered = options.filter.call(ctx, obj, i, buffer);
+            }
+            if (filtered) {
+                buffer.push(obj);
+            }
+        };
     };
 
 
@@ -327,7 +367,7 @@
 
         terminal.toArray = function () {
             var current, result = [];
-            while ((current = pipeline.next()) !== eop) {
+            while ((current = pipeline.next()) !== nil) {
                 result.push(current);
             }
             return result;
@@ -335,7 +375,7 @@
 
         terminal.findFirst = function () {
             var obj = pipeline.next();
-            if (obj === eop) {
+            if (obj === nil) {
                 return Optional.empty();
             }
             return Optional.ofNullable(obj);
@@ -343,7 +383,7 @@
 
         terminal.forEach = function (fn) {
             var current;
-            while ((current = pipeline.next()) !== eop) {
+            while ((current = pipeline.next()) !== nil) {
                 fn.call(ctx, current);
             }
         };
@@ -351,7 +391,7 @@
         terminal.min = function (comparator) {
             comparator = comparator || defaultComparator;
             var current, result = null;
-            while ((current = pipeline.next()) !== eop) {
+            while ((current = pipeline.next()) !== nil) {
                 if (result === null || comparator.call(ctx, current, result) < 0) {
                     result = current;
                 }
@@ -362,7 +402,7 @@
         terminal.max = function (comparator) {
             comparator = comparator || defaultComparator;
             var current, result = null;
-            while ((current = pipeline.next()) !== eop) {
+            while ((current = pipeline.next()) !== nil) {
                 if (result === null || comparator.call(ctx, current, result) > 0) {
                     result = current;
                 }
@@ -372,7 +412,7 @@
 
         terminal.sum = function () {
             var current, result = 0;
-            while ((current = pipeline.next()) !== eop) {
+            while ((current = pipeline.next()) !== nil) {
                 result += current;
             }
             return result;
@@ -380,7 +420,7 @@
 
         terminal.average = function () {
             var current, count = 0, sum = 0;
-            while ((current = pipeline.next()) !== eop) {
+            while ((current = pipeline.next()) !== nil) {
                 sum += current;
                 count++;
             }
@@ -392,7 +432,7 @@
 
         terminal.count = function () {
             var current, result = 0;
-            while ((current = pipeline.next()) !== eop) {
+            while ((current = pipeline.next()) !== nil) {
                 result++;
             }
             return result;
@@ -400,7 +440,7 @@
 
         terminal.allMatch = function (fn) {
             var current;
-            while ((current = pipeline.next()) !== eop) {
+            while ((current = pipeline.next()) !== nil) {
                 var match = fn.call(ctx, current);
                 if (!match) {
                     return false;
@@ -411,7 +451,7 @@
 
         terminal.anyMatch = function (fn) {
             var current;
-            while ((current = pipeline.next()) !== eop) {
+            while ((current = pipeline.next()) !== nil) {
                 var match = fn.call(ctx, current);
                 if (match) {
                     return true;
@@ -422,7 +462,7 @@
 
         terminal.noneMatch = function (fn) {
             var current;
-            while ((current = pipeline.next()) !== eop) {
+            while ((current = pipeline.next()) !== nil) {
                 var match = fn.call(ctx, current);
                 if (match) {
                     return false;
@@ -434,7 +474,7 @@
         terminal.collect = function (collector) {
             var identity = collector.supplier.call(ctx);
             var current, first = true;
-            while ((current = pipeline.next()) !== eop) {
+            while ((current = pipeline.next()) !== nil) {
                 identity = collector.accumulator.call(ctx, identity, current, first);
                 first = false;
             }
@@ -464,11 +504,11 @@
             var current;
 
             var identity = pipeline.next();
-            if (identity === eop) {
+            if (identity === nil) {
                 return Optional.empty();
             }
 
-            while ((current = pipeline.next()) !== eop) {
+            while ((current = pipeline.next()) !== nil) {
                 identity = accumulator.call(ctx, identity, current);
             }
 
@@ -636,188 +676,6 @@
 
     Pipeline.prototype.toString = function () {
         return "[object Stream]";
-    };
-
-
-    //
-    // Generic Pipeline operations
-    //
-
-    var GeneratorOp = function (fn) {
-        this.prev = null;
-        this.next = null;
-
-        this.advance = function () {
-            var val = fn.call(ctx);
-            return this.next.pipe(val);
-        };
-    };
-
-    var StatelessOp = function (fn, flat, data) {
-        this.prev = null;
-        this.next = null;
-
-        this.advance = function () {
-            if (!isStashed() && this.prev === null) {
-                return eop;
-            }
-
-            if (!isStashed()) {
-                return this.prev.advance();
-            }
-
-            var obj = unstash();
-            if (this.next !== null) {
-                return this.next.pipe(obj);
-            }
-            return obj;
-        };
-
-        this.pipe = function (obj) {
-            var val = fn.call(ctx, obj);
-            stash(val, flat);
-
-            if (!isStashed()) {
-                return this.advance();
-            }
-
-            obj = unstash();
-            if (this.next !== null) {
-                return this.next.pipe(obj);
-            }
-            return obj;
-        };
-
-
-        // internal data buffering
-
-        var buffer = nil,
-            flatten = false,    // if true buffer array will be iterated
-            keys = nil,         // in case we iterate over object hash
-            origin = 0,         // current buffer index (if flatten)
-            fence = 0;          // max buffer size (if flatten)
-
-        var isStashed = function () {
-            if (buffer === nil) {
-                return false;
-            }
-            if (flatten) {
-                return origin < fence;
-            }
-            return true;
-        };
-
-        var unstash = function () {
-            var bufferedVal;
-            if (!flatten) {
-                bufferedVal = buffer;
-                buffer = nil;
-                return bufferedVal;
-            }
-
-            bufferedVal = nextBufferedVal();
-            origin++;
-            if (origin >= fence) {
-                buffer = nil;
-                keys = nil;
-                flatten = false;
-                origin = 0;
-                fence = 0;
-            }
-            return bufferedVal;
-        };
-
-        var nextBufferedVal = function () {
-            if (isArray(buffer)) {
-                return buffer[origin];
-            }
-            var key = keys[origin];
-            return buffer[key];
-        };
-
-        var stash = function (val, flat) {
-            buffer = val;
-
-            if (!flat) {
-                return;
-            }
-
-            if (isArray(buffer)) {
-                fence = buffer.length;
-                flatten = flat;
-            } else if (isObject(buffer)) {
-                keys = Object.keys(buffer);
-                fence = keys.length;
-                flatten = flat;
-            } else {
-                // in case flatMap returns no collection
-                flatten = false;
-            }
-        };
-
-
-        if (data) {
-            stash(data, flat);
-        }
-    };
-
-    var StatefulOp = function (options) {
-        this.prev = null;
-        this.next = null;
-
-        var buffer = null, i = 0;
-
-        this.advance = function () {
-            var obj;
-            if (buffer === null) {
-                buffer = [];
-                while ((obj = this.prev.advance()) !== eop) {
-                    // obj will be added to buffer via this.pipe
-                    i++;
-                    if (options.voter) {
-                        var voted = options.voter.call(ctx, obj, i);
-                        if (!voted) {
-                            break;
-                        }
-                    }
-                }
-                if (options.finisher) {
-                    options.finisher.call(ctx, buffer);
-                }
-            }
-
-            if (buffer.length === 0) {
-                return eop;
-            }
-
-            obj = buffer.shift();
-            if (this.next !== null) {
-                return this.next.pipe(obj);
-            }
-
-            return obj;
-        };
-
-        this.pipe = function (obj) {
-            if (options.voter) {
-                var voted = options.voter.call(ctx, obj, i);
-                if (!voted) {
-                    return;
-                }
-            }
-
-            if (options.consumer) {
-                options.consumer.call(ctx, obj, i);
-            }
-
-            var filtered = true;
-            if (options.filter) {
-                filtered = options.filter.call(ctx, obj, i, buffer);
-            }
-            if (filtered) {
-                buffer.push(obj);
-            }
-        };
     };
 
 
