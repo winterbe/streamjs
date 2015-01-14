@@ -14,6 +14,10 @@
         nil = {};
 
 
+
+
+
+
     var Iterator = function () {
 
     };
@@ -25,7 +29,7 @@
         if (isObject(data)) {
             return new ObjectIterator(data);
         }
-        throw 'unknown iterator for data: ' + data;
+        return new ValueIterator(data);
     };
 
     var ArrayIterator = function (array) {
@@ -33,6 +37,7 @@
     };
 
     ArrayIterator.prototype = new Iterator();
+    ArrayIterator.prototype.constructor = Iterator;
 
     ArrayIterator.prototype.next = function () {
         if (this.origin >= this.fence) {
@@ -58,6 +63,7 @@
     };
 
     ObjectIterator.prototype = new Iterator();
+    ObjectIterator.prototype.constructor = Iterator;
 
     ObjectIterator.prototype.initialize = function (object) {
         this.data = object || {};
@@ -81,6 +87,133 @@
     };
 
 
+    var ValueIterator = function (value) {
+        this.initialize(value);
+    };
+
+    ValueIterator.prototype = new Iterator();
+    ValueIterator.prototype.constructor = Iterator;
+
+    ValueIterator.prototype.initialize = function (value) {
+        this.value = value;
+        this.done = false;
+    };
+
+    ValueIterator.prototype.next = function () {
+        if (!this.done) {
+            this.done = true;
+            return this.value;
+        }
+        return nil;
+    };
+
+
+
+    var PipelineOp = function () {
+        this.next = null;
+        this.prev = null;
+    };
+
+
+    var IteratorOp = function (data) {
+        this.iterator = Iterator.of(data);
+    };
+
+    IteratorOp.prototype = new PipelineOp();
+    IteratorOp.prototype.constructor = PipelineOp;
+
+    IteratorOp.prototype.advance = function () {
+        var obj = this.iterator.next();
+        if (obj === nil) {
+            return eop;
+        }
+        if (this.next === null) {
+            return obj;
+        }
+        return this.next.pipe(obj);
+    };
+
+
+    var MapOp = function (fn) {
+        this.fn = fn;
+    };
+
+    MapOp.prototype = new PipelineOp();
+    MapOp.prototype.constructor = PipelineOp;
+
+    MapOp.prototype.advance = function () {
+        return this.prev.advance();
+    };
+
+    MapOp.prototype.pipe = function (obj) {
+        var result = this.fn.call(ctx, obj);
+        if (this.next === null) {
+            return result;
+        }
+        return this.next.pipe(result);
+    };
+
+
+    var FlatOp = function (fn) {
+        this.fn = fn;
+        this.iterator = null;
+    };
+
+    FlatOp.prototype = new PipelineOp();
+    FlatOp.prototype.constructor = PipelineOp;
+
+    FlatOp.prototype.advance = function () {
+        if (this.iterator === null) {
+            return this.prev.advance();
+        }
+        var obj = this.iterator.next();
+        if (obj === nil) {
+            this.iterator = null;
+            return this.prev.advance();
+        }
+        if (this.next === null) {
+            return obj;
+        }
+        return this.next.pipe(obj);
+    };
+
+    FlatOp.prototype.pipe = function (obj) {
+        this.iterator = Iterator.of(obj);
+        var current = this.iterator.next();
+        if (current === nil) {
+            return this.prev.advance();
+        }
+        if (this.next === null) {
+            return current;
+        }
+        return this.next.pipe(current);
+    };
+
+
+    var FilterOp = function (fn) {
+        this.fn = fn;
+    };
+
+    FilterOp.prototype = new PipelineOp();
+    FilterOp.prototype.constructor = PipelineOp;
+
+    FilterOp.prototype.advance = function () {
+        return this.prev.advance();
+    };
+
+    FilterOp.prototype.pipe = function (obj) {
+        var filtered = this.fn.call(ctx, obj);
+        if (!filtered) {
+            return this.prev.advance();
+        }
+        if (this.next === null) {
+            return obj;
+        }
+        return this.next.pipe(obj);
+    };
+
+
+
     //
     // Internal Pipeline (doing all the work)
     //
@@ -96,14 +229,10 @@
             });
         }
         else if (isString(input)) {
-            lastOp = new StatelessOp(function (arg) {
-                return arg;
-            }, true, input.split(''));
+            lastOp = new IteratorOp(input.split(''));
         }
         else {
-            lastOp = new StatelessOp(function (arg) {
-                return arg;
-            }, true, input);
+            lastOp = new IteratorOp(input);
         }
 
         this.add = function (op) {
@@ -126,28 +255,18 @@
         //
 
         this.filter = function (predicate) {
-            this.add(new StatelessOp(function (arg) {
-                var filtered = predicate.call(ctx, arg);
-                if (filtered) {
-                    return arg;
-                } else {
-                    return nil;
-                }
-            }));
+            this.add(new FilterOp(predicate));
             return this;
         };
 
         this.map = function (mapper) {
-            this.add(new StatelessOp(function (arg) {
-                return mapper.call(ctx, arg);
-            }));
+            this.add(new MapOp(mapper));
             return this;
         };
 
         this.flatMap = function (mapper) {
-            this.add(new StatelessOp(function (arg) {
-                return mapper.call(ctx, arg);
-            }, true));
+            this.add(new MapOp(mapper));
+            this.add(new FlatOp());
             return this;
         };
 
