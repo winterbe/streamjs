@@ -14,6 +14,73 @@
         nil = {};
 
 
+    var Iterator = function () {
+
+    };
+
+    Iterator.of = function (data) {
+        if (isArray(data)) {
+            return new ArrayIterator(data);
+        }
+        if (isObject(data)) {
+            return new ObjectIterator(data);
+        }
+        throw 'unknown iterator for data: ' + data;
+    };
+
+    var ArrayIterator = function (array) {
+        this.initialize(array);
+    };
+
+    ArrayIterator.prototype = new Iterator();
+
+    ArrayIterator.prototype.next = function () {
+        if (this.origin >= this.fence) {
+            return nil;
+        }
+
+        try {
+            return this.data[this.origin];
+        }
+        finally {
+            this.origin++;
+        }
+    };
+
+    ArrayIterator.prototype.initialize = function (array) {
+        this.data = array || [];
+        this.origin = 0;
+        this.fence = this.data.length;
+    };
+
+    var ObjectIterator = function (object) {
+        this.initialize(object);
+    };
+
+    ObjectIterator.prototype = new Iterator();
+
+    ObjectIterator.prototype.initialize = function (object) {
+        this.data = object || {};
+        this.keys = Object.keys(object);
+        this.origin = 0;
+        this.fence = this.keys.length;
+    };
+
+    ObjectIterator.prototype.next = function () {
+        if (this.origin >= this.fence) {
+            return nil;
+        }
+
+        try {
+            var key = this.keys[this.origin];
+            return this.data[key];
+        }
+        finally {
+            this.origin++;
+        }
+    };
+
+
     //
     // Internal Pipeline (doing all the work)
     //
