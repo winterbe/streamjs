@@ -1,11 +1,46 @@
 (function () {
     "use strict";
 
+    var buffer = [];
+
     var measure = function (name, input, fn) {
-        var t0 = Date.now();
-        fn.call({}, input);
-        var time = Date.now() - t0;
-        console.log("%s - took: %oms", name, time);
+        var i,
+            t0,
+            time,
+            repeat = 5,
+            runs = [],
+            min = null,
+            max = null,
+            sum = 0;
+
+        for (i = 0; i < repeat; i++) {
+            t0 = Date.now();
+            var val = fn.call({}, input);
+            buffer.push(val);
+            time = Date.now() - t0;
+            runs.push({
+                name: name,
+                time: time
+            });
+        }
+
+        for (i = 0; i < runs.length; i++) {
+            var run = runs[i];
+            sum += run.time;
+            if (min === null || min > run.time) {
+                min = run.time;
+            }
+            if (max === null || max < run.time) {
+                max = run.time;
+            }
+        }
+
+        return {
+            name: name,
+            min: min,
+            max: max,
+            avg: sum / repeat
+        };
     };
 
     var createInput = function (size) {
@@ -17,10 +52,12 @@
     };
 
 
-    var input = createInput(1000000);
+    var input = createInput(100000);
     console.log("input.length: %o", input.length);
 
-    measure("Stream.js [filter - map - toArray]", input, function () {
+    var result;
+
+    result = measure("Stream.js [filter - map - toArray]", input, function () {
         return Stream(input)
             .filter(function (num) {
                 return num % 2 === 1;
@@ -31,7 +68,9 @@
             .toArray();
     });
 
-    measure("Underscore.js [filter - map - value]", input, function () {
+    console.log(result);
+
+    result = measure("Underscore.js [filter - map - value]", input, function () {
         return _.chain(input)
             .filter(function (num) {
                 return num % 2 === 1;
@@ -42,7 +81,9 @@
             .value();
     });
 
-    measure("Stream.js [filter - map - findFirst]", input, function () {
+    console.log(result);
+
+    result = measure("Stream.js [filter - map - findFirst]", input, function () {
         return Stream(input)
             .filter(function (num) {
                 return num % 2 === 1;
@@ -53,7 +94,9 @@
             .findFirst();
     });
 
-    measure("Underscore.js [filter - map - first - value]", input, function () {
+    console.log(result);
+
+    result = measure("Underscore.js [filter - map - first - value]", input, function () {
         return _.chain(input)
             .filter(function (num) {
                 return num % 2 === 1;
@@ -64,6 +107,8 @@
             .first()
             .value();
     });
+
+    console.log(result);
 
 
 }());
