@@ -186,70 +186,70 @@
     var GeneratorOp = function (fn) {
         this.prev = null;
         this.next = null;
-
-        this.advance = function () {
-            var val = fn.call(ctx);
-            return this.next.pipe(val);
-        };
+        this.fn = fn;
     };
+    GeneratorOp.prototype.advance = function () {
+        var val = this.fn.call(ctx);
+        return this.next.pipe(val);
+    };
+
 
     var StatefulOp = function (options) {
         this.prev = null;
         this.next = null;
-
-        var buffer = null, i = 0;
-
-        this.advance = function () {
-            var obj;
-            if (buffer === null) {
-                buffer = [];
-                while ((obj = this.prev.advance()) !== nil) {
-                    // obj will be added to buffer via this.pipe
-                    i++;
-                    if (options.voter) {
-                        var voted = options.voter.call(ctx, obj, i);
-                        if (!voted) {
-                            break;
-                        }
+        this.options = options;
+        this.buffer = null;
+        this.i = 0;
+    };
+    StatefulOp.prototype.advance = function () {
+        var obj;
+        if (this.buffer === null) {
+            this.buffer = [];
+            while ((obj = this.prev.advance()) !== nil) {
+                // obj will be added to buffer via this.pipe
+                this.i++;
+                if (this.options.voter) {
+                    var voted = this.options.voter.call(ctx, obj, this.i);
+                    if (!voted) {
+                        break;
                     }
                 }
-                if (options.finisher) {
-                    options.finisher.call(ctx, buffer);
-                }
             }
+            if (this.options.finisher) {
+                this.options.finisher.call(ctx, this.buffer);
+            }
+        }
 
-            if (buffer.length === 0) {
-                return nil;
-            }
+        if (this.buffer.length === 0) {
+            return nil;
+        }
 
-            obj = buffer.shift();
-            if (this.next !== null) {
-                return this.next.pipe(obj);
-            }
+        obj = this.buffer.shift();
+        if (this.next !== null) {
+            return this.next.pipe(obj);
+        }
 
-            return obj;
-        };
+        return obj;
+    };
+    StatefulOp.prototype.pipe = function (obj) {
+        if (this.options.voter) {
+            var voted = this.options.voter.call(ctx, obj, this.i);
+            if (!voted) {
+                return;
+            }
+        }
 
-        this.pipe = function (obj) {
-            if (options.voter) {
-                var voted = options.voter.call(ctx, obj, i);
-                if (!voted) {
-                    return;
-                }
-            }
+        if (this.options.consumer) {
+            this.options.consumer.call(ctx, obj, this.i);
+        }
 
-            if (options.consumer) {
-                options.consumer.call(ctx, obj, i);
-            }
-
-            var filtered = true;
-            if (options.filter) {
-                filtered = options.filter.call(ctx, obj, i, buffer);
-            }
-            if (filtered) {
-                buffer.push(obj);
-            }
-        };
+        var filtered = true;
+        if (this.options.filter) {
+            filtered = this.options.filter.call(ctx, obj, this.i, this.buffer);
+        }
+        if (filtered) {
+            this.buffer.push(obj);
+        }
     };
 
 
