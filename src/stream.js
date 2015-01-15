@@ -252,6 +252,45 @@
         }
     };
 
+    var LimitOp = function (limit) {
+        this.limit = limit;
+        this.i = 0;
+    };
+    LimitOp.prototype = new PipelineOp();
+    LimitOp.prototype.advance = function () {
+        return this.prev.advance();
+    };
+    LimitOp.prototype.pipe = function (obj) {
+        if (this.i >= this.limit) {
+            return nil;
+        }
+        this.i++;
+        if (this.next === null) {
+            return obj;
+        }
+        return this.next.pipe(obj);
+    };
+
+
+    var SkipOp = function (skip) {
+        this.skip = skip;
+        this.i = 0;
+    };
+    SkipOp.prototype = new PipelineOp();
+    SkipOp.prototype.advance = function () {
+        return this.prev.advance();
+    };
+    SkipOp.prototype.pipe = function (obj) {
+        if (this.i < this.skip) {
+            this.i++;
+            return this.prev.advance();
+        }
+        this.i++;
+        if (this.next === null) {
+            return obj;
+        }
+        return this.next.pipe(obj);
+    };
 
 
     //
@@ -324,36 +363,28 @@
             return this;
         };
 
-        this.skip = function (num) {
+        this.distinct = function () {
             this.add(new StatefulOp({
-                filter: function (obj, i) {
-                    return i >= num;
+                filter: function (obj, i, array) {
+                    return array.indexOf(obj) < 0;
                 }
             }));
             return this;
         };
 
+        this.skip = function (num) {
+            this.add(new SkipOp(num));
+            return this;
+        };
+
         this.limit = function (num) {
-            this.add(new StatefulOp({
-                voter: function (obj, i) {
-                    return i < num;
-                }
-            }));
+            this.add(new LimitOp(num));
             return this;
         };
 
         this.peek = function (consumer) {
             this.add(new StatefulOp({
                 consumer: consumer
-            }));
-            return this;
-        };
-
-        this.distinct = function () {
-            this.add(new StatefulOp({
-                filter: function (obj, i, array) {
-                    return array.indexOf(obj) < 0;
-                }
             }));
             return this;
         };
