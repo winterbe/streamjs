@@ -197,26 +197,22 @@
     var StatefulOp = function (options) {
         this.prev = null;
         this.next = null;
-        this.options = options;
+        this.filter = options.filter;
+        this.finisher = options.finisher;
         this.buffer = null;
         this.i = 0;
     };
     StatefulOp.prototype.advance = function () {
         var obj;
+
         if (this.buffer === null) {
             this.buffer = [];
             while ((obj = this.prev.advance()) !== nil) {
                 // obj will be added to buffer via this.pipe
                 this.i++;
-                if (this.options.voter) {
-                    var voted = this.options.voter.call(ctx, obj, this.i);
-                    if (!voted) {
-                        break;
-                    }
-                }
             }
-            if (this.options.finisher) {
-                this.options.finisher.call(ctx, this.buffer);
+            if (this.finisher) {
+                this.finisher.call(ctx, this.buffer);
             }
         }
 
@@ -232,22 +228,7 @@
         return obj;
     };
     StatefulOp.prototype.pipe = function (obj) {
-        if (this.options.voter) {
-            var voted = this.options.voter.call(ctx, obj, this.i);
-            if (!voted) {
-                return;
-            }
-        }
-
-        if (this.options.consumer) {
-            this.options.consumer.call(ctx, obj, this.i);
-        }
-
-        var filtered = true;
-        if (this.options.filter) {
-            filtered = this.options.filter.call(ctx, obj, this.i, this.buffer);
-        }
-        if (filtered) {
+        if (!this.filter || this.filter.call(ctx, obj, this.i, this.buffer)) {
             this.buffer.push(obj);
         }
     };
@@ -286,6 +267,21 @@
             return this.prev.advance();
         }
         this.i++;
+        if (this.next === null) {
+            return obj;
+        }
+        return this.next.pipe(obj);
+    };
+
+    var PeekOp = function (consumer) {
+        this.consumer = consumer;
+    };
+    PeekOp.prototype = new PipelineOp();
+    PeekOp.prototype.advance = function () {
+        return this.prev.advance();
+    };
+    PeekOp.prototype.pipe = function (obj) {
+        this.consumer.call(ctx, obj);
         if (this.next === null) {
             return obj;
         }
@@ -383,9 +379,7 @@
         };
 
         this.peek = function (consumer) {
-            this.add(new StatefulOp({
-                consumer: consumer
-            }));
+            this.add(new PeekOp(consumer));
             return this;
         };
 
