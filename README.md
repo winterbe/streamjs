@@ -21,7 +21,7 @@ Stream([5, 9, 2, 4, 8, 1])
 
 # Getting started
 
-Stream.js is based on ECMAScript 5 and works in all modern browsers as well as [Node.js](http://nodejs.org/) and [Nashorn](http://openjdk.java.net/projects/nashorn/). You can install Stream.js manually by downloading the [latest release](https://github.com/winterbe/streamjs/releases) from GitHub. The root folder contains the minified script and a source map file for debugging. Alternatively you can install Stream.js with [Bower](http://bower.io/) or [NPM](https://www.npmjs.com/package/streamjs).
+Stream.js is based on ECMAScript 5 and works in all modern browsers as well as [Node.js](http://nodejs.org/) and [Nashorn](http://openjdk.java.net/projects/nashorn/). In order to get started you can install Stream.js manually by downloading the [latest release](https://github.com/winterbe/streamjs/releases) from GitHub. The root folder contains the minified script and a source map file for debugging. Alternatively you can install Stream.js with [Bower](http://bower.io/) or [NPM](https://www.npmjs.com/package/streamjs).
 
 ##### Bower
 
