@@ -3,25 +3,21 @@
   "version": "1.1.2",
   "homepage": "https://github.com/winterbe/streamjs",
   "authors": ["Benjamin Winterberg"],
-  "description": "Object Streaming Pipeline for JavaScript - inspired by the Java 8 Streams API.",
-  "main": "src/stream.js",
+  "description": "Object Streaming Pipeline for JavaScript - inspired by the Java 8 Streams API",
+  "main": "stream.js",
   "moduleType": [
     "amd",
     "globals"
   ],
   "keywords": [
+    "functional",
     "collection",
     "pipeline",
-    "pipe",
-    "array",
+    "stream",
+    "lazy",
     "utils",
-    "monad",
-    "functional",
     "java",
-    "streams",
-    "server",
-    "client",
-    "browser"
+    "array"
   ],
   "license": "MIT",
   "ignore": [

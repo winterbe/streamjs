@@ -4,13 +4,13 @@ module.exports = function (grunt) {
         pkg: grunt.file.readJSON('package.json'),
         uglify: {
             options: {
-                banner: '/*! Stream.js <%= grunt.template.today("yyyy-mm-dd") %> */\n',
+                banner: '/*! Stream.js <%= pkg.version %> (<%= grunt.template.today("yyyy-mm-dd") %>) */',
                 sourceMap: true,
-                sourceMapIncludeSources: false
+                sourceMapName: 'stream-min.map'
             },
             dist: {
                 files: {
-                    'src/stream.min.js': ['src/stream.js']
+                    'stream-min.js': ['stream.js']
                 }
             }
         },
@@ -18,7 +18,7 @@ module.exports = function (grunt) {
             files: ['test/index.html']
         },
         jshint: {
-            files: ['src/stream.js', 'test/**/*.js'],
+            files: ['stream.js', 'test/**/*.js'],
             options: {
                 jshintrc: '.jshintrc'
             }
