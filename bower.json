@@ -1,9 +1,9 @@
 {
   "name": "streamjs",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "homepage": "https://github.com/winterbe/streamjs",
   "authors": ["Benjamin Winterberg"],
-  "description": "A Collection Pipeline for JavaScript - inspired by the Java 8 Streams API.",
+  "description": "Object Streaming Pipeline for JavaScript - inspired by the Java 8 Streams API.",
   "main": "src/stream.js",
   "moduleType": [
     "amd",
