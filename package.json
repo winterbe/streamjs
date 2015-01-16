@@ -30,7 +30,7 @@
   "engines": {
     "node": ">=0.10"
   },
-  "main": "streamjs",
+  "main": "src/stream.js",
   "files": [
     "src/stream.js",
     "src/stream.min.js",
