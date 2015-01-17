@@ -131,6 +131,12 @@ Filters the elements of the stream to match the given predicate function and ret
 
 Applies the given mapping function to each element of the stream and returns the stream.
 
+##### map(path)
+
+Maps each element of the stream by resolving the given string `path` and returns the stream.
+
+E.g. `map('a.b.c')` is equivalent to `map(function(obj) { return obj.a.b.c; })`.
+
 ##### flatMap(mappingFn)
 
 Applies the given mapping function to each element of the stream and flattens the results by replacing each element with the contents of the element in case of collections, then returns the stream.

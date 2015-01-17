@@ -334,8 +334,13 @@
             return this;
         };
 
-        this.map = function (mapper) {
-            this.add(new MapOp(mapper));
+        this.map = function () {
+            var arg = arguments[0];
+            if (isString(arg)) {
+                this.add(new MapOp(pathMapper(arg)));
+            } else {
+                this.add(new MapOp(arg));
+            }
             return this;
         };
 
@@ -803,6 +808,24 @@
             return 0;
         }
         return a > b ? 1 : -1;
+    };
+
+    var pathMapper = function (path) {
+        if (path.indexOf('.') < 0) {
+            return function (obj) {
+                return obj[path];
+            };
+        }
+
+        var paths = path.split('.');
+        return function (obj) {
+            var current = obj;
+            for (var i = 0; i < paths.length; i++) {
+                var path = paths[i];
+                current = current[path];
+            }
+            return current;
+        };
     };
 
     var isString = function (obj) {
