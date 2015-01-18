@@ -83,3 +83,39 @@ QUnit.test("filter with null", function (assert) {
     assert.equal(result[2], undefined);
     assert.equal(result[3], 2);
 });
+
+QUnit.test("filter via regexp literal", function (assert) {
+    var data = ["a1", "a2", "b3"];
+
+    var result = Stream(data)
+        .filter(/a.*/)
+        .toArray();
+
+    assert.equal(result.length, 2);
+    assert.equal(result[0], "a1");
+    assert.equal(result[1], "a2");
+
+    // assert original data is untouched
+    assert.equal(data.length, 3);
+    assert.equal(data[0], "a1");
+    assert.equal(data[1], "a2");
+    assert.equal(data[2], "b3");
+});
+
+QUnit.test("filter via regexp object", function (assert) {
+    var data = ["a1", "a2", "b3"];
+
+    var result = Stream(data)
+        .filter(new RegExp("a.*"))
+        .toArray();
+
+    assert.equal(result.length, 2);
+    assert.equal(result[0], "a1");
+    assert.equal(result[1], "a2");
+
+    // assert original data is untouched
+    assert.equal(data.length, 3);
+    assert.equal(data[0], "a1");
+    assert.equal(data[1], "a2");
+    assert.equal(data[2], "b3");
+});

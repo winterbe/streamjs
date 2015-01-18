@@ -329,8 +329,15 @@
         // intermediate operations (stateless)
         //
 
-        this.filter = function (predicate) {
-            this.add(new FilterOp(predicate));
+        this.filter = function () {
+            var arg = arguments[0];
+            if (isRegExp(arg)) {
+                this.add(new FilterOp(function (obj) {
+                    return arg.test(obj);
+                }));
+            } else {
+                this.add(new FilterOp(arg));
+            }
             return this;
         };
 
@@ -878,6 +885,10 @@
 
     var isObject = function (obj) {
         return typeof obj === 'object' && !!obj;
+    };
+
+    var isRegExp = function (obj) {
+        return Object.prototype.toString.call(obj) === '[object RegExp]';
     };
 
 
