@@ -83,3 +83,66 @@ QUnit.test("flatMap returns object", function (assert) {
     assert.equal(result[0], 1);
     assert.equal(result[1], 1);
 });
+
+QUnit.test("flatMap via path (depth 1)", function (assert) {
+    var data = [{a: [1]}, {a: [2]}, {a: [3]}, {a: [4]}];
+
+    var result = Stream(data)
+        .flatMap("a")
+        .toArray();
+
+    assert.equal(result.length, 4);
+    assert.equal(result[0], 1);
+    assert.equal(result[1], 2);
+    assert.equal(result[2], 3);
+    assert.equal(result[3], 4);
+
+    // assert original data is untouched
+    assert.equal(data.length, 4);
+    assert.equal(data[0].a, 1);
+    assert.equal(data[1].a, 2);
+    assert.equal(data[2].a, 3);
+    assert.equal(data[3].a, 4);
+});
+
+QUnit.test("flatMap via path (depth 2)", function (assert) {
+    var data = [{a: {b: [1]}}, {a: {b: [2]}}, {a: {b: [3]}}, {a: {b: [4]}}];
+
+    var result = Stream(data)
+        .flatMap("a.b")
+        .toArray();
+
+    assert.equal(result.length, 4);
+    assert.equal(result[0], 1);
+    assert.equal(result[1], 2);
+    assert.equal(result[2], 3);
+    assert.equal(result[3], 4);
+
+    // assert original data is untouched
+    assert.equal(data.length, 4);
+    assert.equal(data[0].a.b, 1);
+    assert.equal(data[1].a.b, 2);
+    assert.equal(data[2].a.b, 3);
+    assert.equal(data[3].a.b, 4);
+});
+
+QUnit.test("flatMap via path (depth 3)", function (assert) {
+    var data = [{a: {b: {c: [1]}}}, {a: {b: {c: [2]}}}, {a: {b: {c: [3]}}}, {a: {b: {c: [4]}}}];
+
+    var result = Stream(data)
+        .flatMap("a.b.c")
+        .toArray();
+
+    assert.equal(result.length, 4);
+    assert.equal(result[0], 1);
+    assert.equal(result[1], 2);
+    assert.equal(result[2], 3);
+    assert.equal(result[3], 4);
+
+    // assert original data is untouched
+    assert.equal(data.length, 4);
+    assert.equal(data[0].a.b.c, 1);
+    assert.equal(data[1].a.b.c, 2);
+    assert.equal(data[2].a.b.c, 3);
+    assert.equal(data[3].a.b.c, 4);
+});

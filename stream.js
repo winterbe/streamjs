@@ -344,8 +344,13 @@
             return this;
         };
 
-        this.flatMap = function (mapper) {
-            this.add(new MapOp(mapper));
+        this.flatMap = function () {
+            var arg = arguments[0];
+            if (isString(arg)) {
+                this.add(new MapOp(pathMapper(arg)));
+            } else {
+                this.add(new MapOp(arg));
+            }
             this.add(new FlatOp());
             return this;
         };
