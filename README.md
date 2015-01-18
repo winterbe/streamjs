@@ -91,4 +91,6 @@ The Stream.js API is described in detail in the [project wiki](https://github.co
 
 # Copyright and license
 
-Created and copyright (c) 2014-2015 by Benjamin Winterberg. Stream.js may be freely distributed under the [MIT license](https://github.com/winterbe/streamjs/blob/master/LICENSE).
+Created and copyright (c) 2014-2015 by Benjamin Winterberg.
+
+Stream.js may be freely distributed under the [MIT license](https://github.com/winterbe/streamjs/blob/master/LICENSE).
