@@ -72,7 +72,7 @@ What's so different between Stream.js and other functional libraries like Unders
 
 Stream.js is built around a lazily evaluated operation pipeline. Instead of consecutively performing each operation on the whole input collection, objects are passed vertically and one by one upon the chain. Interim results will _not_ be stored in internal collections (except for some stateful operations like `sorted`). Instead objects are directly piped into the resulting object as specified by the terminal operation. This results in **minimized memory consumption** and internal state.
 
-Stream operations are lazily evaluated to avoid examining all of the input data when it's not necessary. Streams always perform the minimal amount of operations to gain results. E.g. in a `filter - map - findFirst` stream you don't have to filter and map the whole data. Instead `map` and `findFirst` will only executed once before returning the single result. This results in **increased performance** when operation upon large amounts of input elements.
+Stream operations are lazily evaluated to avoid examining all of the input data when it's not necessary. Streams always perform the minimal amount of operations to gain results. E.g. in a `filter - map - findFirst` stream you don't have to filter and map the whole data. Instead `map` and `findFirst` are executed just one time before returning the single result. This results in **increased performance** when operation upon large amounts of input elements.
 
 ```js
 Stream([1, 2, 3, 4])
@@ -87,7 +87,7 @@ Stream([1, 2, 3, 4])
 
 # [API Documentation](https://github.com/winterbe/streamjs/wiki)
 
-The Stream.js API is described in detail in the [project wiki](https://github.com/winterbe/streamjs/wiki). For more information about Java 8 Streams I recommend reading the [Javadoc](http://docs.oracle.com/javase/8/docs/api/java/util/stream/package-summary.html) and this [blog post](http://winterbe.com/posts/2014/07/31/java8-stream-tutorial-examples/).
+The Stream.js API is described in detail in the [project wiki](https://github.com/winterbe/streamjs/wiki). For more information about Java 8 Streams I recommend reading the official [Javadoc](http://docs.oracle.com/javase/8/docs/api/java/util/stream/package-summary.html) and this [blog post](http://winterbe.com/posts/2014/07/31/java8-stream-tutorial-examples/).
 
 # Copyright and license
 
