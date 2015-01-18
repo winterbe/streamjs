@@ -35,6 +35,10 @@ $ bower install streamjs
 $ npm install streamjs
 ```
 
+<p align="center">
+   <i>Read the <a href="https://github.com/winterbe/streamjs/wiki">API Doc</a></i>
+</p>
+
 # How Streams work
 
 Stream.js defines a single function `Stream` to create new streams from different input collections like _arrays_, _maps_ or _number ranges_:
@@ -83,6 +87,7 @@ Stream([1, 2, 3, 4])
 
 # [API Documentation](https://github.com/winterbe/streamjs/wiki)
 
+The Stream.js API is described in detail in the [project wiki](https://github.com/winterbe/streamjs/wiki). For more information about Java 8 Streams I recommend reading the [Javadoc](http://docs.oracle.com/javase/8/docs/api/java/util/stream/package-summary.html) and this [blog post](http://winterbe.com/posts/2014/07/31/java8-stream-tutorial-examples/).
 
 # Copyright and license
 
