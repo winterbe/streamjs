@@ -667,6 +667,33 @@
         };
 
 
+        var StreamIterator = function () {
+            this.value = pipeline.next();
+        };
+        StreamIterator.prototype = new Iterator();
+        StreamIterator.prototype.next = function () {
+            if (this.value === nil) {
+                return {
+                    value: undefined,
+                    done: true
+                };
+            }
+            var nextValue = pipeline.next(),
+                done = nextValue === nil,
+                result = {
+                    value: this.value,
+                    done: done
+                };
+            this.value = nextValue;
+            return result;
+        };
+
+        terminal.iterator = function () {
+            return new StreamIterator();
+        };
+
+
+
         //
         // assert stream can only be consumed once by proxing all terminal operations
         //
