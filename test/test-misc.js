@@ -26,7 +26,7 @@ QUnit.test("toString", function (assert) {
 });
 
 QUnit.test("version", function (assert) {
-    assert.equal(Stream.VERSION, "1.1.2");
+    assert.equal(Stream.VERSION, "1.2.0");
 });
 
 QUnit.test("noConflict", function (assert) {

@@ -4,7 +4,7 @@ module.exports = function (grunt) {
         pkg: grunt.file.readJSON('package.json'),
         uglify: {
             options: {
-                banner: '/*! Stream.js <%= pkg.version %> (<%= grunt.template.today("yyyy-mm-dd") %>) */',
+                banner: '/*! Stream.js v<%= pkg.version %> (<%= grunt.template.today("yyyy-mm-dd") %>) */',
                 sourceMap: true,
                 sourceMapName: 'stream-min.map'
             },
