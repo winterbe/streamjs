@@ -89,6 +89,10 @@ Stream([1, 2, 3, 4])
 
 The Stream.js API is described in detail [here](https://github.com/winterbe/streamjs/blob/master/APIDOC.md). For more information about Java 8 Streams I recommend reading the official [Javadoc](http://docs.oracle.com/javase/8/docs/api/java/util/stream/package-summary.html) and this [blog post](http://winterbe.com/posts/2014/07/31/java8-stream-tutorial-examples/).
 
+# Contributing
+
+Found a bug or missing feature? Please open an [issue](https://github.com/winterbe/streamjs/issues)! Your feedback and help is highly appreciated. Please refer to the [contributing rules](https://github.com/winterbe/streamjs/blob/master/CONTRIBUTING.md) before sending a pull request. I would also love to hear your feedback via [Twitter](https://twitter.com/benontherun).
+
 # Copyright and license
 
 Created and copyright (c) 2014-2015 by Benjamin Winterberg.
