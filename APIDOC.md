@@ -44,6 +44,10 @@ Intermediate operations all return a stream, thus enabling you to chain multiple
 
 Filters the elements of the stream to match the given predicate function and returns the stream.
 
+##### filter(regexp)
+
+Filters the elements of the stream to match the given regular expression and returns the stream.
+
 ##### map(mappingFn)
 
 Applies the given mapping function to each element of the stream and returns the stream.
@@ -202,7 +206,7 @@ Alias: `join`
 
 ##### iterator()
 
-Returns a `StreamIterator` to traverse upon the elements described by this stream. StreamIterator defines a single method `next`, returning an object holding the next `value` and a boolean flag `done` indicating if the iterator has been finished.
+Returns a `StreamIterator` to traverse upon the elements described by this stream. `StreamIterator` defines a single method `next`, returning an object holding the next `value` and a boolean flag `done` indicating if the iterator has been finished.
 
 ```js
 var iterator = stream.iterator(), result;
