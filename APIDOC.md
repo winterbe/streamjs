@@ -96,7 +96,7 @@ var stream = Stream("ABCDEFG");
 Returns a new stream for the given arguments.
 
 ```js
-var stream = Stream(1, 2, 3, 4);
+var stream = Stream.of(1, 2, 3, 4);
 ```
 
 ##### Stream.empty()
@@ -104,7 +104,7 @@ var stream = Stream(1, 2, 3, 4);
 Returns a new empty stream.
 
 ```js
-var stream = Stream();
+var stream = Stream.empty();
 ```
 
 ##### Stream.range(startInclusive, endExclusive)
@@ -112,7 +112,7 @@ var stream = Stream();
 Returns a new stream for the given number range.
 
 ```js
-var stream = Stream(0, 10);   // => 0..9
+var stream = Stream.range(0, 10);   // => 0..9
 ```
 
 ##### Stream.rangeClosed(startInclusive, endInclusive)
@@ -120,7 +120,7 @@ var stream = Stream(0, 10);   // => 0..9
 Returns a new stream for the given number range.
 
 ```js
-var stream = Stream(0, 9);    // => 0..9
+var stream = Stream.rangeClosed(0, 9);    // => 0..9
 ```
 
 ##### Stream.generate(supplier)
