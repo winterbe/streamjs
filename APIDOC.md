@@ -1,5 +1,64 @@
 # API Documentation
 
+Stream.js is a lightweight dependency-free utility library for ECMAScript 5 compatible JavaScript engines, such as browsers, Node.js or the Java 8 Nashorn engine. No native JavaScript types are modified in any way. Instead Stream.js exposes a single function `Stream` which serves as the constructor for creating and working with streams of in-memory data. It also serves as namespace for additional types such as `Stream.Optional`.
+
+## Naming Conventions
+
+As a functional programming library Stream.js follows strict naming conventions to describe different kind of function arguments.
+
+##### Predicate
+
+Predicate functions accept a single element of the stream as the first argument and return a boolean.
+
+```js
+var predicate = function(num) {
+   return num % 2 === 1;
+}
+```
+
+##### Mapping Function
+
+Mapping functions accept a single element of the stream as the first argument and transform this argument into something else, returning another object.
+
+```js
+var mappingFn = function(num) {
+   return {a: num};
+}
+```
+
+##### Supplier
+
+Supplier functions return new objects out of nowhere. No arguments are passed.
+
+```js
+var supplier = function() {
+   return Math.random();
+}
+```
+
+##### Comparator
+
+Comparator functions accept two arguments and compare those arguments for order, returning 0, 1 or -1.
+
+```js
+var defaultComparator = function (a, b) {
+   if (a === b) {
+      return 0;
+   }
+   return a > b ? 1 : -1;
+};
+```
+
+##### Accumulator
+
+Accumulator functions accept two arguments and return an object, e.g. by merging both arguments into a single result. Normally those functions are called multiple times for all elements of the stream, passing the last accumulator result as first argument and the current element of the stream as second argument.
+
+```js
+var accumulator = function(result, obj) {
+   return result + " " + obj;
+}
+```
+
 ## Stream
 
 ### Constructors
