@@ -4,7 +4,7 @@ Stream.js is a lightweight dependency-free utility library for ECMAScript 5 comp
 
 ## Naming Conventions
 
-As a functional programming library Stream.js follows strict naming conventions to describe different kind of function arguments.
+Stream.js is a functional programming library and follows strict naming conventions to describe different kind of function arguments. Please keep in mind that all functions passed as stream operations must be _stateless_. That means those functions should not modify the internal state of the streams underlying data structure (e.g. add or remove elements from the input array). Stateful functions may result in non-deterministic or incorrect behavior.
 
 ##### Predicate
 
@@ -33,6 +33,16 @@ Supplier functions return new objects out of nowhere. No arguments are passed.
 ```js
 var supplier = function() {
    return Math.random();
+}
+```
+
+##### Consumer
+
+Consumer functions accept a single element of the stream as the first argument and perform some custom actions, returning nothing.
+
+```js
+var consumer = function (obj) {
+   console.log("consuming", obj);
 }
 ```
 
