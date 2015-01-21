@@ -253,13 +253,30 @@ Stream([1, 1, 2, 3, 3, 4])
 
 Truncates the elements of the stream to be no longer than `maxSize` and returns the stream.
 
+```js
+Stream([1, 2, 3, 4])
+   .limit(2);        // => 1, 2
+```
+
 ##### skip(n)
 
 Discards the first `n` elements and returns the stream.
 
+```js
+Stream([1, 2, 3, 4])
+   .skip(2);         // => 3, 4
+```
+
 ##### peek(consumer)
 
 Performs the consumer function for each element and returns the stream.
+
+```js
+Stream([1, 2, 3, 4])
+   .peek(function (num) {
+      console.log(num);
+   });
+```
 
 ### Terminal Operations
 
@@ -271,11 +288,26 @@ Returns an array containing the elements of the stream.
 
 Alias: `toList`
 
+```js
+var result = Stream([1, 2, 3, 4, 5])
+   .filter(function (num) {
+      return num % 2 === 1;
+   })
+   .toArray();   // => [1, 3, 5]
+```
+
 ##### forEach(consumer)
 
 Performs the consumer function for each element of the stream.
 
 Alias: `each`
+
+```js
+Stream([1, 2, 3, 4])
+   .forEach(function (num) {
+      console.log(num);
+   });
+```
 
 ##### findFirst()
 
@@ -283,25 +315,76 @@ Returns an `Optional` wrapping the first element of the stream or `Optional.empt
 
 Alias: `findAny`
 
+```js
+Stream([1, 2, 3, 4])
+   .findFirst()
+   .ifPresent(function (first) {
+      console.log(first);  // => 1
+   });
+```
+
 ##### min()
 
 Returns an `Optional` wrapping the minimum element of the stream (according the natural order) or `Optional.empty()` if the stream is empty.
+
+```js
+Stream([4, 1, 3, 2])
+   .min()
+   .ifPresent(function (min) {
+      console.log(min);  // => 1
+   });
+```
 
 ##### min(comparator)
 
 Returns an `Optional` wrapping the minimum element of the stream (according the given comparator function) or `Optional.empty()` if the stream is empty.
 
+```js
+Stream([{a: 3}, {a: 1}, {a: 2}])
+   .min(function (obj1, obj2) {
+      if (obj1.a === obj2.a) return 0;
+      return obj1.a > obj2.a ? 1 : -1;
+   })
+   .ifPresent(function (min) {
+      console.log(min);    // => {a: 1}
+   });
+```
+
 ##### max()
 
 Returns an `Optional` wrapping the maximum element of the stream (according the natural order) or `Optional.empty()` if the stream is empty.
+
+```js
+Stream([4, 1, 3, 2])
+   .max()
+   .ifPresent(function (min) {
+      console.log(min);  // => 1
+   });
+```
 
 ##### max(comparator)
 
 Returns an `Optional` wrapping the maximum element of the stream (according the given comparator function) or `Optional.empty()` if the stream is empty.
 
+```js
+Stream([{a: 3}, {a: 1}, {a: 2}])
+   .max(function (obj1, obj2) {
+      if (obj1.a === obj2.a) return 0;
+      return obj1.a > obj2.a ? 1 : -1;
+   })
+   .ifPresent(function (min) {
+      console.log(min);    // => {a: 3}
+   });
+```
+
 ##### sum()
 
 Returns the sum of all elements in this stream.
+
+```js
+Stream([1, 2, 3, 4])
+   .sum();     // => 10
+```
 
 ##### average()
 
@@ -309,35 +392,102 @@ Returns an `Optional` wrapping the arithmetic mean of all elements of this strea
 
 Alias: `avg`
 
+```js
+Stream([1, 2, 3, 4])
+   .average()
+   .ifPresent(function (avg) {
+      console.log(avg);    // => 2.5
+   });
+```
+
 ##### count()
 
 Returns the number of elements of the stream.
 
 Alias: `size`
 
+```js
+Stream([1, 2, 3, 4])
+   .count();     // => 4
+```
+
 ##### allMatch(predicate)
 
 Returns whether all elements of the stream match the given predicate function.
+
+```js
+Stream([1, 2, 3, 4])
+   .allMatch(function (num) {
+      return num > 1;   // => false
+   });
+```
 
 ##### anyMatch(predicate)
 
 Returns whether any element of the stream matches the given predicate function.
 
+```js
+Stream([1, 2, 3, 4])
+   .anyMatch(function (num) {
+      return num > 1;   // => true
+   });
+```
+
 ##### noneMatch(predicate)
 
 Returns whether no element of the stream matches the given predicate function.
 
-##### collect(collector)
-
-Performs a generalized reduction operation denoted by the given collector and returns the reduced value. A collector consists of a supplier function, an accumulator function and an optional finisher function.
+```js
+Stream([1, 2, 3, 4])
+   .noneMatch(function (num) {
+      return num > 1;   // => false
+   });
+```
 
 ##### reduce(identity, accumulator)
 
 Performs a reduction operation using the provided `identity` object as initial value and the accumulator function and returns the reduced value.
 
+```js
+Stream([1, 2, 3, 4])
+   .reduce(1000, function (result, num) {
+      return result + num;    // => 1010
+   });
+```
+
 ##### reduce(accumulator)
 
 Performs a reduction operation using the first element of the stream as as initial value and the accumulator function and returns the reduced value wrapped as `Optional`.
+
+```js
+Stream([1, 2, 3, 4])
+   .reduce(function (result, num) {
+      return result + num;
+   })
+   .ifPresent(function (result) {
+      console.log(result);    // => 10
+   });
+```
+
+##### collect(collector)
+
+Performs a generalized reduction operation denoted by the given collector and returns the reduced value. A collector consists of a supplier function, an accumulator function and an optional finisher function.
+
+```js
+Stream([1, 2, 3, 4])
+   .collect({
+      supplier: function () {
+         return "Data: ";
+      },
+      accumulator: function (val, num) {
+         return val + num + " ";
+      },
+      finisher: function (val) {
+         return val + "!";
+      }
+   });
+// => Data: 1 2 3 4 !
+```
 
 ##### groupingBy(keyMapper)
 
@@ -368,6 +518,16 @@ Alias: `partitionBy`
 Joins all elements of the stream into a string, using the following non-required options: `options.delimiter`, `options.prefix`, `options.suffix`.
 
 Alias: `join`
+
+```js
+Stream([1, 2, 3, 4])
+   .joining({
+      prefix: "PREFIX_",
+      suffix: "_SUFFIX",
+      delimiter: ","
+   });
+// => "PREFIX_1,2,3,4_SUFFIX"
+```
 
 ##### iterator()
 
