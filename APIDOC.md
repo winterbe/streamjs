@@ -513,6 +513,17 @@ Groups all elements of the stream by chunks of the given size, returning an arra
 
 Alias: `partitionBy`
 
+##### joining()
+
+Joins all elements of the stream into a string.
+
+Alias: `join`
+
+```js
+Stream([1, 2, 3, 4])
+   .joining();    // => "1234"
+```
+
 ##### joining(options)
 
 Joins all elements of the stream into a string, using the following non-required options: `options.delimiter`, `options.prefix`, `options.suffix`.
