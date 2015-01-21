@@ -21,7 +21,7 @@ Stream([5, 9, 2, 4, 8, 1])
 
 # Getting started
 
-Stream.js is a lightweight dependency-free utility library for ECMAScript 5 compatible JavaScript engines, such as all modern browsers, [Node.js](http://nodejs.org/) or the Java 8 [Nashorn](http://openjdk.java.net/projects/nashorn/) engine. In order to get started you can install Stream.js manually by downloading the [latest release](https://github.com/winterbe/streamjs/releases) from GitHub. The root folder contains the minified script (**2.6 KB minified, gzipped**) and a source map file for debugging. Alternatively you can install Stream.js with [Bower](http://bower.io/) or [NPM](https://www.npmjs.com/package/streamjs).
+Stream.js is a lightweight dependency-free utility library for ECMAScript 5 compatible JavaScript engines, such as all modern browsers, [Node.js](http://nodejs.org/) or the Java 8 [Nashorn](http://openjdk.java.net/projects/nashorn/) engine. In order to get started you can install Stream.js manually by downloading the [latest release](https://github.com/winterbe/streamjs/releases) from GitHub. The **2.6 KB minified, gzipped** script is located in the root folder of this project and ships with a source map file for debugging. Alternatively you can install Stream.js with [Bower](http://bower.io/) or [NPM](https://www.npmjs.com/package/streamjs).
 
 > ##### Bower
 
