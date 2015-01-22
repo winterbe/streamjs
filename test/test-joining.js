@@ -18,6 +18,12 @@ QUnit.test("joining with options", function (assert) {
     assert.equal(result, "PREFIX_1,2,3,4_SUFFIX");
 });
 
+QUnit.test("joining with delimiter", function (assert) {
+    var result = Stream([1, 2, 3, 4])
+        .joining(',');
+    assert.equal(result, "1,2,3,4");
+});
+
 QUnit.test("joining empty with options", function (assert) {
     var result = Stream([])
         .joining({

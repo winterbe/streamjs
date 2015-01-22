@@ -663,12 +663,16 @@
             });
         };
 
-        terminal.joining = function (options) {
+        terminal.joining = function (arg) {
             var prefix = "", suffix = "", delimiter = "";
-            if (options) {
-                prefix = options.prefix || prefix;
-                suffix = options.suffix || suffix;
-                delimiter = options.delimiter || delimiter;
+            if (arg) {
+                if (isString(arg)) {
+                    delimiter = arg;
+                } else {
+                    prefix = arg.prefix || prefix;
+                    suffix = arg.suffix || suffix;
+                    delimiter = arg.delimiter || delimiter;
+                }
             }
 
             return pipeline.collect({

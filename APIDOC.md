@@ -584,6 +584,17 @@ Stream([1, 2, 3, 4])
    .joining();    // => "1234"
 ```
 
+> ##### joining(delimiter)
+
+Joins all elements of the stream into a string.
+
+Alias: `join`
+
+```js
+Stream([1, 2, 3, 4])
+   .joining("-");    // => "1-2-3-4"
+```
+
 > ##### joining(options)
 
 Joins all elements of the stream into a string, using the following non-required options: `options.delimiter`, `options.prefix`, `options.suffix`.
