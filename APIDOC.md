@@ -495,11 +495,29 @@ Groups all elements of the stream by applying the given keyMapper function and r
 
 Alias: `groupBy`
 
+```js
+Stream([{a: "foo", b: 1}, {a: "bar", b: 2}, {a: "bar", b: 3}])
+  .groupBy(function (obj) {
+      return obj.a;
+  });
+
+// => { foo: [{a: "foo", b: 1}], bar: [{a: "bar", b: 2, {a: "bar", b: 3}] }
+```
+
 > ##### toMap(keyMapper, mergeFunction)
 
 Groups all elements of the stream by applying the given keyMapper function and returns an object map, assigning a single value for each key. Multiple values for the same key will be merged using the given merge function.
 
 Alias: `indexBy`
+
+```js
+Stream([{a: "foo", b: 1}, {a: "bar", b: 2}])
+  .toMap(function (obj) {
+      return obj.a;
+  });
+
+// => { foo: {a: "foo", b: 1}, bar: {a: "bar", b: 2} }
+```
 
 > ##### partitioningBy(predicate)
 
@@ -507,11 +525,27 @@ Groups all elements of the stream by the results of applying the given predicate
 
 Alias: `partitionBy`
 
+```js
+Stream([1, 2, 3, 4])
+   .partitionBy(function (num) {
+      return num % 2 === 0;
+   });
+
+// => {"true": [2, 4], "false": [1, 3]}
+```
+
 > ##### partitioningBy(size)
 
 Groups all elements of the stream by chunks of the given size, returning an array of arrays.
 
 Alias: `partitionBy`
+
+```js
+Stream([1, 2, 3, 4])
+   .partitionBy(2);
+
+// => [[1, 2,], [3, 4]]
+```
 
 > ##### joining()
 
