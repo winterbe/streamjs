@@ -501,7 +501,7 @@ Stream([{a: "foo", b: 1}, {a: "bar", b: 2}, {a: "bar", b: 3}])
       return obj.a;
   });
 
-// => { foo: [{a: "foo", b: 1}], bar: [{a: "bar", b: 2, {a: "bar", b: 3}] }
+// => { foo: [{a: "foo", b: 1}], bar: [{a: "bar", b: 2}, {a: "bar", b: 3}] }
 ```
 
 > ##### toMap(keyMapper, mergeFunction)
