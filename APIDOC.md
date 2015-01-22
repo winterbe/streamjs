@@ -504,9 +504,22 @@ Stream([{a: "foo", b: 1}, {a: "bar", b: 2}, {a: "bar", b: 3}])
 // => { foo: [{a: "foo", b: 1}], bar: [{a: "bar", b: 2}, {a: "bar", b: 3}] }
 ```
 
+> ##### groupingBy(path)
+
+Groups all elements of the stream by resolving the given string `path` and returns an object map, assigning an array value for each key.
+
+```js
+Stream([{a: "foo", b: 1}, {a: "bar", b: 2}, {a: "bar", b: 3}])
+  .groupBy('a');
+
+// => { foo: [{a: "foo", b: 1}], bar: [{a: "bar", b: 2}, {a: "bar", b: 3}] }
+```
+
+Alias: `groupBy`
+
 > ##### toMap(keyMapper, mergeFunction)
 
-Groups all elements of the stream by applying the given keyMapper function and returns an object map, assigning a single value for each key. Multiple values for the same key will be merged using the given merge function.
+Groups all elements of the stream by applying the given keyMapper function and returns an object map, assigning a single value for each key. Multiple values for the same key will be merged using the given merge function. The second argument `mergeFunction` is not required. If no merge function is present and multiple values are found for the same key, an error is thrown.
 
 Alias: `indexBy`
 

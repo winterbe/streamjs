@@ -557,13 +557,17 @@
             return Optional.ofNullable(identity);
         };
 
-        terminal.groupBy = function (keyMapper) {
+        terminal.groupBy = function () {
+            var arg = arguments[0];
+            if (isString(arg)) {
+                arg = pathMapper(arg);
+            }
             return pipeline.collect({
                 supplier: function () {
                     return {};
                 },
                 accumulator: function (map, obj) {
-                    var key = keyMapper.call(ctx, obj);
+                    var key = arg.call(ctx, obj);
                     if (!map.hasOwnProperty(key)) {
                         map[key] = [];
                     }
