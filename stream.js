@@ -430,8 +430,15 @@
             }
         };
 
-        terminal.min = function (comparator) {
-            comparator = comparator || defaultComparator;
+        terminal.min = function (arg) {
+            var comparator;
+            if (isFunction(arg)) {
+                comparator = arg;
+            } else if (isString(arg)) {
+                comparator = pathComparator(arg);
+            } else {
+                comparator = defaultComparator;
+            }
             var current, result = null;
             while ((current = pipeline.next()) !== nil) {
                 if (result === null || comparator.call(ctx, current, result) < 0) {
@@ -441,8 +448,15 @@
             return Optional.ofNullable(result);
         };
 
-        terminal.max = function (comparator) {
-            comparator = comparator || defaultComparator;
+        terminal.max = function (arg) {
+            var comparator;
+            if (isFunction(arg)) {
+                comparator = arg;
+            } else if (isString(arg)) {
+                comparator = pathComparator(arg);
+            } else {
+                comparator = defaultComparator;
+            }
             var current, result = null;
             while ((current = pipeline.next()) !== nil) {
                 if (result === null || comparator.call(ctx, current, result) > 0) {
@@ -863,6 +877,15 @@
             return 0;
         }
         return a > b ? 1 : -1;
+    };
+
+    var pathComparator = function (path) {
+        var fn = pathMapper(path);
+        return function (obj1, obj2) {
+            var a = fn(obj1),
+                b = fn(obj2);
+            return defaultComparator(a, b);
+        };
     };
 
     var pathMapper = function (path) {

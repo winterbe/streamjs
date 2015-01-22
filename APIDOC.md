@@ -350,6 +350,18 @@ Stream([{a: 3}, {a: 1}, {a: 2}])
    });
 ```
 
+> ##### min(path)
+
+Returns an `Optional` wrapping the minimum element of the stream (according the given string path) or `Optional.empty()` if the stream is empty.
+
+```js
+Stream([{a: 3}, {a: 1}, {a: 2}])
+   .min("a")
+   .ifPresent(function (min) {
+      console.log(min);    // => {a: 1}
+   });
+```
+
 > ##### max()
 
 Returns an `Optional` wrapping the maximum element of the stream (according the natural order) or `Optional.empty()` if the stream is empty.
@@ -372,6 +384,18 @@ Stream([{a: 3}, {a: 1}, {a: 2}])
       if (obj1.a === obj2.a) return 0;
       return obj1.a > obj2.a ? 1 : -1;
    })
+   .ifPresent(function (min) {
+      console.log(min);    // => {a: 3}
+   });
+```
+
+> ##### max(path)
+
+Returns an `Optional` wrapping the maximum element of the stream (according the given string path) or `Optional.empty()` if the stream is empty.
+
+```js
+Stream([{a: 3}, {a: 1}, {a: 2}])
+   .min("a")
    .ifPresent(function (min) {
       console.log(min);    // => {a: 3}
    });
@@ -586,7 +610,7 @@ Stream([1, 2, 3, 4])
 
 > ##### joining(delimiter)
 
-Joins all elements of the stream into a string.
+Joins all elements of the stream into a string, using the given delimiter.
 
 Alias: `join`
 

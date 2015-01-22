@@ -23,3 +23,11 @@ QUnit.test("min (comparator)", function (assert) {
     assert.equal(result.isPresent(), true);
     assert.equal(result.get(), 4);
 });
+
+QUnit.test("min (path comparator)", function (assert) {
+    var result = Stream([{a: 1}, {a: 2}, {a: 3}])
+        .min("a");
+    assert.equal(result, "[object Optional]");
+    assert.equal(result.isPresent(), true);
+    assert.equal(result.get().a, 1);
+});

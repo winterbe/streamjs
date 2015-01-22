@@ -23,3 +23,11 @@ QUnit.test("max (comparator)", function (assert) {
     assert.equal(result.isPresent(), true);
     assert.equal(result.get(), 1);
 });
+
+QUnit.test("max (path comparator)", function (assert) {
+    var result = Stream([{a: 1}, {a: 2}, {a: 3}])
+        .max("a");
+    assert.equal(result, "[object Optional]");
+    assert.equal(result.isPresent(), true);
+    assert.equal(result.get().a, 3);
+});
