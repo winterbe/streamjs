@@ -582,18 +582,26 @@
             });
         };
 
-        terminal.toMap = function (keyMapper, mergeFunction) {
+        terminal.toMap = function () {
+            var arg0 = arguments[0];
+            if (isString(arg0)) {
+                arg0 = pathMapper(arg0);
+            }
+            var arg1 = false;
+            if (arguments.length > 1) {
+                arg1 = arguments[1];
+            }
             return pipeline.collect({
                 supplier: function () {
                     return {};
                 },
                 accumulator: function (map, obj) {
-                    var key = keyMapper.call(ctx, obj);
+                    var key = arg0.call(ctx, obj);
                     if (map.hasOwnProperty(key)) {
-                        if (!mergeFunction) {
+                        if (!arg1) {
                             throw "duplicate mapping found for key: " + key;
                         }
-                        map[key] = mergeFunction.call(ctx, map[key], obj);
+                        map[key] = arg1.call(ctx, map[key], obj);
                         return map;
                     }
 

@@ -15,6 +15,21 @@ QUnit.test("toMap", function (assert) {
     assert.equal(map["Doe"], data[1]);
 });
 
+QUnit.test("toMap path", function (assert) {
+    var data = [
+        {firstName: "Peter", lastName: "Parker"},
+        {firstName: "John", lastName: "Doe"}
+    ];
+
+    var map = Stream(data)
+        .toMap("lastName");
+
+    assert.equal(map.hasOwnProperty("Parker"), true);
+    assert.equal(map.hasOwnProperty("Doe"), true);
+    assert.equal(map["Parker"], data[0]);
+    assert.equal(map["Doe"], data[1]);
+});
+
 QUnit.test("toMap empty", function (assert) {
     var map = Stream([])
         .toMap(function (obj) {
