@@ -446,6 +446,15 @@ Stream([1, 2, 3, 4])
    });
 ```
 
+> ##### allMatch(regexp)
+
+Returns whether all elements of the stream match the given regexp pattern.
+
+```js
+Stream(["a1", "a2", "b3"])
+   .allMatch(/a.*/);    // => false
+```
+
 > ##### anyMatch(predicate)
 
 Returns whether any element of the stream matches the given predicate function.
@@ -457,6 +466,15 @@ Stream([1, 2, 3, 4])
    });
 ```
 
+> ##### anyMatch(regexp)
+
+Returns whether any element of the stream matches the given regexp pattern.
+
+```js
+Stream(["a1", "a2", "b3"])
+   .anyMatch(/a.*/);    // => true
+```
+
 > ##### noneMatch(predicate)
 
 Returns whether no element of the stream matches the given predicate function.
@@ -466,6 +484,15 @@ Stream([1, 2, 3, 4])
    .noneMatch(function (num) {
       return num > 1;   // => false
    });
+```
+
+> ##### noneMatch(regexp)
+
+Returns whether no element of the stream matches the given regexp pattern.
+
+```js
+Stream(["a1", "a2", "a3"])
+   .noneMatch(/b.*/);    // => true
 ```
 
 > ##### reduce(identity, accumulator)
