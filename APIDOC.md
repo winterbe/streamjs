@@ -599,6 +599,10 @@ Wraps a single value which may be `null` or `undefined`.
 
 Creates a new optional wrapper for the given non-null and non-undefined value.
 
+```js
+Stream.Optional.of(1);
+```
+
 > ##### Optional.ofNullable(value)
 
 Creates a new optional wrapper for the given value. The value may be null or undefined.
