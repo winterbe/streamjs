@@ -170,6 +170,23 @@ Stream(["a1", "a2", "b1"])
    .filter(/a.*/);   // => a1, a2
 ```
 
+> ##### filter(sample)
+
+Filters the elements of the stream to match the given sample object and returns the stream.
+
+```js
+var data = [
+  {a: 1, b: 1},
+  {a: 2, b: 2},
+  {a: 1, b: 3}
+];
+
+Stream(data)
+   .filter({a: 1});
+
+// => {a: 1, b: 1}, {a: 1, b: 3}
+```
+
 > ##### map(mappingFn)
 
 Applies the given mapping function to each element of the stream and returns the stream.

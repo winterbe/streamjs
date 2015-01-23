@@ -335,6 +335,10 @@
                 this.add(new FilterOp(function (obj) {
                     return arg.test(obj);
                 }));
+            } else if (isObject(arg)) {
+                this.add(new FilterOp(function (obj) {
+                    return deepEquals(arg, obj);
+                }));
             } else {
                 this.add(new FilterOp(arg));
             }
@@ -921,8 +925,40 @@
         };
     };
 
+    var deepEquals = function (a, b) {
+        if (!isObject(a)) {
+            return a === b;
+        }
+
+        if (!isObject(b)) {
+            return false;
+        }
+
+        for (var prop in a) {
+            if (!a.hasOwnProperty(prop)) {
+                continue;
+            }
+
+            if (!b.hasOwnProperty(prop)) {
+                return false;
+            }
+
+            var val1 = a[prop];
+            var val2 = b[prop];
+            var propEquals = deepEquals(val1, val2);
+
+            if (!propEquals) {
+                return false;
+            }
+        }
+
+        return true;
+    };
+
+    var ObjToString = Object.prototype.toString;
+
     var isString = function (obj) {
-        return Object.prototype.toString.call(obj) === '[object String]';
+        return ObjToString.call(obj) === '[object String]';
     };
 
     var isFunction = function (obj) {
@@ -930,11 +966,11 @@
     };
 
     var isNumber = function (obj) {
-        return Object.prototype.toString.call(obj) === '[object Number]';
+        return ObjToString.call(obj) === '[object Number]';
     };
 
     var isArray = Array.isArray || function (obj) {
-            return Object.prototype.toString.call(obj) === '[object Array]';
+            return ObjToString.call(obj) === '[object Array]';
         };
 
     var isObject = function (obj) {
@@ -942,7 +978,7 @@
     };
 
     var isRegExp = function (obj) {
-        return Object.prototype.toString.call(obj) === '[object RegExp]';
+        return ObjToString.call(obj) === '[object RegExp]';
     };
 
 

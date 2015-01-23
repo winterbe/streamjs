@@ -119,3 +119,42 @@ QUnit.test("filter via regexp object", function (assert) {
     assert.equal(data[1], "a2");
     assert.equal(data[2], "b3");
 });
+
+QUnit.test("filter via sample object (depth=1)", function (assert) {
+    var data = [
+        {a: 1, b: 1},
+        {a: 2, b: 2},
+        {a: 1, b: 3}
+    ];
+
+    var result = Stream(data)
+        .filter({a: 1})
+        .toArray();
+
+    assert.equal(result.length, 2);
+    assert.equal(result[0].a, 1);
+    assert.equal(result[0].b, 1);
+    assert.equal(result[1].a, 1);
+    assert.equal(result[1].b, 3);
+});
+
+QUnit.test("filter via sample object (depth=2)", function (assert) {
+    var data = [
+        {a: 1, b: 1, c: {x: "x1"}},
+        {a: 2, b: 2, c: {x: "x2"}},
+        {a: 1, b: 3, c: {x: "x3"}},
+        {a: 1, b: 4, c: {x: "x1"}}
+    ];
+
+    var result = Stream(data)
+        .filter({a: 1, c: {x: "x1"}})
+        .toArray();
+
+    assert.equal(result.length, 2);
+    assert.equal(result[0].a, 1);
+    assert.equal(result[0].b, 1);
+    assert.equal(result[0].c.x, "x1");
+    assert.equal(result[1].a, 1);
+    assert.equal(result[1].b, 4);
+    assert.equal(result[1].c.x, "x1");
+});
