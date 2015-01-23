@@ -494,8 +494,13 @@
             return result;
         };
 
-        terminal.allMatch = function (fn) {
-            var current;
+        terminal.allMatch = function () {
+            var current, arg = arguments[0], fn = arg;
+            if (isRegExp(arg)) {
+                fn = function (obj) {
+                    return arg.test(obj);
+                };
+            }
             while ((current = pipeline.next()) !== nil) {
                 var match = fn.call(ctx, current);
                 if (!match) {
@@ -505,8 +510,13 @@
             return true;
         };
 
-        terminal.anyMatch = function (fn) {
-            var current;
+        terminal.anyMatch = function () {
+            var current, arg = arguments[0], fn = arg;
+            if (isRegExp(arg)) {
+                fn = function (obj) {
+                    return arg.test(obj);
+                };
+            }
             while ((current = pipeline.next()) !== nil) {
                 var match = fn.call(ctx, current);
                 if (match) {
@@ -516,8 +526,13 @@
             return false;
         };
 
-        terminal.noneMatch = function (fn) {
-            var current;
+        terminal.noneMatch = function () {
+            var current, arg = arguments[0], fn = arg;
+            if (isRegExp(arg)) {
+                fn = function (obj) {
+                    return arg.test(obj);
+                };
+            }
             while ((current = pipeline.next()) !== nil) {
                 var match = fn.call(ctx, current);
                 if (match) {

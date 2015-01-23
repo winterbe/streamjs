@@ -21,3 +21,21 @@ QUnit.test("allMatch empty", function (assert) {
         });
     assert.equal(result, true);
 });
+
+QUnit.test("allMatch regexp true", function (assert) {
+    var result = Stream(["a1", "a2", "a3"])
+        .allMatch(/a.*/);
+    assert.equal(result, true);
+});
+
+QUnit.test("allMatch regexp false", function (assert) {
+    var result = Stream(["a1", "a2", "b3"])
+        .allMatch(/a.*/);
+    assert.equal(result, false);
+});
+
+QUnit.test("allMatch regexp empty", function (assert) {
+    var result = Stream([])
+        .allMatch(/a.*/);
+    assert.equal(result, true);
+});
