@@ -17,6 +17,23 @@ QUnit.test("partitionBy predicate", function (assert) {
     assert.equal(result[false][0], data[2]);
 });
 
+QUnit.test("partitionBy sample object", function (assert) {
+    var data = [
+        {firstName: "Peter", lastName: "Parker"},
+        {firstName: "Sandra", lastName: "Parker"},
+        {firstName: "John", lastName: "Doe"}
+    ];
+
+    var result = Stream(data)
+        .partitionBy({lastName: 'Parker'});
+
+    assert.equal(result[true].length, 2);
+    assert.equal(result[false].length, 1);
+    assert.equal(result[true][0], data[0]);
+    assert.equal(result[true][1], data[1]);
+    assert.equal(result[false][0], data[2]);
+});
+
 QUnit.test("partitionBy regexp", function (assert) {
     var result = Stream(["a1", "a2", "b1"])
         .partitionBy(/a.*/);

@@ -665,7 +665,12 @@
                     return arg0.test(obj);
                 });
             }
-            throw 'partitionBy requires argument of type function, regexp or number';
+            if (isObject(arg0)) {
+                return partitionByPredicate(function (obj) {
+                    return deepEquals(arg0, obj);
+                });
+            }
+            throw 'partitionBy requires argument of type function, object, regexp or number';
         };
 
         var partitionByPredicate = function (predicate) {
