@@ -257,6 +257,19 @@ Stream([{foo: 'bar'}, ...])
    });
 ```
 
+> ##### sorted(path)
+
+Sorts the elements of the stream according to the given string path and returns the stream.
+
+Alias: `sort`
+
+```js
+var data = [{a: 4}, {a: 1}, {a: 3}, {a: 2}];
+Stream(data)
+   .sorted("a);
+// => {a: 1}, {a: 2}, {a: 3}, {a: 4}
+```
+
 > ##### distinct()
 
 Returns the stream consisting of the distinct elements of this stream.

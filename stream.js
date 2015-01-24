@@ -371,7 +371,15 @@
         // intermediate operations (stateful)
         //
 
-        this.sorted = function (comparator) {
+        this.sorted = function (arg) {
+            var comparator;
+            if (isFunction(arg)) {
+                comparator = arg;
+            } else if (isString(arg)) {
+                comparator = pathComparator(arg);
+            } else {
+                comparator = defaultComparator;
+            }
             this.add(new StatefulOp({
                 finisher: function (array) {
                     array.sort(comparator);

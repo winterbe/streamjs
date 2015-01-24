@@ -32,3 +32,23 @@ QUnit.test("sorted empty", function (assert) {
 
     assert.equal(result.length, 0);
 });
+
+QUnit.test("sorted by path", function (assert) {
+    var data = [{a: 4}, {a: 1}, {a: 3}, {a: 2}];
+    var result = Stream(data)
+        .sorted("a")
+        .toArray();
+
+    assert.equal(result.length, 4);
+    assert.equal(result[0].a, 1);
+    assert.equal(result[1].a, 2);
+    assert.equal(result[2].a, 3);
+    assert.equal(result[3].a, 4);
+
+    // assert input data is untouched
+    assert.equal(data.length, 4);
+    assert.equal(data[0].a, 4);
+    assert.equal(data[1].a, 1);
+    assert.equal(data[2].a, 3);
+    assert.equal(data[3].a, 2);
+});
