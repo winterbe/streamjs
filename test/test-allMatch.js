@@ -39,3 +39,21 @@ QUnit.test("allMatch regexp empty", function (assert) {
         .allMatch(/a.*/);
     assert.equal(result, true);
 });
+
+QUnit.test("allMatch sample true", function (assert) {
+    var result = Stream([{a: 1, b: 5}, {a: 2, b: 5}, {a: 3, b: 5}])
+        .allMatch({b: 5});
+    assert.equal(result, true);
+});
+
+QUnit.test("allMatch sample false", function (assert) {
+    var result = Stream([{a: 1, b: 5}, {a: 2, b: 5}, {a: 3, b: 5}])
+        .allMatch({a: 1});
+    assert.equal(result, false);
+});
+
+QUnit.test("allMatch sample empty", function (assert) {
+    var result = Stream([])
+        .allMatch({a: 1});
+    assert.equal(result, true);
+});

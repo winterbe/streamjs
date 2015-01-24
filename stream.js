@@ -512,6 +512,10 @@
                 fn = function (obj) {
                     return arg.test(obj);
                 };
+            } else if (isObject(arg)) {
+                fn = function (obj) {
+                    return deepEquals(arg, obj);
+                };
             }
             while ((current = pipeline.next()) !== nil) {
                 var match = fn.call(ctx, current);
@@ -528,6 +532,10 @@
                 fn = function (obj) {
                     return arg.test(obj);
                 };
+            } else if (isObject(arg)) {
+                fn = function (obj) {
+                    return deepEquals(arg, obj);
+                };
             }
             while ((current = pipeline.next()) !== nil) {
                 var match = fn.call(ctx, current);
@@ -543,6 +551,10 @@
             if (isRegExp(arg)) {
                 fn = function (obj) {
                     return arg.test(obj);
+                };
+            } else if (isObject(arg)) {
+                fn = function (obj) {
+                    return deepEquals(arg, obj);
                 };
             }
             while ((current = pipeline.next()) !== nil) {

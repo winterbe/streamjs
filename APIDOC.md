@@ -476,6 +476,15 @@ Stream([1, 2, 3, 4])
    });
 ```
 
+> ##### allMatch(sample)
+
+Returns whether all elements of the stream match the given sample object.
+
+```js
+Stream([{a: 1}, {a: 2}])
+   .allMatch({a: 1});   // => false
+```
+
 > ##### allMatch(regexp)
 
 Returns whether all elements of the stream match the given regexp pattern.
@@ -496,6 +505,15 @@ Stream([1, 2, 3, 4])
    });
 ```
 
+> ##### anyMatch(sample)
+
+Returns whether any element of the stream match the given sample object.
+
+```js
+Stream([{a: 1}, {a: 2}])
+   .anyMatch({a: 1});   // => true
+```
+
 > ##### anyMatch(regexp)
 
 Returns whether any element of the stream matches the given regexp pattern.
@@ -514,6 +532,15 @@ Stream([1, 2, 3, 4])
    .noneMatch(function (num) {
       return num > 1;   // => false
    });
+```
+
+> ##### allMatch(sample)
+
+Returns whether no element of the stream match the given sample object.
+
+```js
+Stream([{a: 1}, {a: 2}])
+   .noneMatch({a: 1});   // => false
 ```
 
 > ##### noneMatch(regexp)

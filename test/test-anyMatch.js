@@ -28,14 +28,32 @@ QUnit.test("anyMatch regexp true", function (assert) {
     assert.equal(result, true);
 });
 
-QUnit.test("allMatch regexp false", function (assert) {
+QUnit.test("anyMatch regexp false", function (assert) {
     var result = Stream(["b1", "b2", "b3"])
         .anyMatch(/a.*/);
     assert.equal(result, false);
 });
 
-QUnit.test("allMatch regexp empty", function (assert) {
+QUnit.test("anyMatch regexp empty", function (assert) {
     var result = Stream([])
         .anyMatch(/a.*/);
+    assert.equal(result, false);
+});
+
+QUnit.test("anyMatch sample true", function (assert) {
+    var result = Stream([{a: 1, b: 5}, {a: 2, b: 5}, {a: 3, b: 5}])
+        .anyMatch({a: 1});
+    assert.equal(result, true);
+});
+
+QUnit.test("anyMatch sample false", function (assert) {
+    var result = Stream([{a: 1, b: 5}, {a: 2, b: 5}, {a: 3, b: 5}])
+        .anyMatch({a: 4});
+    assert.equal(result, false);
+});
+
+QUnit.test("anyMatch sample empty", function (assert) {
+    var result = Stream([])
+        .anyMatch({a: 1});
     assert.equal(result, false);
 });
