@@ -1,3 +1,17 @@
+QUnit.test("filter - flatMap - map - distinct - filter - join", function (assert) {
+    var people = [];
+
+    var names = Stream(people)
+        .filter({married: true})
+        .flatMap("children")
+        .map("firstName")
+        .distinct()
+        .filter(/a.*/i)
+        .join(", ");
+
+    assert.equal(names, "");
+});
+
 QUnit.test("filter - map - toArray", function (assert) {
     var numFilter = 0;
     var numMap = 0;

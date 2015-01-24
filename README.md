@@ -4,15 +4,13 @@ Stream.js [![Travic CI](https://travis-ci.org/winterbe/streamjs.svg?branch=maste
 > An Object Streaming Pipeline for JavaScript - inspired by the [Java 8 Streams API](http://winterbe.com/posts/2014/07/31/java8-stream-tutorial-examples/)
 
 ```js
-Stream([5, 9, 2, 4, 8, 1])
-   .filter(function (num) {
-      return num % 2 === 1;
-   })
-   .sorted()
-   .map(function (num) {
-      return "odd" + num;
-   })
-   .toArray();
+Stream(people)
+   .filter({married: true})
+   .flatMap("children")
+   .map("firstName")
+   .distinct()
+   .filter(/a.*/i)
+   .join(", ");
 ```
 
 <p align="center">
