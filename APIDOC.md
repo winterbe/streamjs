@@ -641,6 +641,19 @@ Stream([1, 2, 3, 4])
 // => {"true": [2, 4], "false": [1, 3]}
 ```
 
+> ##### partitioningBy(regexp)
+
+Groups all elements of the stream by the results of testing the given regexp pattern to each element of the stream, returning an object with two keys `true` and `false`.
+
+Alias: `partitionBy`
+
+```js
+Stream(["a1", "a2", "b1"])
+   .partitionBy(/a.*/);
+
+// => {"true": ["a1", "a2"], "false": ["b1"]}
+```
+
 > ##### partitioningBy(size)
 
 Groups all elements of the stream by chunks of the given size, returning an array of arrays.

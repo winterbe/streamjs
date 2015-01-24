@@ -660,7 +660,12 @@
             if (isNumber(arg0)) {
                 return partitionByNumber(arg0);
             }
-            throw 'partitionBy requires argument of type function or number';
+            if (isRegExp(arg0)) {
+                return partitionByPredicate(function (obj) {
+                    return arg0.test(obj);
+                });
+            }
+            throw 'partitionBy requires argument of type function, regexp or number';
         };
 
         var partitionByPredicate = function (predicate) {
