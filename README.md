@@ -5,7 +5,7 @@ Stream.js [![Travic CI](https://travis-ci.org/winterbe/streamjs.svg?branch=maste
 
 ```js
 Stream(people)
-   .filter({married: true})
+   .filter({age: 23})
    .flatMap("children")
    .map("firstName")
    .distinct()
@@ -22,10 +22,10 @@ Stream(people)
 Stream.js is a functional programming library for operating upon collections of data. It's lightweight, dependency-free (**2.6 KB minified, gzipped**) and works in all current browsers, [Node.js](http://nodejs.org/) and the Java 8 [Nashorn](http://openjdk.java.net/projects/nashorn/) engine. You can download the [latest release](https://github.com/winterbe/streamjs/releases) from GitHub or install Stream.js via [Bower](http://bower.io/) and [NPM](https://www.npmjs.com/package/streamjs).
 
 ```bash
-# Install via bower
 $ bower install streamjs
 
-# Install via NPM
+# or
+
 $ npm install streamjs
 ```
 
