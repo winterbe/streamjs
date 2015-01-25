@@ -19,22 +19,18 @@ Stream(people)
 
 # Getting started
 
-Stream.js is a lightweight dependency-free utility library for ECMAScript 5 compatible JavaScript engines, such as all modern browsers, [Node.js](http://nodejs.org/) or the Java 8 [Nashorn](http://openjdk.java.net/projects/nashorn/) engine. In order to get started you can install Stream.js manually by downloading the [latest release](https://github.com/winterbe/streamjs/releases) from GitHub. The **2.6 KB minified, gzipped** script is located in the root folder of this project and ships with a source map file for debugging. Alternatively you can install Stream.js with [Bower](http://bower.io/) or [NPM](https://www.npmjs.com/package/streamjs).
-
-> ##### Bower
+Stream.js is a functional programming library for operating upon collections of data. It's lightweight, dependency-free (**2.6 KB minified, gzipped**) and works in all current browsers, [Node.js](http://nodejs.org/) and the Java 8 [Nashorn](http://openjdk.java.net/projects/nashorn/) engine. You can download the [latest release](https://github.com/winterbe/streamjs/releases) from GitHub or install Stream.js via [Bower](http://bower.io/) and [NPM](https://www.npmjs.com/package/streamjs).
 
 ```bash
+# Install via bower
 $ bower install streamjs
-```
 
-> ##### NPM
-
-```bash
+# Install via NPM
 $ npm install streamjs
 ```
 
 <p align="center">
-   <i>Read the <a href="https://github.com/winterbe/streamjs/blob/master/APIDOC.md">API DOC</a></i>
+   <i>Read the <a href="https://github.com/winterbe/streamjs/blob/master/APIDOC.md">APIDOC</a></i>
 </p>
 
 # How Streams work
