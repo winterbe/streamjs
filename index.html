@@ -27,18 +27,16 @@
         </ul>
       </header>
       <section>
-        <h4>
-<a id="example" class="anchor" href="#example" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example</h4>
+        <h1>
+<a id="streamjs" class="anchor" href="#streamjs" aria-hidden="true"><span class="octicon octicon-link"></span></a>Stream.js</h1>
 
-<div class="highlight highlight-js"><pre>Stream([<span class="pl-c1">5</span>, <span class="pl-c1">9</span>, <span class="pl-c1">2</span>, <span class="pl-c1">4</span>, <span class="pl-c1">8</span>, <span class="pl-c1">1</span>])
-   .filter(<span class="pl-st">function</span> (<span class="pl-vpf">num</span>) {
-      <span class="pl-k">return</span> num <span class="pl-k">%</span> <span class="pl-c1">2</span> <span class="pl-k">===</span> <span class="pl-c1">1</span>;
-   })
-   .sorted()
-   .map(<span class="pl-st">function</span> (<span class="pl-vpf">num</span>) {
-      <span class="pl-k">return</span> <span class="pl-s1"><span class="pl-pds">"</span>odd<span class="pl-pds">"</span></span> <span class="pl-k">+</span> num;
-   })
-   .toArray();</pre></div>
+<div class="highlight highlight-js"><pre>Stream(people)
+   .filter({age<span class="pl-k">:</span> <span class="pl-c1">23</span>})
+   .flatMap(<span class="pl-s1"><span class="pl-pds">"</span>children<span class="pl-pds">"</span></span>)
+   .map(<span class="pl-s1"><span class="pl-pds">"</span>firstName<span class="pl-pds">"</span></span>)
+   .distinct()
+   .filter(<span class="pl-sr"><span class="pl-pds">/</span>a<span class="pl-c1">.</span><span class="pl-k">*</span><span class="pl-pds">/</span>i</span>)
+   .<span class="pl-s3">join</span>(<span class="pl-s1"><span class="pl-pds">"</span>, <span class="pl-pds">"</span></span>);</pre></div>
 
 <p align="center">
    <i>Follow on <a href="https://twitter.com/benontherun">Twitter</a> for Updates</i>
@@ -47,21 +45,93 @@
 <h1>
 <a id="getting-started" class="anchor" href="#getting-started" aria-hidden="true"><span class="octicon octicon-link"></span></a>Getting started</h1>
 
-<p>Stream.js is based on ECMAScript 5 and works in all modern browsers as well as <a href="http://nodejs.org/">Node.js</a> and <a href="http://openjdk.java.net/projects/nashorn/">Nashorn</a>. In order to get started you can install Stream.js manually by downloading the <a href="https://github.com/winterbe/streamjs/releases">latest release</a> from GitHub. The root folder contains the minified script and a source map file for debugging. Alternatively you can install Stream.js with <a href="http://bower.io/">Bower</a> or <a href="https://www.npmjs.com/package/streamjs">NPM</a>.</p>
+<p>Stream.js is a functional programming library for operating upon collections of data. It's lightweight, dependency-free (<strong>2.6 KB minified, gzipped</strong>) and works in all current browsers, <a href="http://nodejs.org/">Node.js</a> and the Java 8 <a href="http://openjdk.java.net/projects/nashorn/">Nashorn</a> engine.</p>
 
-<h5>
-<a id="bower" class="anchor" href="#bower" aria-hidden="true"><span class="octicon octicon-link"></span></a>Bower</h5>
+<p>Download the <a href="https://github.com/winterbe/streamjs/releases">latest release</a> from GitHub or install Stream.js via <a href="http://bower.io/">Bower</a> and <a href="https://www.npmjs.com/package/streamjs">NPM</a>:</p>
 
-<div class="highlight highlight-bash"><pre>$ bower install streamjs</pre></div>
+<div class="highlight highlight-bash"><pre>$ bower install streamjs
 
-<h5>
-<a id="node" class="anchor" href="#node" aria-hidden="true"><span class="octicon octicon-link"></span></a>Node</h5>
+<span class="pl-c"># or</span>
 
-<div class="highlight highlight-bash"><pre>$ npm install streamjs</pre></div>
+$ npm install streamjs</pre></div>
 
 <p align="center">
-   <i>Read the <a href="https://github.com/winterbe/streamjs/blob/master/APIDOC.md">API DOC</a></i>
+   <i>Read the <a href="https://github.com/winterbe/streamjs/blob/master/APIDOC.md">APIDOC</a></i>
 </p>
+
+<h1>
+<a id="examples" class="anchor" href="#examples" aria-hidden="true"><span class="octicon octicon-link"></span></a>Examples</h1>
+
+<p>Before explaining how Stream.js works in detail, here's a few real world code samples.</p>
+
+<p>Filter and sort a collection of persons, then group everything by age.</p>
+
+<div class="highlight highlight-js"><pre>Stream(people)
+   .filter({married<span class="pl-k">:</span> <span class="pl-c1">true</span>, gender<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>male<span class="pl-pds">'</span></span>})
+   .sorted(<span class="pl-s1"><span class="pl-pds">"</span>lastName<span class="pl-pds">"</span></span>);
+   .groupBy(<span class="pl-s1"><span class="pl-pds">"</span>age<span class="pl-pds">"</span></span>);</pre></div>
+
+<p>Filter and transform a collection of tweets to its text content, then limit the tweets to a maximum of 100 and partition the results into 10 tweets per page:</p>
+
+<div class="highlight highlight-js"><pre>Stream(tweets)
+   .filter(<span class="pl-st">function</span> (<span class="pl-vpf">tweet</span>) {
+      <span class="pl-k">return</span> tweet.author <span class="pl-k">!==</span> me;
+   })
+   .map(<span class="pl-s1"><span class="pl-pds">"</span>text<span class="pl-pds">"</span></span>)
+   .filter(<span class="pl-sr"><span class="pl-pds">/</span><span class="pl-c1">.</span><span class="pl-k">*</span>streamjs<span class="pl-c1">.</span><span class="pl-k">*</span><span class="pl-pds">/</span>i</span>)
+   .limit(<span class="pl-c1">100</span>)
+   .partitionBy(<span class="pl-c1">10</span>);</pre></div>
+
+<p>Create an array of 100 odd random numbers between 1 and 1000:</p>
+
+<div class="highlight highlight-js"><pre>Stream
+   .generate(<span class="pl-st">function</span>() {
+      <span class="pl-k">return</span> <span class="pl-s3">Math</span>.<span class="pl-s3">floor</span>(<span class="pl-s3">Math</span>.<span class="pl-s3">random</span>() <span class="pl-k">*</span> <span class="pl-c1">1000</span>) <span class="pl-k">+</span> <span class="pl-c1">1</span>;
+   })
+   .filter(<span class="pl-st">function</span> (<span class="pl-vpf">num</span>) {
+      <span class="pl-k">return</span> num <span class="pl-k">%</span> <span class="pl-c1">2</span> <span class="pl-k">===</span> <span class="pl-c1">1</span>;
+   })
+   .limit(<span class="pl-c1">100</span>);
+   .toArray();</pre></div>
+
+<p>Create an infinite iterator, generating an odd random number between 1 and 1000 on each call to <code>next()</code>:</p>
+
+<div class="highlight highlight-js"><pre><span class="pl-s">var</span> iterator <span class="pl-k">=</span> Stream
+   .generate(<span class="pl-st">function</span>() {
+      <span class="pl-k">return</span> <span class="pl-s3">Math</span>.<span class="pl-s3">floor</span>(<span class="pl-s3">Math</span>.<span class="pl-s3">random</span>() <span class="pl-k">*</span> <span class="pl-c1">1000</span>) <span class="pl-k">+</span> <span class="pl-c1">1</span>;
+   })
+   .filter(<span class="pl-st">function</span> (<span class="pl-vpf">num</span>) {
+      <span class="pl-k">return</span> num <span class="pl-k">%</span> <span class="pl-c1">2</span> <span class="pl-k">===</span> <span class="pl-c1">1</span>;
+   })
+   .iterator();
+
+iterator.<span class="pl-sc">next</span>();
+iterator.<span class="pl-sc">next</span>();</pre></div>
+
+<p>Create an array of 100 parent objects, each holding an array of 10 children:</p>
+
+<div class="highlight highlight-js"><pre>Stream
+    .range(<span class="pl-c1">0</span>, <span class="pl-c1">100</span>)
+    .map(<span class="pl-st">function</span> (<span class="pl-vpf">num</span>) {
+        <span class="pl-k">return</span> {
+            parentId<span class="pl-k">:</span> num,
+            type<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>parent<span class="pl-pds">'</span></span>,
+            children<span class="pl-k">:</span> []
+        };
+    })
+    .peek(<span class="pl-st">function</span> (<span class="pl-vpf">parent</span>) {
+        parent.children <span class="pl-k">=</span> Stream
+            .range(<span class="pl-c1">0</span>, <span class="pl-c1">10</span>)
+            .map(<span class="pl-st">function</span> (<span class="pl-vpf">num</span>) {
+                <span class="pl-k">return</span> {
+                    childId<span class="pl-k">:</span> num,
+                    type<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>child<span class="pl-pds">'</span></span>,
+                    parent<span class="pl-k">:</span> parent
+                };
+            })
+            .toArray();
+    })
+    .toArray();</pre></div>
 
 <h1>
 <a id="how-streams-work" class="anchor" href="#how-streams-work" aria-hidden="true"><span class="octicon octicon-link"></span></a>How Streams work</h1>
