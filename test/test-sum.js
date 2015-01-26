@@ -7,3 +7,8 @@ QUnit.test("sum empty", function (assert) {
     var result = Stream([]).sum();
     assert.equal(result, 0);
 });
+
+QUnit.test("sum via path", function (assert) {
+    var result = Stream.of({a: 1}, {a: 2}, {a: 3}).sum("a");
+    assert.equal(result, 6);
+});

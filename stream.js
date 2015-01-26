@@ -478,10 +478,13 @@
             return Optional.ofNullable(result);
         };
 
-        terminal.sum = function () {
+        terminal.sum = function (path) {
+            var fn = path ? pathMapper(path) : function (obj) {
+                return obj;
+            };
             var current, result = 0;
             while ((current = pipeline.next()) !== nil) {
-                result += current;
+                result += fn.call(ctx, current);
             }
             return result;
         };

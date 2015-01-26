@@ -440,6 +440,15 @@ Stream([1, 2, 3, 4])
    .sum();     // => 10
 ```
 
+> ##### sum(path)
+
+Returns the sum of all elements for the given path in this stream.
+
+```js
+Stream([{a: 1}, {a: 2}, {a: 3}])
+   .sum("a");     // => 6
+```
+
 > ##### average()
 
 Returns an `Optional` wrapping the arithmetic mean of all elements of this stream or `Optional.empty()` if the stream is empty.
