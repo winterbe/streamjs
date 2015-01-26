@@ -48,16 +48,17 @@ Stream(people)
    .groupBy("age");
 ```
 
-Filter and sort a collection of tweets, then limit the tweets to a maximum of 1000 and partition the results into 50 tweets per page:
+Filter and transform a collection of tweets to its text content, then limit the tweets to a maximum of 100 and partition the results into 10 tweets per page:
 
 ```js
 Stream(tweets)
    .filter(function (tweet) {
       return tweet.author !== me;
    })
-   .sorted("date");
-   .limit(1000)
-   .partitionBy(50);
+   .map("text")
+   .filter(/.*streamjs.*/i)
+   .limit(100)
+   .partitionBy(10);
 ```
 
 Create an array of 100 odd random numbers between 1 and 1000:
