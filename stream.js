@@ -489,10 +489,13 @@
             return result;
         };
 
-        terminal.average = function () {
+        terminal.average = function (path) {
+            var fn = path ? pathMapper(path) : function (obj) {
+                return obj;
+            };
             var current, count = 0, sum = 0;
             while ((current = pipeline.next()) !== nil) {
-                sum += current;
+                sum += fn.call(ctx, current);
                 count++;
             }
             if (sum === 0 || count === 0) {

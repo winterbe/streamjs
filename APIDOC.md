@@ -463,6 +463,20 @@ Stream([1, 2, 3, 4])
    });
 ```
 
+> ##### average(path)
+
+Returns an `Optional` wrapping the arithmetic mean of all elements of this stream or `Optional.empty()` if the stream is empty, by resolving the given path for each element.
+
+Alias: `avg`
+
+```js
+Stream([{a: 1}, {a: 2}, {a: 3}, {a: 4}])
+   .average("a")
+   .ifPresent(function (avg) {
+      console.log(avg);    // => 2.5
+   });
+```
+
 > ##### count()
 
 Returns the number of elements of the stream.
