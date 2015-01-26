@@ -35,6 +35,88 @@ $ npm install streamjs
    <i>Read the <a href="https://github.com/winterbe/streamjs/blob/master/APIDOC.md">APIDOC</a></i>
 </p>
 
+# Examples
+
+Before explaining how Stream.js works in detail, here's a few real world code samples.
+
+Filter and sort a collection of persons, then group everything by age.
+
+```js
+Stream(people)
+   .filter({married: true, gender: 'male'})
+   .sorted("lastName");
+   .groupBy("age");
+```
+
+Filter and sort a collection of tweets, then limit the tweets to a maximum of 1000 and partition the results into 50 tweets per page:
+
+```js
+Stream(tweets)
+   .filter(function (tweet) {
+      return tweet.author !== me;
+   })
+   .sorted("date");
+   .limit(1000)
+   .partitionBy(50);
+```
+
+Create an array of 100 odd random numbers between 1 and 1000:
+
+```js
+Stream
+   .generate(function() {
+      return Math.floor(Math.random() * 1000) + 1;
+   })
+   .filter(function (num) {
+      return num % 2 === 1;
+   })
+   .limit(100);
+   .toArray();
+```
+
+Create an infinite iterator, generating an odd random number between 1 and 1000 on each call to `next()`:
+
+```js
+var iterator = Stream
+   .generate(function() {
+      return Math.floor(Math.random() * 1000) + 1;
+   })
+   .filter(function (num) {
+      return num % 2 === 1;
+   })
+   .iterator();
+
+iterator.next();
+iterator.next();
+```
+
+Create an array of 100 parent objects, each holding an array of 10 children:
+
+```js
+Stream
+    .range(0, 100)
+    .map(function (num) {
+        return {
+            parentId: num,
+            type: 'parent',
+            children: []
+        };
+    })
+    .peek(function (parent) {
+        parent.children = Stream
+            .range(0, 10)
+            .map(function (num) {
+                return {
+                    childId: num,
+                    type: 'child',
+                    parent: parent
+                };
+            })
+            .toArray();
+    })
+    .toArray();
+```
+
 # How Streams work
 
 Stream.js defines a single function `Stream` to create new streams from different input collections like _arrays_, _maps_ or _number ranges_:
