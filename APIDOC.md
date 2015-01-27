@@ -823,13 +823,37 @@ Stream.Optional.empty();
 
 If a value is present and value matches the given predicate function, returns this optional, otherwise return an empty optional.
 
+```js
+var optional = Stream.Optional.of({a: 23})
+   .filter(function (obj) {
+      return obj.a % 2 === 0;
+   });
+optional.isPresent();   // => false
+```
+
 > ##### map(mappingFn)
 
 If a value is present apply the given mapping function and wrap the resulting value with an optional.
 
+```js
+var optional = Stream.Optional.of({a: 23})
+   .map(function (obj) {
+      return obj.a;
+   });
+optional.get();   // => 23
+```
+
 > ##### flatMap(mappingFn)
 
 If a value is present apply the given optional-returning mapping function, and return the optional result or empty.
+
+```js
+var optional = Stream.Optional.of({a: 23})
+   .flatMap(function (obj) {
+      return Stream.Optional.of(obj.a);
+   });
+optional.get();   // => 23
+```
 
 ### Terminal Operations
 
@@ -889,5 +913,4 @@ Returns the value if present, otherwise throw the given error.
 ```js
 var optional = Stream.Optional.empty();
 optional.orElseThrow("something went wrong");
-// => new Error("something went wrong");
 ```
