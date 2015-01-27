@@ -805,9 +805,17 @@ Stream.Optional.of(1);
 
 Creates a new optional wrapper for the given value. The value may be null or undefined.
 
+```js
+Stream.Optional.ofNullable(null);
+```
+
 > ##### Optional.empty()
 
 Creates a new empty optional wrapper (same as `Optional.ofNullable(null)`).
+
+```js
+Stream.Optional.empty();
+```
 
 ### Intermediate Operations
 
@@ -829,22 +837,57 @@ If a value is present apply the given optional-returning mapping function, and r
 
 Check if a value is present.
 
+```js
+var optional = Stream.Optional.of(23);
+optional.isPresent();   // => true
+```
+
 > ##### get()
 
 Returns the value if a value is present, otherwise throws an error.
+
+```js
+var optional = Stream.Optional.of(23);
+optional.get();   // => 23
+```
 
 > ##### ifPresent(consumer)
 
 Invoke the given consumer function for the specified value if present.
 
+```js
+Stream.Optional.of(23)
+   .ifPresent(function (num) {
+      console.log(num);     // => 23
+   });
+```
+
 > ##### orElse(other)
 
 Returns the value if present, otherwise return the given `other` value.
+
+```js
+var optional = Stream.Optional.empty();
+optional.orElse(3);   // => 3
+```
 
 > ##### orElseGet(supplier)
 
 Returns the value if present, otherwise return the result of invoking the supplier function.
 
+```js
+var optional = Stream.Optional.empty();
+optional.orElseGet(function () {
+   return 1337;
+});
+```
+
 > ##### orElseThrow(error)
 
 Returns the value if present, otherwise throw the given error.
+
+```js
+var optional = Stream.Optional.empty();
+optional.orElseThrow("something went wrong");
+// => new Error("something went wrong");
+```
