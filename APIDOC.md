@@ -266,8 +266,17 @@ Alias: `sort`
 ```js
 var data = [{a: 4}, {a: 1}, {a: 3}, {a: 2}];
 Stream(data)
-   .sorted("a);
+   .sorted("a");
 // => {a: 1}, {a: 2}, {a: 3}, {a: 4}
+```
+
+> ##### shuffle()
+
+Randomly reorder all elements of the stream.
+
+```js
+Stream([1, 2, 3, 4])
+   .shuffle();   // => 4, 1, 3, 2
 ```
 
 > ##### distinct()

@@ -388,6 +388,20 @@
             return this;
         };
 
+        this.shuffle = function () {
+            this.add(new StatefulOp({
+                finisher: function (array) {
+                    for (var i = 0; i < array.length; i++) {
+                        var j = Math.floor(Math.random() * array.length);
+                        var tmp = array[i];
+                        array[i] = array[j];
+                        array[j] = tmp;
+                    }
+                }
+            }));
+            return this;
+        };
+
         this.distinct = function () {
             this.add(new StatefulOp({
                 filter: function (obj, i, array) {
