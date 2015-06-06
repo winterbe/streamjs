@@ -18,6 +18,9 @@
 
     };
     Iterator.of = function (data) {
+        if (data === null || data === undefined) {
+            return new EmptyIterator(data);
+        }
         if (isArray(data)) {
             return new ArrayIterator(data);
         }
@@ -89,6 +92,18 @@
             this.done = true;
             return this.value;
         }
+        return nil;
+    };
+
+    var EmptyIterator = function (value) {
+        this.initialize(value);
+    };
+    EmptyIterator.prototype = new Iterator();
+    EmptyIterator.prototype.initialize = function (value) {
+        this.value = value;
+        this.done = true;
+    };
+    EmptyIterator.prototype.next = function () {
         return nil;
     };
 

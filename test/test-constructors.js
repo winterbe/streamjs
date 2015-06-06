@@ -7,6 +7,16 @@ QUnit.test("input array", function (assert) {
     assert.equal(result[2], 3);
 });
 
+QUnit.test("input undefined", function (assert) {
+    var result = Stream(undefined).toArray();
+    assert.equal(result.length, 0);
+});
+
+QUnit.test("input null", function (assert) {
+    var result = Stream(null).toArray();
+    assert.equal(result.length, 0);
+});
+
 QUnit.test("input object", function (assert) {
     var input = {
         foo: 1, bar: 2, foobar: 3
