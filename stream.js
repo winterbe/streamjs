@@ -252,7 +252,7 @@
         if (!this.customMerge) {
             this.buffer.push(obj);
         } else {
-            this.merger.call({}, this.buffer, obj);
+            this.merger.call({}, obj, this.buffer);
         }
     };
 
@@ -413,7 +413,7 @@
 
         this.shuffle = function () {
             this.add(new StatefulOp({
-                merger: function (array, obj) {
+                merger: function (obj, array) {
                     if (array.length === 0) {
                         array.push(obj);
                     } else {
@@ -426,6 +426,15 @@
             }));
             return this;
         };
+
+        this.reverse = function () {
+            this.add(new StatefulOp({
+                merger: function (obj, array) {
+                    array.unshift(obj);
+                }
+            }));
+            return this;
+        }
 
         this.distinct = function () {
             this.add(new StatefulOp({
