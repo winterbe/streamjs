@@ -214,6 +214,8 @@
         this.next = null;
         this.filter = options.filter;
         this.finisher = options.finisher;
+        this.merger = options.merger
+        this.customMerge = isFunction(this.merger);
         this.buffer = null;
         this.i = 0;
     };
@@ -243,8 +245,14 @@
         return obj;
     };
     StatefulOp.prototype.pipe = function (obj) {
-        if (!this.filter || this.filter.call(ctx, obj, this.i, this.buffer)) {
+        if (this.filter && this.filter.call(ctx, obj, this.i, this.buffer) === false) {
+            return;
+        }
+
+        if (!this.customMerge) {
             this.buffer.push(obj);
+        } else {
+            this.merger.call({}, this.buffer, obj);
         }
     };
 
@@ -405,12 +413,14 @@
 
         this.shuffle = function () {
             this.add(new StatefulOp({
-                finisher: function (array) {
-                    for (var i = 0; i < array.length; i++) {
-                        var j = Math.floor(Math.random() * array.length);
+                merger: function (array, obj) {
+                    if (array.length === 0) {
+                        array.push(obj);
+                    } else {
+                        var i = Math.floor(Math.random() * array.length);
                         var tmp = array[i];
-                        array[i] = array[j];
-                        array[j] = tmp;
+                        array[i] = obj;
+                        array.push(tmp);
                     }
                 }
             }));
