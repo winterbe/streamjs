@@ -434,7 +434,7 @@
                 }
             }));
             return this;
-        }
+        };
 
         this.distinct = function () {
             this.add(new StatefulOp({
