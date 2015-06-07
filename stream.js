@@ -214,7 +214,7 @@
         this.next = null;
         this.filter = options.filter;
         this.finisher = options.finisher;
-        this.merger = options.merger
+        this.merger = options.merger;
         this.customMerge = isFunction(this.merger);
         this.buffer = null;
         this.i = 0;
