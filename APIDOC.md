@@ -306,6 +306,15 @@ Stream([1, 2, 3, 4])
    .skip(2);         // => 3, 4
 ```
 
+> ##### slice(begin, end)
+
+Discards all elements except those between the zero-based indices `begin` (included) and `end` (excluded).
+
+```js
+Stream([1, 2, 3, 4])
+   .slice(1, 3);         // => 2, 3
+```
+
 > ##### peek(consumer)
 
 Performs the consumer function for each element and returns the stream.

@@ -256,40 +256,23 @@
         }
     };
 
-    var LimitOp = function (limit) {
-        this.limit = limit;
+    var SliceOp = function (begin, end) {
+        this.begin = begin;
+        this.end = end;
         this.i = 0;
     };
-    LimitOp.prototype = new PipelineOp();
-    LimitOp.prototype.advance = function () {
+    SliceOp.prototype = new PipelineOp();
+    SliceOp.prototype.advance = function () {
         return this.prev.advance();
     };
-    LimitOp.prototype.pipe = function (obj) {
-        if (this.i >= this.limit) {
+    SliceOp.prototype.pipe = function (obj) {
+        if (this.i >= this.end) {
             return nil;
         }
         this.i++;
-        if (this.next === null) {
-            return obj;
-        }
-        return this.next.pipe(obj);
-    };
-
-
-    var SkipOp = function (skip) {
-        this.skip = skip;
-        this.i = 0;
-    };
-    SkipOp.prototype = new PipelineOp();
-    SkipOp.prototype.advance = function () {
-        return this.prev.advance();
-    };
-    SkipOp.prototype.pipe = function (obj) {
-        if (this.i < this.skip) {
-            this.i++;
+        if (this.i <= this.begin) {
             return this.prev.advance();
         }
-        this.i++;
         if (this.next === null) {
             return obj;
         }
@@ -445,13 +428,21 @@
             return this;
         };
 
+        this.slice = function (begin, end) {
+            if (begin > end) {
+                throw "slice(): begin must not be greater than end";
+            }
+            this.add(new SliceOp(begin, end));
+            return this;
+        };
+
         this.skip = function (num) {
-            this.add(new SkipOp(num));
+            this.add(new SliceOp(num, Number.MAX_VALUE));
             return this;
         };
 
         this.limit = function (num) {
-            this.add(new LimitOp(num));
+            this.add(new SliceOp(0, num));
             return this;
         };
 
