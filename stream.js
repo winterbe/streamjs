@@ -294,6 +294,24 @@
         return this.next.pipe(obj);
     };
 
+    var TakeWhileOp = function (predicate) {
+        this.predicate = predicate;
+    };
+    TakeWhileOp.prototype = new PipelineOp();
+    TakeWhileOp.prototype.advance = function () {
+        return this.prev.advance();
+    };
+    TakeWhileOp.prototype.pipe = function (obj) {
+        var filtered = this.predicate.call(ctx, obj);
+        if (filtered !== true) {
+            return nil;
+        }
+        if (this.next === null) {
+            return obj;
+        }
+        return this.next.pipe(obj);
+    };
+
 
     //
     // Internal Pipeline (doing all the work)
@@ -448,6 +466,22 @@
 
         this.peek = function (consumer) {
             this.add(new PeekOp(consumer));
+            return this;
+        };
+
+        this.takeWhile = function () {
+            var arg = arguments[0];
+            if (isRegExp(arg)) {
+                this.add(new TakeWhileOp(function (obj) {
+                    return arg.test(obj);
+                }));
+            } else if (isObject(arg)) {
+                this.add(new TakeWhileOp(function (obj) {
+                    return deepEquals(arg, obj);
+                }));
+            } else {
+                this.add(new TakeWhileOp(arg));
+            }
             return this;
         };
 
