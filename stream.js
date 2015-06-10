@@ -13,10 +13,10 @@
         nil = {};
 
 
+    function Iterator() {
 
-    var Iterator = function () {
+    }
 
-    };
     Iterator.of = function (data) {
         if (data === null || data === undefined) {
             return new EmptyIterator(data);
@@ -31,9 +31,10 @@
     };
 
 
-    var ArrayIterator = function (array) {
+    function ArrayIterator(array) {
         this.initialize(array);
-    };
+    }
+
     ArrayIterator.prototype = new Iterator();
     ArrayIterator.prototype.next = function () {
         if (this.origin >= this.fence) {
@@ -42,8 +43,7 @@
 
         try {
             return this.data[this.origin];
-        }
-        finally {
+        } finally {
             this.origin++;
         }
     };
@@ -54,9 +54,10 @@
     };
 
 
-    var ObjectIterator = function (object) {
+    function ObjectIterator(object) {
         this.initialize(object);
-    };
+    }
+
     ObjectIterator.prototype = new Iterator();
     ObjectIterator.prototype.initialize = function (object) {
         this.data = object || {};
@@ -72,16 +73,16 @@
         try {
             var key = this.keys[this.origin];
             return this.data[key];
-        }
-        finally {
+        } finally {
             this.origin++;
         }
     };
 
 
-    var ValueIterator = function (value) {
+    function ValueIterator(value) {
         this.initialize(value);
-    };
+    }
+
     ValueIterator.prototype = new Iterator();
     ValueIterator.prototype.initialize = function (value) {
         this.value = value;
@@ -95,9 +96,10 @@
         return nil;
     };
 
-    var EmptyIterator = function (value) {
+    function EmptyIterator(value) {
         this.initialize(value);
-    };
+    }
+
     EmptyIterator.prototype = new Iterator();
     EmptyIterator.prototype.initialize = function (value) {
         this.value = value;
@@ -108,16 +110,16 @@
     };
 
 
-
-    var PipelineOp = function () {
+    function PipelineOp() {
         this.next = null;
         this.prev = null;
-    };
+    }
 
 
-    var IteratorOp = function (data) {
+    function IteratorOp(data) {
         this.iterator = Iterator.of(data);
-    };
+    }
+
     IteratorOp.prototype = new PipelineOp();
     IteratorOp.prototype.advance = function () {
         var obj = this.iterator.next();
@@ -131,9 +133,10 @@
     };
 
 
-    var MapOp = function (fn) {
+    function MapOp(fn) {
         this.fn = fn;
-    };
+    }
+
     MapOp.prototype = new PipelineOp();
     MapOp.prototype.advance = function () {
         return this.prev.advance();
@@ -147,10 +150,11 @@
     };
 
 
-    var FlatOp = function (fn) {
+    function FlatOp(fn) {
         this.fn = fn;
         this.iterator = null;
-    };
+    }
+
     FlatOp.prototype = new PipelineOp();
     FlatOp.prototype.advance = function () {
         if (this.iterator === null) {
@@ -179,9 +183,10 @@
     };
 
 
-    var FilterOp = function (fn) {
+    function FilterOp(fn) {
         this.fn = fn;
-    };
+    }
+
     FilterOp.prototype = new PipelineOp();
     FilterOp.prototype.advance = function () {
         return this.prev.advance();
@@ -198,18 +203,19 @@
     };
 
 
-    var GeneratorOp = function (fn) {
+    function GeneratorOp(fn) {
         this.prev = null;
         this.next = null;
         this.fn = fn;
-    };
+    }
+
     GeneratorOp.prototype.advance = function () {
         var val = this.fn.call(ctx);
         return this.next.pipe(val);
     };
 
 
-    var StatefulOp = function (options) {
+    function StatefulOp(options) {
         this.prev = null;
         this.next = null;
         this.filter = options.filter;
@@ -218,7 +224,8 @@
         this.customMerge = isFunction(this.merger);
         this.buffer = null;
         this.i = 0;
-    };
+    }
+
     StatefulOp.prototype.advance = function () {
         var obj;
 
@@ -256,11 +263,12 @@
         }
     };
 
-    var SliceOp = function (begin, end) {
+    function SliceOp(begin, end) {
         this.begin = begin;
         this.end = end;
         this.i = 0;
-    };
+    }
+
     SliceOp.prototype = new PipelineOp();
     SliceOp.prototype.advance = function () {
         return this.prev.advance();
@@ -279,9 +287,10 @@
         return this.next.pipe(obj);
     };
 
-    var PeekOp = function (consumer) {
+    function PeekOp(consumer) {
         this.consumer = consumer;
-    };
+    }
+
     PeekOp.prototype = new PipelineOp();
     PeekOp.prototype.advance = function () {
         return this.prev.advance();
@@ -294,9 +303,10 @@
         return this.next.pipe(obj);
     };
 
-    var TakeWhileOp = function (predicate) {
+    function TakeWhileOp(predicate) {
         this.predicate = predicate;
-    };
+    }
+
     TakeWhileOp.prototype = new PipelineOp();
     TakeWhileOp.prototype.advance = function () {
         return this.prev.advance();
@@ -317,7 +327,7 @@
     // Internal Pipeline (doing all the work)
     //
 
-    var Pipeline = function (input) {
+    function Pipeline(input) {
         var pipeline = this, lastOp;
 
         // default op iterates over input elements
@@ -326,11 +336,9 @@
             lastOp = new GeneratorOp(function () {
                 return input.call(ctx);
             });
-        }
-        else if (isString(input)) {
+        } else if (isString(input)) {
             lastOp = new IteratorOp(input.split(''));
-        }
-        else {
+        } else {
             lastOp = new IteratorOp(input);
         }
 
@@ -858,7 +866,6 @@
         };
 
 
-
         //
         // assert stream can only be consumed once by proxing all terminal operations
         //
@@ -899,7 +906,7 @@
         this.sort = this.sorted;
         this.size = this.count;
         this.findAny = this.findFirst;
-    };
+    }
 
     Pipeline.prototype.toString = function () {
         return "[object Stream]";
@@ -910,7 +917,7 @@
     // Optional type
     //
 
-    var Optional = function (val) {
+    function Optional(val) {
         this.isPresent = function () {
             return val !== null && val !== undefined;
         };
@@ -974,7 +981,7 @@
             }
             return this;
         };
-    };
+    }
 
     Optional.prototype.toString = function () {
         return "[object Optional]";
@@ -1066,38 +1073,38 @@
 
     var ObjToString = Object.prototype.toString;
 
-    var isString = function (obj) {
+    function isString(obj) {
         return ObjToString.call(obj) === '[object String]';
-    };
+    }
 
-    var isFunction = function (obj) {
+    function isFunction(obj) {
         return typeof obj === 'function' || false;
-    };
+    }
 
-    var isNumber = function (obj) {
+    function isNumber(obj) {
         return ObjToString.call(obj) === '[object Number]';
-    };
+    }
 
     var isArray = Array.isArray || function (obj) {
             return ObjToString.call(obj) === '[object Array]';
         };
 
-    var isObject = function (obj) {
+    function isObject(obj) {
         return typeof obj === 'object' && !!obj;
-    };
+    }
 
-    var isRegExp = function (obj) {
+    function isRegExp(obj) {
         return ObjToString.call(obj) === '[object RegExp]';
-    };
+    }
 
 
     //
     // Stream function grants access to pipeline
     //
 
-    var Stream = function (input) {
+    function Stream(input) {
         return new Pipeline(input);
-    };
+    }
 
     Stream.range = function (startInclusive, endExclusive) {
         var array = [];
