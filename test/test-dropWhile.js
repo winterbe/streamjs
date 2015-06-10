@@ -1,15 +1,16 @@
-QUnit.test("takeWhile num array", function (assert) {
+QUnit.test("dropWhile num array", function (assert) {
     var data = [1, 2, 3, 2, 1];
 
     var result = Stream(data)
-        .takeWhile(function (num) {
+        .dropWhile(function (num) {
             return num < 3;
         })
         .toArray();
 
-    assert.equal(result.length, 2);
-    assert.equal(result[0], 1);
+    assert.equal(result.length, 3);
+    assert.equal(result[0], 3);
     assert.equal(result[1], 2);
+    assert.equal(result[2], 1);
 
     // assert original data is untouched
     assert.equal(data.length, 5);
@@ -20,29 +21,29 @@ QUnit.test("takeWhile num array", function (assert) {
     assert.equal(data[4], 1);
 });
 
-QUnit.test("takeWhile object", function (assert) {
-    var data = {a: 1, b: 2, c: 3, d: 2};
+QUnit.test("dropWhile object", function (assert) {
+    var data = {a: 1, b: 2, c: 3, d: 1};
 
     var result = Stream(data)
-        .takeWhile(function (num) {
+        .dropWhile(function (num) {
             return num < 3;
         })
         .toArray();
 
     assert.equal(result.length, 2);
-    assert.equal(result[0], 1);
-    assert.equal(result[1], 2);
+    assert.equal(result[0], 3);
+    assert.equal(result[1], 1);
 
     // assert original data is untouched
     assert.equal(data.a, 1);
     assert.equal(data.b, 2);
     assert.equal(data.c, 3);
-    assert.equal(data.d, 2);
+    assert.equal(data.d, 1);
 });
 
-QUnit.test("takeWhile empty", function (assert) {
+QUnit.test("dropWhile empty", function (assert) {
     var result = Stream([])
-        .takeWhile(function () {
+        .dropWhile(function () {
             return true;
         })
         .toArray();
@@ -50,16 +51,16 @@ QUnit.test("takeWhile empty", function (assert) {
     assert.equal(result.length, 0);
 });
 
-QUnit.test("takeWhile via regexp literal", function (assert) {
+QUnit.test("dropWhile via regexp literal", function (assert) {
     var data = ["a1", "a2", "b3", "a4"];
 
     var result = Stream(data)
-        .takeWhile(/a.*/)
+        .dropWhile(/a.*/)
         .toArray();
 
     assert.equal(result.length, 2);
-    assert.equal(result[0], "a1");
-    assert.equal(result[1], "a2");
+    assert.equal(result[0], "b3");
+    assert.equal(result[1], "a4");
 
     // assert original data is untouched
     assert.equal(data.length, 4);
@@ -69,16 +70,16 @@ QUnit.test("takeWhile via regexp literal", function (assert) {
     assert.equal(data[3], "a4");
 });
 
-QUnit.test("takeWhile via regexp object", function (assert) {
+QUnit.test("dropWhile via regexp object", function (assert) {
     var data = ["a1", "a2", "b3", "a4"];
 
     var result = Stream(data)
-        .takeWhile(new RegExp("a.*"))
+        .dropWhile(new RegExp("a.*"))
         .toArray();
 
     assert.equal(result.length, 2);
-    assert.equal(result[0], "a1");
-    assert.equal(result[1], "a2");
+    assert.equal(result[0], "b3");
+    assert.equal(result[1], "a4");
 
     // assert original data is untouched
     assert.equal(data.length, 4);
@@ -88,7 +89,7 @@ QUnit.test("takeWhile via regexp object", function (assert) {
     assert.equal(data[3], "a4");
 });
 
-QUnit.test("takeWhile via sample object (depth=1)", function (assert) {
+QUnit.test("dropWhile via sample object (depth=1)", function (assert) {
     var data = [
         {a: 1, b: 1},
         {a: 1, b: 2},
@@ -97,17 +98,17 @@ QUnit.test("takeWhile via sample object (depth=1)", function (assert) {
     ];
 
     var result = Stream(data)
-        .takeWhile({a: 1})
+        .dropWhile({a: 1})
         .toArray();
 
     assert.equal(result.length, 2);
-    assert.equal(result[0].a, 1);
-    assert.equal(result[0].b, 1);
+    assert.equal(result[0].a, 2);
+    assert.equal(result[0].b, 3);
     assert.equal(result[1].a, 1);
-    assert.equal(result[1].b, 2);
+    assert.equal(result[1].b, 4);
 });
 
-QUnit.test("takeWhile via sample object (depth=2)", function (assert) {
+QUnit.test("dropWhile via sample object (depth=2)", function (assert) {
     var data = [
         {a: 1, b: 1, c: {x: "x1"}},
         {a: 1, b: 2, c: {x: "x1"}},
@@ -116,14 +117,14 @@ QUnit.test("takeWhile via sample object (depth=2)", function (assert) {
     ];
 
     var result = Stream(data)
-        .takeWhile({a: 1, c: {x: "x1"}})
+        .dropWhile({a: 1, c: {x: "x1"}})
         .toArray();
 
     assert.equal(result.length, 2);
-    assert.equal(result[0].a, 1);
-    assert.equal(result[0].b, 1);
-    assert.equal(result[0].c.x, "x1");
+    assert.equal(result[0].a, 2);
+    assert.equal(result[0].b, 3);
+    assert.equal(result[0].c.x, "x3");
     assert.equal(result[1].a, 1);
-    assert.equal(result[1].b, 2);
+    assert.equal(result[1].b, 4);
     assert.equal(result[1].c.x, "x1");
 });

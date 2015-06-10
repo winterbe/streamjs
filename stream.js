@@ -322,6 +322,29 @@
         return this.next.pipe(obj);
     };
 
+    function DropWhileOp(predicate) {
+        this.predicate = predicate;
+        this.border = false;
+    }
+
+    DropWhileOp.prototype = new PipelineOp();
+    DropWhileOp.prototype.advance = function () {
+        return this.prev.advance();
+    };
+    DropWhileOp.prototype.pipe = function (obj) {
+        if (!this.border) {
+            var filtered = this.predicate.call(ctx, obj);
+            if (filtered === true) {
+                return this.prev.advance();
+            }
+            this.border = true;
+        }
+        if (this.next === null) {
+            return obj;
+        }
+        return this.next.pipe(obj);
+    };
+
 
     //
     // Internal Pipeline (doing all the work)
@@ -489,6 +512,22 @@
                 }));
             } else {
                 this.add(new TakeWhileOp(arg));
+            }
+            return this;
+        };
+
+        this.dropWhile = function () {
+            var arg = arguments[0];
+            if (isRegExp(arg)) {
+                this.add(new DropWhileOp(function (obj) {
+                    return arg.test(obj);
+                }));
+            } else if (isObject(arg)) {
+                this.add(new DropWhileOp(function (obj) {
+                    return deepEquals(arg, obj);
+                }));
+            } else {
+                this.add(new DropWhileOp(arg));
             }
             return this;
         };

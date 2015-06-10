@@ -12,8 +12,6 @@ QUnit.test("shuffle num array", function (assert) {
     assert.ok(result.indexOf(4) > -1);
     assert.ok(result.indexOf(5) > -1);
 
-    console.log(result);
-
     // assert original data is untouched
     assert.equal(data.length, 5);
     assert.equal(data[0], 1);
