@@ -83,6 +83,18 @@
 
     console.log(result);
 
+    result = measure("Iterative [filter - map - array]", input, function () {
+        var result = [];
+        for (var i = 0; i < input.length; i++) {
+            if (i % 2 === 1) {
+                result.push({num: i});
+            }
+        }
+        return result;
+    });
+
+    console.log(result);
+
     result = measure("Stream.js [filter - map - findFirst]", input, function () {
         return Stream(input)
             .filter(function (num) {
@@ -106,6 +118,17 @@
             })
             .first()
             .value();
+    });
+
+    console.log(result);
+
+    result = measure("Iterative [filter - map - return first]", input, function () {
+        for (var i = 0; i < input.length; i++) {
+            if (i % 2 === 1) {
+                return {num: i};
+            }
+        }
+        return null;
     });
 
     console.log(result);
