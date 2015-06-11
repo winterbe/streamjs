@@ -279,6 +279,15 @@ Stream([1, 2, 3, 4])
    .shuffle();   // => 4, 1, 3, 2
 ```
 
+> ##### reverse()
+
+Reverse the order of each elements of the stream.
+
+```js
+Stream([1, 2, 3, 4])
+   .reverse();   // => 4, 3, 2, 1
+```
+
 > ##### distinct()
 
 Returns the stream consisting of the distinct elements of this stream.
@@ -324,6 +333,42 @@ Stream([1, 2, 3, 4])
    .peek(function (num) {
       console.log(num);
    });
+```
+
+> ##### takeWhile(predicate)
+
+```js
+Stream([1, 2, 3, 2, 1])
+     .takeWhile(function (num) {
+         return num < 3;
+     })
+     .toArray();  // => 1, 2
+```
+
+> ##### takeWhile(regexp)
+
+```js
+Stream(["a1", "a2", "b3", "a4"])
+     .takeWhile(/a.*/)
+     .toArray();  // => a1, a2
+```
+
+> ##### dropWhile(predicate)
+
+```js
+Stream([1, 2, 3, 2, 1])
+     .dropWhile(function (num) {
+         return num < 3;
+     })
+     .toArray();  // => 3, 2, 1
+```
+
+> ##### dropWhile(regexp)
+
+```js
+Stream(["a1", "a2", "b3", "a4"])
+     .dropWhile(/a.*/)
+     .toArray();  // => b3, a4
 ```
 
 ### Terminal Operations
