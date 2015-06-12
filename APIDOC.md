@@ -337,6 +337,8 @@ Stream([1, 2, 3, 4])
 
 > ##### takeWhile(predicate)
 
+Takes all elements of the stream as long as `predicate` is true. All elements are rejected from the moment `predicate` is false for the first time.
+
 ```js
 Stream([1, 2, 3, 2, 1])
      .takeWhile(function (num) {
@@ -347,13 +349,34 @@ Stream([1, 2, 3, 2, 1])
 
 > ##### takeWhile(regexp)
 
+Takes all elements of the stream as long as `regexp` matches. All elements are rejected from the moment `regexp` doesn't match for the first time.
+
 ```js
 Stream(["a1", "a2", "b3", "a4"])
      .takeWhile(/a.*/)
      .toArray();  // => a1, a2
 ```
 
+> ##### takeWhile(object)
+
+Takes all elements of the stream as long as `object` matches. All elements are rejected from the moment `object` doesn't match for the first time.
+
+```js
+var data = [
+     {a: 1, b: 1},
+     {a: 1, b: 2},
+     {a: 2, b: 3},
+     {a: 1, b: 4}
+];
+
+Stream(data)
+     .takeWhile({a: 1})
+     .toArray();  // => {a: 1, b: 1}, {a: 1, b: 2}
+```
+
 > ##### dropWhile(predicate)
+
+Rejects all elements of the stream as long as `predicate` is true. All elements are accepted from the moment `predicate` is false for the first time.
 
 ```js
 Stream([1, 2, 3, 2, 1])
@@ -365,10 +388,29 @@ Stream([1, 2, 3, 2, 1])
 
 > ##### dropWhile(regexp)
 
+Rejects all elements of the stream as long as `regexp` matches. All elements are accepted from the moment `regexp` doesn't match for the first time.
+
 ```js
 Stream(["a1", "a2", "b3", "a4"])
      .dropWhile(/a.*/)
      .toArray();  // => b3, a4
+```
+
+> ##### dropWhile(object)
+
+Rejects all elements of the stream as long as `object` matches. All elements are accepted from the moment `object` doesn't match for the first time.
+
+```js
+var data = [
+     {a: 1, b: 1},
+     {a: 1, b: 2},
+     {a: 2, b: 3},
+     {a: 1, b: 4}
+];
+
+Stream(data)
+     .dropWhile({a: 1})
+     .toArray();  // => {a: 2, b: 3}, {a: 1, b: 4}
 ```
 
 ### Terminal Operations
