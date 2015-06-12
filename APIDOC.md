@@ -357,9 +357,9 @@ Stream(["a1", "a2", "b3", "a4"])
      .toArray();  // => a1, a2
 ```
 
-> ##### takeWhile(object)
+> ##### takeWhile(sample)
 
-Takes all elements of the stream as long as `object` matches. All elements are rejected from the moment `object` doesn't match for the first time.
+Takes all elements of the stream as long as `sample` matches. All elements are rejected from the moment `sample` doesn't match for the first time.
 
 ```js
 var data = [
@@ -396,9 +396,9 @@ Stream(["a1", "a2", "b3", "a4"])
      .toArray();  // => b3, a4
 ```
 
-> ##### dropWhile(object)
+> ##### dropWhile(sample)
 
-Rejects all elements of the stream as long as `object` matches. All elements are accepted from the moment `object` doesn't match for the first time.
+Rejects all elements of the stream as long as `sample` matches. All elements are accepted from the moment `sample` doesn't match for the first time.
 
 ```js
 var data = [
