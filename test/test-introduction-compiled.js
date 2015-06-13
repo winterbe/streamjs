@@ -81,4 +81,71 @@ QUnit.test("sample 6", function (assert) {
     assert.equal(ops[5], "forEach: c3");
 });
 
+QUnit.test("sample 6", function (assert) {
+    var ops = [];
+
+    Stream.of("d2", "a2", "b1", "b3", "c").map(function (s) {
+        ops.push("map: " + s);
+        return s.toUpperCase();
+    }).anyMatch(function (s) {
+        ops.push("anyMatch: " + s);
+        return s.startsWith("A");
+    });
+
+    assert.equal(ops.length, 4);
+    assert.equal(ops[0], "map: d2");
+    assert.equal(ops[1], "anyMatch: D2");
+    assert.equal(ops[2], "map: a2");
+    assert.equal(ops[3], "anyMatch: A2");
+});
+
+QUnit.test("sample 7", function (assert) {
+    var ops = [];
+
+    Stream.of("d2", "a2", "b1", "b3", "c").filter(function (s) {
+        ops.push("filter: " + s);
+        return s.indexOf("a") === 0;
+    }).map(function (s) {
+        ops.push("map: " + s);
+        return s.toUpperCase();
+    }).forEach(function (s) {
+        return ops.push("forEach: " + s);
+    });
+
+    assert.equal(ops.length, 7);
+    assert.equal(ops[0], "filter: d2");
+    assert.equal(ops[1], "filter: a2");
+    assert.equal(ops[2], "map: a2");
+    assert.equal(ops[3], "forEach: A2");
+    assert.equal(ops[4], "filter: b1");
+    assert.equal(ops[5], "filter: b3");
+    assert.equal(ops[6], "filter: c");
+});
+
+QUnit.test("sample 8", function (assert) {
+    assert.throws(function () {
+        var stream = Stream.of(1, 2, 3).filter(function (n) {
+            return n % 2 === 1;
+        });
+
+        stream.anyMatch(function (n) {
+            return true;
+        }); // ok
+        stream.toArray(); // error
+    });
+});
+
+QUnit.test("sample 9", function (assert) {
+    var odd = function odd(array) {
+        return Stream(array).filter(function (n) {
+            return n % 2 === 1;
+        });
+    };
+
+    assert.equal(odd([1, 2, 3]).anyMatch(function (n) {
+        return true;
+    }), true);
+    assert.equal(odd([1, 2, 3]).toArray().length, 2);
+});
+
 //# sourceMappingURL=test-introduction-compiled.js.map
