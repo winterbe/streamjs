@@ -89,7 +89,7 @@ QUnit.test("sample 6", function (assert) {
         return s.toUpperCase();
     }).anyMatch(function (s) {
         ops.push("anyMatch: " + s);
-        return s.startsWith("A");
+        return s.indexOf("A") === 0;
     });
 
     assert.equal(ops.length, 4);

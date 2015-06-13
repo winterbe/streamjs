@@ -91,7 +91,7 @@ QUnit.test("sample 6", function (assert) {
         })
         .anyMatch(s => {
             ops.push("anyMatch: " + s);
-            return s.startsWith("A");
+            return s.indexOf("A") === 0;
         });
 
     assert.equal(ops.length, 4);
