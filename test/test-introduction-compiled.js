@@ -1,3 +1,8 @@
+// I'm using Babel.js and Intellij IDEA File Watcher to automatically transpile es6 to js:
+// --source-maps --out-file $FileNameWithoutExtension$-compiled.js $FilePath$ --blacklist useStrict
+//
+// useStrict is blacklisted to prevent global use-strict for jshint
+
 QUnit.test("sample 1", function (assert) {
     var myList = ["a1", "a2", "b1", "c2", "c1"];
 
