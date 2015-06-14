@@ -42,6 +42,50 @@ QUnit.test("input string", function (assert) {
     assert.equal(result, "ACD");
 });
 
+QUnit.test("from array", function (assert) {
+    var input = [1, 2, 3];
+    var result = Stream.from(input).toArray();
+    assert.equal(result.length, 3);
+    assert.equal(result[0], 1);
+    assert.equal(result[1], 2);
+    assert.equal(result[2], 3);
+});
+
+QUnit.test("from undefined", function (assert) {
+    var result = Stream.from(undefined).toArray();
+    assert.equal(result.length, 0);
+});
+
+QUnit.test("from null", function (assert) {
+    var result = Stream.from(null).toArray();
+    assert.equal(result.length, 0);
+});
+
+QUnit.test("from object", function (assert) {
+    var input = {
+        foo: 1, bar: 2, foobar: 3
+    };
+
+    var result = Stream.from(input).toArray();
+    assert.equal(result.length, 3);
+    assert.equal(result[0], 1);
+    assert.equal(result[1], 2);
+    assert.equal(result[2], 3);
+});
+
+QUnit.test("from string", function (assert) {
+    var result = Stream.from("abcd")
+        .filter(function (c) {
+            return c !== 'b';
+        })
+        .map(function (c) {
+            return c.toUpperCase();
+        })
+        .joining();
+
+    assert.equal(result, "ACD");
+});
+
 QUnit.test("of", function (assert) {
     var result = Stream.of(1, 2, 3, 4)
         .filter(function (num) {

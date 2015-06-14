@@ -1145,6 +1145,10 @@
         return new Pipeline(input);
     }
 
+    Stream.from = function(input) {
+        return Stream(input);
+    };
+
     Stream.range = function (startInclusive, endExclusive) {
         var array = [];
         for (var i = startInclusive; i < endExclusive; i++) {

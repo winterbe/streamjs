@@ -83,6 +83,8 @@ Returns a new stream for the given collection. Collection can either be an array
 var stream = Stream([1, 2, 3, 4]);
 ```
 
+Alias: `Stream.from`
+
 > ##### Stream(string)
 
 Returns a new stream for the given string. The string will be splitted by characters.
@@ -90,6 +92,8 @@ Returns a new stream for the given string. The string will be splitted by charac
 ```js
 var stream = Stream("ABCDEFG");
 ```
+
+Alias: `Stream.from`
 
 > ##### Stream.of(args...)
 
