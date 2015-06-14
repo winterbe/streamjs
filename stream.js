@@ -1141,7 +1141,7 @@
         if (!console) {
             return false;
         }
-        return console.log === fn || console.warn === fn || console.error === fn || console.trace;
+        return console.log === fn || console.warn === fn || console.error === fn || console.trace === fn;
     }
 
 
