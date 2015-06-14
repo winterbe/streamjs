@@ -23,3 +23,10 @@ QUnit.test("forEach empty", function (assert) {
 
     assert.equal(called, false);
 });
+
+QUnit.test("forEach console.log", function (assert) {
+    Stream(["forEach"])
+        .forEach(console.log);
+
+    assert.ok(true);    // assert no error
+});

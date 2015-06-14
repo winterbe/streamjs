@@ -24,3 +24,11 @@ QUnit.test("peek empty", function (assert) {
     assert.equal(poke.length, 0);
     assert.equal(result.length, 0);
 });
+
+QUnit.test("peek console.log", function (assert) {
+    Stream(["peek"])
+        .peek(console.log)
+        .toArray();
+
+    assert.ok(true);    // assert no error
+});

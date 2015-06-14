@@ -289,6 +289,7 @@
 
     function PeekOp(consumer) {
         this.consumer = consumer;
+        this.consoleFn = isConsoleFn(consumer);
     }
 
     PeekOp.prototype = new PipelineOp();
@@ -296,7 +297,7 @@
         return this.prev.advance();
     };
     PeekOp.prototype.pipe = function (obj) {
-        this.consumer.call(ctx, obj);
+        this.consumer.call(this.consoleFn ? console : ctx, obj);
         if (this.next === null) {
             return obj;
         }
@@ -556,9 +557,9 @@
         };
 
         terminal.forEach = function (fn) {
-            var current;
+            var current, consoleFn = isConsoleFn(fn);
             while ((current = pipeline.next()) !== nil) {
-                fn.call(ctx, current);
+                fn.call(consoleFn ? console : ctx, current);
             }
         };
 
@@ -1134,6 +1135,13 @@
 
     function isRegExp(obj) {
         return ObjToString.call(obj) === '[object RegExp]';
+    }
+
+    function isConsoleFn(fn) {
+        if (!console) {
+            return false;
+        }
+        return console.log === fn || console.warn === fn || console.error === fn || console.trace;
     }
 
 
