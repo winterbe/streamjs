@@ -1158,9 +1158,9 @@
     };
 
     Stream.range = function (startInclusive, endExclusive) {
-		return Stream.iterate(startInclusive, function(num) {
-			return num + 1;
-		}).limit(endExclusive - startInclusive);
+        return Stream.iterate(startInclusive, function(num) {
+            return num + 1;
+        }).limit(endExclusive - startInclusive);
     };
 
     Stream.rangeClosed = function (startInclusive, endInclusive) {
