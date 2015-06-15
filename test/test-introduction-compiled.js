@@ -3,8 +3,6 @@
 //
 // useStrict is blacklisted to prevent global use-strict for jshint
 
-"use strict";
-
 QUnit.test("sample 1", function (assert) {
     var myList = ["a1", "a2", "b1", "c2", "c1"];
 
