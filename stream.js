@@ -1153,12 +1153,12 @@
         return new Pipeline(input);
     }
 
-    Stream.from = function(input) {
+    Stream.from = function (input) {
         return Stream(input);
     };
 
     Stream.range = function (startInclusive, endExclusive) {
-        return Stream.iterate(startInclusive, function(num) {
+        return Stream.iterate(startInclusive, function (num) {
             return num + 1;
         }).limit(endExclusive - startInclusive);
     };
@@ -1210,13 +1210,11 @@
 
     if (typeof module !== 'undefined' && module.exports) {
         module.exports = Stream;
-    }
-    else if (typeof define === 'function' && define.amd) {
+    } else if (typeof define === 'function' && define.amd) {
         define('streamjs', [], function () {
             return Stream;
         });
-    }
-    else {
+    } else {
         root.Stream = Stream;
     }
 
