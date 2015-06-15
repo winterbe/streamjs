@@ -142,3 +142,78 @@ QUnit.test("sample 9", function (assert) {
     assert.equal(odd([1, 2, 3]).anyMatch(n => true), true);
     assert.equal(odd([1, 2, 3]).toArray().length, 2);
 });
+
+var persons = [
+    {name: "Max", age: 18},
+    {name: "Peter", age: 23},
+    {name: "Pamela", age: 23},
+    {name: "David", age: 12}
+];
+
+QUnit.test("sample 10", function (assert) {
+    var groups = Stream(persons)
+        .groupBy(p => p.age);
+
+    assert.equal(groups[18].length, 1);
+    assert.equal(groups[23].length, 2);
+    assert.equal(groups[12].length, 1);
+});
+
+QUnit.test("sample 10", function (assert) {
+    var avg = Stream(persons)
+        .map(p => p.age)
+        .average()
+        .get();
+
+    assert.equal(avg, 19);
+});
+
+QUnit.test("sample 11", function (assert) {
+    var phrase = Stream(persons)
+        .filter(p => p.age >= 18)
+        .map(p => p.name)
+        .join({
+            prefix: 'In Germany ',
+            suffix: ' are of legal age.',
+            delimiter: ' and '
+        });
+
+    assert.equal(phrase, 'In Germany Max and Peter and Pamela are of legal age.');
+});
+
+QUnit.test("sample 12", function (assert) {
+    var result = Stream(persons)
+        .collect({
+            supplier: () => '[',
+            accumulator: (s, p) => s + ' ' + p.name.toUpperCase(),
+            finisher: (s) => s + ' ]'
+        });
+
+    assert.equal(result, "[ MAX PETER PAMELA DAVID ]");
+});
+
+QUnit.test("sample 13", function (assert) {
+    var oldest = Stream(persons)
+        .reduce((p1, p2) => p1.age > p2.age ? p1 : p2)
+        .get();
+
+    assert.equal(oldest.name, "Pamela");
+});
+
+QUnit.test("sample 13", function (assert) {
+    var result = Stream(persons)
+        .sort("age")
+        .reverse()
+        .reduce({names: [], sumOfAges: 0}, (res, p) => {
+            res.names.push(p.name);
+            res.sumOfAges += p.age;
+            return res;
+        });
+
+    assert.equal(result.names.length, 4);
+    assert.equal(result.names[0], "Pamela");
+    assert.equal(result.names[1], "Peter");
+    assert.equal(result.names[2], "Max");
+    assert.equal(result.names[3], "David");
+    assert.equal(result.sumOfAges, 76);
+});
