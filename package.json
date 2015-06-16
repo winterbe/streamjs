@@ -29,7 +29,8 @@
     "grunt-contrib-jshint": "*",
     "grunt-contrib-qunit": "*",
     "grunt-contrib-uglify": "*",
-    "grunt-contrib-watch": "*"
+    "grunt-contrib-watch": "*",
+    "babel-core": "*"
   },
   "license": "MIT",
   "engines": {
