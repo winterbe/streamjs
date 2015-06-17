@@ -18,7 +18,7 @@ module.exports = function (grunt) {
             files: ['test/index.html']
         },
         jshint: {
-            files: ['stream.js', 'test/**/*.js'],
+            files: ['stream.js', 'test/**/*.js', '!test/*-compiled.js'],
             options: {
                 jshintrc: '.jshintrc'
             }

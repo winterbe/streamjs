@@ -17,6 +17,48 @@ QUnit.test("input null", function (assert) {
     assert.equal(result.length, 0);
 });
 
+QUnit.test("input makeshift iterator", function (assert) {
+  function iter(){
+    var index = 0;
+
+    return {
+       next: function(){
+           if (index >= 10) return;
+           return { value: index++, done: (index >= 10) };
+       }
+    };
+  }
+
+  var input = iter();
+  var result = Stream(input)
+    .filter(function(i) {
+        return i % 2;
+    })
+    .takeWhile(function(i) {
+        return i < 7;
+    })
+    .toArray();
+
+  assert.equal(result.length, 3);
+  assert.equal(result[0], 1);
+  assert.equal(result[1], 3);
+  assert.equal(result[2], 5);
+});
+
+QUnit.test("input stream iterator", function (assert) {
+  var input = Stream.of(1, 2, 3, 4, 5).iterator();
+  var result = Stream(input)
+    .filter(function(i) {
+        return i % 2;
+    })
+    .toArray();
+
+  assert.equal(result.length, 3);
+  assert.equal(result[0], 1);
+  assert.equal(result[1], 3);
+  assert.equal(result[2], 5);
+});
+
 QUnit.test("input object", function (assert) {
     var input = {
         foo: 1, bar: 2, foobar: 3

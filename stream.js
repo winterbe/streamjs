@@ -24,6 +24,9 @@
         if (isArray(data)) {
             return new ArrayIterator(data);
         }
+        if (isIterator(data)) {
+            return new IteratorIterator(data);
+        }
         if (isObject(data)) {
             return new ObjectIterator(data);
         }
@@ -51,6 +54,25 @@
         this.data = array || [];
         this.origin = 0;
         this.fence = this.data.length;
+    };
+
+
+    function IteratorIterator(iterator) {
+        this.iterator = iterator;
+    }
+
+    IteratorIterator.prototype = new Iterator();
+    IteratorIterator.prototype.next = function () {
+        if (this.iterator) {
+            var obj = this.iterator.next();
+            if (obj.done) {
+                delete this.iterator;
+            }
+            return obj.value;
+        }
+        else {
+            return nil;
+        }
     };
 
 
@@ -1126,8 +1148,12 @@
     }
 
     var isArray = Array.isArray || function (obj) {
-            return ObjToString.call(obj) === '[object Array]';
-        };
+        return ObjToString.call(obj) === '[object Array]';
+    };
+
+    function isIterator(obj) {
+        return !!obj && isFunction(obj.next);
+    }
 
     function isObject(obj) {
         return typeof obj === 'object' && !!obj;
