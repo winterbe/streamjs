@@ -85,6 +85,28 @@ var stream = Stream([1, 2, 3, 4]);
 
 Alias: `Stream.from`
 
+> ##### Stream(iterator)
+
+Returns a new stream for the given iterator. The iterator must conform to the [Iterator Protocol](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols#iterator).
+
+```js
+// ES6 Generator
+function* iterator() {
+     yield 1;
+     yield 2;
+     yield 3;
+     yield 4;
+     yield 5;
+     yield 6;
+}
+
+Stream(iterator())
+   .filter(function(i) {
+       return i % 2 === 1;
+   })
+   .toArray();    // => 1, 3, 5
+```
+
 > ##### Stream(string)
 
 Returns a new stream for the given string. The string will be splitted by characters.
