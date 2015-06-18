@@ -24,6 +24,9 @@
         if (isArray(data)) {
             return new ArrayIterator(data);
         }
+        if (isMap(data) || isSet(data)) {
+            return new IteratorIterator(data.values());
+        }
         if (isIterator(data)) {
             return new IteratorIterator(data);
         }
@@ -1150,6 +1153,14 @@
     var isArray = Array.isArray || function (obj) {
         return ObjToString.call(obj) === '[object Array]';
     };
+
+    function isSet(obj) {
+        return !!Set && obj instanceof Set && isFunction(obj.values);
+    }
+
+    function isMap(obj) {
+        return !!Map && obj instanceof Map && isFunction(obj.values);
+    }
 
     function isIterator(obj) {
         return !!obj && isFunction(obj.next);
