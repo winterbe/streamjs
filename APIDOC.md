@@ -75,12 +75,69 @@ var accumulator = function(result, obj) {
 
 The following constructor functions can be used to create different kind of streams.
 
-> ##### Stream(collection)
+> ##### Stream(array)
 
-Returns a new stream for the given collection. Collection can either be an array or an object hash (map).
+Returns a new stream for the given array.
 
 ```js
-var stream = Stream([1, 2, 3, 4]);
+Stream([1, 2, 3, 4, 5])
+   .filter(function(i) {
+       return i % 2 === 1;
+   })
+   .toArray();    // => 1, 3, 5
+```
+
+Alias: `Stream.from`
+
+> ##### Stream(objectHash)
+
+Returns a new stream for the given object hash by streaming upon the values of each key.
+
+```js
+Stream({a: 1, b: 2, c: 3, d: 4, e: 5})
+   .filter(function(i) {
+       return i % 2 === 1;
+   })
+   .toArray();    // => 1, 3, 5
+```
+
+Alias: `Stream.from`
+
+> ##### Stream(set)
+
+Returns a new stream for the given set.
+
+```js
+// ES6 Set
+var mySet = new Set([1, 2, 3, 4, 5]);
+
+Stream(mySet)
+   .filter(function(i) {
+       return i % 2 === 1;
+   })
+   .toArray();    // => 1, 3, 5
+```
+
+Alias: `Stream.from`
+
+> ##### Stream(map)
+
+Returns a new stream for the given map.
+
+```js
+// ES6 Map
+var myMap = new Map();
+data.set("key1", 1);
+data.set("key2", 2);
+data.set("key3", 3);
+data.set("key3", 4);
+data.set("key3", 5);
+
+Stream(myMap)
+   .filter(function(i) {
+       return i % 2 === 1;
+   })
+   .toArray();    // => 1, 3, 5
 ```
 
 Alias: `Stream.from`
@@ -106,6 +163,8 @@ Stream(iterator())
    })
    .toArray();    // => 1, 3, 5
 ```
+
+Alias: `Stream.from`
 
 > ##### Stream(string)
 
