@@ -1,7 +1,5 @@
 // I'm using Babel.js and Intellij IDEA File Watcher to automatically transpile es6 to js:
-// --source-maps --out-file $FileNameWithoutExtension$-compiled.js $FilePath$ --blacklist useStrict
-//
-// useStrict is blacklisted to prevent global use-strict for jshint
+// --source-maps --out-file $FileNameWithoutExtension$-compiled.js $FilePath$
 
 QUnit.test("input ES6 iterator", function (assert) {
     function* iterator() {

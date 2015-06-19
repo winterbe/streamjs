@@ -1,7 +1,5 @@
 // I'm using Babel.js and Intellij IDEA File Watcher to automatically transpile es6 to js:
-// --source-maps --out-file $FileNameWithoutExtension$-compiled.js $FilePath$ --blacklist useStrict
-//
-// useStrict is blacklisted to prevent global use-strict for jshint
+// --source-maps --out-file $FileNameWithoutExtension$-compiled.js $FilePath$
 
 QUnit.test("sample 1", function (assert) {
     let myList = ["a1", "a2", "b1", "c2", "c1"];
@@ -216,4 +214,26 @@ QUnit.test("sample 13", function (assert) {
     assert.equal(result.names[2], "Max");
     assert.equal(result.names[3], "David");
     assert.equal(result.sumOfAges, 76);
+});
+
+QUnit.test("sample 14", function (assert) {
+    function* fibonacci() {
+        let [prev, cur] = [0, 1];
+        while (true) {
+            [prev, cur] = [cur, prev + cur];
+            yield cur;
+        }
+    }
+
+    var fib = Stream(fibonacci())
+        .filter(n => n % 2)
+        .takeWhile(n => n < 50)
+        .toArray();
+
+    assert.equal(fib.length, 5);
+    assert.equal(fib[0], 1);
+    assert.equal(fib[1], 3);
+    assert.equal(fib[2], 5);
+    assert.equal(fib[3], 13);
+    assert.equal(fib[4], 21);
 });

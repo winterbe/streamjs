@@ -1,7 +1,7 @@
 // I'm using Babel.js and Intellij IDEA File Watcher to automatically transpile es6 to js:
-// --source-maps --out-file $FileNameWithoutExtension$-compiled.js $FilePath$ --blacklist useStrict
-//
-// useStrict is blacklisted to prevent global use-strict for jshint
+// --source-maps --out-file $FileNameWithoutExtension$-compiled.js $FilePath$
+
+"use strict";
 
 QUnit.test("sample 1", function (assert) {
     var myList = ["a1", "a2", "b1", "c2", "c1"];
@@ -219,6 +219,55 @@ QUnit.test("sample 13", function (assert) {
     assert.equal(result.names[2], "Max");
     assert.equal(result.names[3], "David");
     assert.equal(result.sumOfAges, 76);
+});
+
+QUnit.test("sample 14", function (assert) {
+    var marked1$0 = [fibonacci].map(regeneratorRuntime.mark);
+
+    function fibonacci() {
+        var prev, cur, _ref;
+
+        return regeneratorRuntime.wrap(function fibonacci$(context$2$0) {
+            while (1) switch (context$2$0.prev = context$2$0.next) {
+                case 0:
+                    prev = 0;
+                    cur = 1;
+
+                case 2:
+                    if (!true) {
+                        context$2$0.next = 10;
+                        break;
+                    }
+
+                    _ref = [cur, prev + cur];
+                    prev = _ref[0];
+                    cur = _ref[1];
+                    context$2$0.next = 8;
+                    return cur;
+
+                case 8:
+                    context$2$0.next = 2;
+                    break;
+
+                case 10:
+                case "end":
+                    return context$2$0.stop();
+            }
+        }, marked1$0[0], this);
+    }
+
+    var fib = Stream(fibonacci()).filter(function (n) {
+        return n % 2;
+    }).takeWhile(function (n) {
+        return n < 50;
+    }).toArray();
+
+    assert.equal(fib.length, 5);
+    assert.equal(fib[0], 1);
+    assert.equal(fib[1], 3);
+    assert.equal(fib[2], 5);
+    assert.equal(fib[3], 13);
+    assert.equal(fib[4], 21);
 });
 
 //# sourceMappingURL=test-introduction-compiled.js.map
