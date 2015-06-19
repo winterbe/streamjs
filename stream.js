@@ -1231,9 +1231,13 @@
 
 
     Stream.VERSION = version;
+    Stream.NAME = "STREAMJS";
     Stream.Optional = Optional;
 
-    var previousStream = root.Stream;
+    var previousStream;
+    if (!!root.Stream && root.Stream.NAME !== Stream.NAME) {
+        previousStream = root.Stream;
+    }
 
     Stream.noConflict = function () {
         root.Stream = previousStream;

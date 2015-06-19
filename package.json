@@ -30,7 +30,8 @@
     "grunt-contrib-qunit": "*",
     "grunt-contrib-uglify": "*",
     "grunt-contrib-watch": "*",
-    "babel-core": "*"
+    "babel-core": "*",
+    "blanket": "^1.1.7"
   },
   "license": "MIT",
   "engines": {
