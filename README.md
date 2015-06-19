@@ -19,7 +19,7 @@ Stream(people)
 
 # Getting started
 
-Stream.js is a lightweight (**2.6 KB minified, gzipped**), intensely tested (**700+ assertions, 97% coverage**) functional programming library for operating upon collections of in-memory data. It requires EcmaScript 5+, has built-in support for [ES6 features](https://github.com/lukehoban/es6features) and works in all current browsers, [Node.js](http://nodejs.org/) and the Java 8 [Nashorn](http://openjdk.java.net/projects/nashorn/) engine.
+Stream.js is a lightweight (**2.6 KB minified, gzipped**), intensely tested (**700+ assertions, 97% coverage**) functional programming library for operating upon collections of in-memory data. It requires EcmaScript 5+, has built-in support for [ES6 features](https://github.com/lukehoban/es6features) and works in all current browsers, [Node.js](http://nodejs.org/) and Java 8 [Nashorn](http://openjdk.java.net/projects/nashorn/).
 
 Download the [latest release](https://github.com/winterbe/streamjs/releases) from GitHub or install Stream.js via [NPM](https://www.npmjs.com/package/streamjs) or [Bower](http://bower.io/):
 
