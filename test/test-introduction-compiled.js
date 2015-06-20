@@ -166,6 +166,10 @@ QUnit.test("sample 10", function (assert) {
     }).average().get();
 
     assert.equal(avg, 19);
+
+    avg = Stream(persons).map("age").average().get();
+
+    assert.equal(avg, 19);
 });
 
 QUnit.test("sample 11", function (assert) {
@@ -180,6 +184,14 @@ QUnit.test("sample 11", function (assert) {
     });
 
     assert.equal(phrase, "In Germany Max and Peter and Pamela are of legal age.");
+
+    phrase = Stream(persons).filter(function (p) {
+        return p.age >= 18;
+    }).map(function (p) {
+        return p.name;
+    }).join(" | ");
+
+    assert.equal(phrase, "Max | Peter | Pamela");
 });
 
 QUnit.test("sample 12", function (assert) {
