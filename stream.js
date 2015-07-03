@@ -1,14 +1,14 @@
 /**
- * Stream.js v1.6.0
+ * Stream.js v1.6.1
  * https://github.com/winterbe/streamjs
  * Copyright (c) 2014-2015 Benjamin Winterberg
  * Stream.js may be freely distributed under the MIT license.
  */
-(function () {
+;(function () {
     "use strict";
 
-    var root = this,
-        version = "1.6.0",
+    var root = (typeof global == 'object' && global) || this,
+        version = "1.6.1",
         ctx = {},
         nil = {};
 
@@ -1155,11 +1155,11 @@
     };
 
     function isSet(obj) {
-        return !!Set && obj instanceof Set && isFunction(obj.values);
+        return !!root.Set && obj instanceof Set && isFunction(obj.values);
     }
 
     function isMap(obj) {
-        return !!Map && obj instanceof Map && isFunction(obj.values);
+        return !!root.Map && obj instanceof Map && isFunction(obj.values);
     }
 
     function isIterator(obj) {
@@ -1175,7 +1175,7 @@
     }
 
     function isConsoleFn(fn) {
-        if (!console) {
+        if (!root.console) {
             return false;
         }
         return console.log === fn || console.warn === fn || console.error === fn || console.trace === fn;
