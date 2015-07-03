@@ -1,10 +1,15 @@
-// run this file via terminal:
+// manually run this file via terminal:
 //
 // jjs test-nashorn.js
 
 load('../stream.js');
 
-var max = Stream({a: 1, b: 2, c: 3})
+var list = new java.util.ArrayList();
+list.add(1);
+list.add(2);
+list.add(3);
+
+Stream(list)
     .filter(function (num) {
         return num % 2 === 1;
     })

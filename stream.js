@@ -4,7 +4,7 @@
  * Copyright (c) 2014-2015 Benjamin Winterberg
  * Stream.js may be freely distributed under the MIT license.
  */
-;(function () {
+(function () {
     "use strict";
 
     var root = (typeof global == 'object' && global) || this,
@@ -21,10 +21,10 @@
         if (data === null || data === undefined) {
             return new EmptyIterator(data);
         }
-        if (isArray(data)) {
+        if (isArrayLike(data)) {
             return new ArrayIterator(data);
         }
-        if (isMap(data) || isSet(data)) {
+        if (isMap(data) || isSet(data)) {
             return new IteratorIterator(data.values());
         }
         if (isIterator(data)) {
@@ -1150,8 +1150,9 @@
         return ObjToString.call(obj) === '[object Number]';
     }
 
-    var isArray = Array.isArray || function (obj) {
-        return ObjToString.call(obj) === '[object Array]';
+    var isArrayLike = function (obj) {
+        var length = obj['length'];
+        return typeof length == 'number' && length >= 0;
     };
 
     function isSet(obj) {
