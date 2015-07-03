@@ -1,6 +1,6 @@
 {
   "name": "streamjs",
-  "version": "1.6.1",
+  "version": "1.6.2",
   "description": "Lazy Object Streaming Pipeline for JavaScript - inspired by the Java 8 Streams API",
   "homepage": "https://github.com/winterbe/streamjs",
   "author": {
