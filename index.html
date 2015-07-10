@@ -1,42 +1,39 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en-us">
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta charset="UTF-8">
     <title>Stream.js by winterbe</title>
-
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <script src="javascripts/scale.fix.js"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
   </head>
   <body>
-    <div class="wrapper">
-      <header>
-        <h1>Stream.js</h1>
-        <p>Object Streaming Pipeline for JavaScript - inspired by the Java 8 Streams API</p>
-        <p class="view"><a href="https://github.com/winterbe/streamjs">View the Project on GitHub <small>winterbe/streamjs</small></a></p>
-        <ul>
-          <li><a href="https://github.com/winterbe/streamjs/zipball/master">Download <strong>ZIP File</strong></a></li>
-          <li><a href="https://github.com/winterbe/streamjs/tarball/master">Download <strong>TAR Ball</strong></a></li>
-          <li><a href="https://github.com/winterbe/streamjs">View On <strong>GitHub</strong></a></li>
-        </ul>
-      </header>
-      <section>
-        <h1>
-<a id="example" class="anchor" href="#example" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example</h1>
+    <section class="page-header">
+      <h1 class="project-name">Stream.js</h1>
+      <h2 class="project-tagline">Object Streaming Pipeline for JavaScript - inspired by the Java 8 Streams API</h2>
+      <a href="https://github.com/winterbe/streamjs" class="btn">View on GitHub</a>
+      <a href="https://github.com/winterbe/streamjs/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/winterbe/streamjs/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="streamjs-" class="anchor" href="#streamjs-" aria-hidden="true"><span class="octicon octicon-link"></span></a>Stream.js <a href="https://travis-ci.org/winterbe/streamjs"><img src="https://travis-ci.org/winterbe/streamjs.svg?branch=master" alt="Travic CI"></a>
+</h1>
+
+<blockquote>
+<p>Lazy Object Streaming Pipeline for JavaScript - inspired by the <a href="http://winterbe.com/posts/2014/07/31/java8-stream-tutorial-examples/">Java 8 Streams API</a></p>
+</blockquote>
 
 <div class="highlight highlight-js"><pre>Stream(people)
    .filter({age<span class="pl-k">:</span> <span class="pl-c1">23</span>})
-   .flatMap(<span class="pl-s1"><span class="pl-pds">"</span>children<span class="pl-pds">"</span></span>)
-   .map(<span class="pl-s1"><span class="pl-pds">"</span>firstName<span class="pl-pds">"</span></span>)
+   .flatMap(<span class="pl-s"><span class="pl-pds">"</span>children<span class="pl-pds">"</span></span>)
+   .map(<span class="pl-s"><span class="pl-pds">"</span>firstName<span class="pl-pds">"</span></span>)
    .distinct()
    .filter(<span class="pl-sr"><span class="pl-pds">/</span>a<span class="pl-c1">.</span><span class="pl-k">*</span><span class="pl-pds">/</span>i</span>)
-   .<span class="pl-s3">join</span>(<span class="pl-s1"><span class="pl-pds">"</span>, <span class="pl-pds">"</span></span>);</pre></div>
+   .<span class="pl-c1">join</span>(<span class="pl-s"><span class="pl-pds">"</span>, <span class="pl-pds">"</span></span>);</pre></div>
 
 <p align="center">
    <i>Follow on <a href="https://twitter.com/benontherun">Twitter</a> for Updates</i>
@@ -45,15 +42,15 @@
 <h1>
 <a id="getting-started" class="anchor" href="#getting-started" aria-hidden="true"><span class="octicon octicon-link"></span></a>Getting started</h1>
 
-<p>Stream.js is a functional programming library for operating upon collections of data. It's lightweight, dependency-free (<strong>2.6 KB minified, gzipped</strong>) and works in all current browsers, <a href="http://nodejs.org/">Node.js</a> and the Java 8 <a href="http://openjdk.java.net/projects/nashorn/">Nashorn</a> engine.</p>
+<p>Stream.js is a lightweight (<strong>2.6 KB minified, gzipped</strong>), intensely tested (<strong>700+ assertions, 97% coverage</strong>) functional programming library for operating upon collections of in-memory data. It requires EcmaScript 5+, has built-in support for <a href="https://github.com/lukehoban/es6features">ES6 features</a> and works in all current browsers, <a href="http://nodejs.org/">Node.js</a> and Java 8 <a href="http://openjdk.java.net/projects/nashorn/">Nashorn</a>.</p>
 
-<p>Download the <a href="https://github.com/winterbe/streamjs/releases">latest release</a> from GitHub or install Stream.js via <a href="http://bower.io/">Bower</a> and <a href="https://www.npmjs.com/package/streamjs">NPM</a>:</p>
+<p>Download the <a href="https://github.com/winterbe/streamjs/releases">latest release</a> from GitHub or install Stream.js via <a href="https://www.npmjs.com/package/streamjs">NPM</a> or <a href="http://bower.io/">Bower</a>:</p>
 
-<div class="highlight highlight-bash"><pre>$ bower install streamjs
+<div class="highlight highlight-bash"><pre>npm install streamjs
 
 <span class="pl-c"># or</span>
 
-$ npm install streamjs</pre></div>
+bower install streamjs</pre></div>
 
 <p align="center">
    <i>Read the <a href="https://github.com/winterbe/streamjs/blob/master/APIDOC.md">APIDOC</a></i>
@@ -67,17 +64,17 @@ $ npm install streamjs</pre></div>
 <p>Filter and sort a collection of persons, then group everything by age.</p>
 
 <div class="highlight highlight-js"><pre>Stream(people)
-   .filter({married<span class="pl-k">:</span> <span class="pl-c1">true</span>, gender<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>male<span class="pl-pds">'</span></span>})
-   .sorted(<span class="pl-s1"><span class="pl-pds">"</span>lastName<span class="pl-pds">"</span></span>);
-   .groupBy(<span class="pl-s1"><span class="pl-pds">"</span>age<span class="pl-pds">"</span></span>);</pre></div>
+   .filter({married<span class="pl-k">:</span> <span class="pl-c1">true</span>, gender<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>male<span class="pl-pds">'</span></span>})
+   .sorted(<span class="pl-s"><span class="pl-pds">"</span>lastName<span class="pl-pds">"</span></span>);
+   .groupBy(<span class="pl-s"><span class="pl-pds">"</span>age<span class="pl-pds">"</span></span>);</pre></div>
 
 <p>Filter and transform a collection of tweets to its text content, then limit the tweets to a maximum of 100 and partition the results into 10 tweets per page:</p>
 
 <div class="highlight highlight-js"><pre>Stream(tweets)
-   .filter(<span class="pl-st">function</span> (<span class="pl-vpf">tweet</span>) {
+   .filter(<span class="pl-k">function</span> (<span class="pl-smi">tweet</span>) {
       <span class="pl-k">return</span> tweet.author <span class="pl-k">!==</span> me;
    })
-   .map(<span class="pl-s1"><span class="pl-pds">"</span>text<span class="pl-pds">"</span></span>)
+   .map(<span class="pl-s"><span class="pl-pds">"</span>text<span class="pl-pds">"</span></span>)
    .filter(<span class="pl-sr"><span class="pl-pds">/</span><span class="pl-c1">.</span><span class="pl-k">*</span>streamjs<span class="pl-c1">.</span><span class="pl-k">*</span><span class="pl-pds">/</span>i</span>)
    .limit(<span class="pl-c1">100</span>)
    .partitionBy(<span class="pl-c1">10</span>);</pre></div>
@@ -85,10 +82,10 @@ $ npm install streamjs</pre></div>
 <p>Create an array of 100 odd random numbers between 1 and 1000:</p>
 
 <div class="highlight highlight-js"><pre>Stream
-   .generate(<span class="pl-st">function</span>() {
-      <span class="pl-k">return</span> <span class="pl-s3">Math</span>.<span class="pl-s3">floor</span>(<span class="pl-s3">Math</span>.<span class="pl-s3">random</span>() <span class="pl-k">*</span> <span class="pl-c1">1000</span>) <span class="pl-k">+</span> <span class="pl-c1">1</span>;
+   .generate(<span class="pl-k">function</span>() {
+      <span class="pl-k">return</span> <span class="pl-c1">Math</span>.<span class="pl-c1">floor</span>(<span class="pl-c1">Math</span>.<span class="pl-c1">random</span>() <span class="pl-k">*</span> <span class="pl-c1">1000</span>) <span class="pl-k">+</span> <span class="pl-c1">1</span>;
    })
-   .filter(<span class="pl-st">function</span> (<span class="pl-vpf">num</span>) {
+   .filter(<span class="pl-k">function</span> (<span class="pl-smi">num</span>) {
       <span class="pl-k">return</span> num <span class="pl-k">%</span> <span class="pl-c1">2</span> <span class="pl-k">===</span> <span class="pl-c1">1</span>;
    })
    .limit(<span class="pl-c1">100</span>);
@@ -96,36 +93,36 @@ $ npm install streamjs</pre></div>
 
 <p>Create an infinite iterator, generating an odd random number between 1 and 1000 on each call to <code>next()</code>:</p>
 
-<div class="highlight highlight-js"><pre><span class="pl-s">var</span> iterator <span class="pl-k">=</span> Stream
-   .generate(<span class="pl-st">function</span>() {
-      <span class="pl-k">return</span> <span class="pl-s3">Math</span>.<span class="pl-s3">floor</span>(<span class="pl-s3">Math</span>.<span class="pl-s3">random</span>() <span class="pl-k">*</span> <span class="pl-c1">1000</span>) <span class="pl-k">+</span> <span class="pl-c1">1</span>;
+<div class="highlight highlight-js"><pre><span class="pl-k">var</span> iterator <span class="pl-k">=</span> Stream
+   .generate(<span class="pl-k">function</span>() {
+      <span class="pl-k">return</span> <span class="pl-c1">Math</span>.<span class="pl-c1">floor</span>(<span class="pl-c1">Math</span>.<span class="pl-c1">random</span>() <span class="pl-k">*</span> <span class="pl-c1">1000</span>) <span class="pl-k">+</span> <span class="pl-c1">1</span>;
    })
-   .filter(<span class="pl-st">function</span> (<span class="pl-vpf">num</span>) {
+   .filter(<span class="pl-k">function</span> (<span class="pl-smi">num</span>) {
       <span class="pl-k">return</span> num <span class="pl-k">%</span> <span class="pl-c1">2</span> <span class="pl-k">===</span> <span class="pl-c1">1</span>;
    })
    .iterator();
 
-iterator.<span class="pl-sc">next</span>();
-iterator.<span class="pl-sc">next</span>();</pre></div>
+iterator.<span class="pl-c1">next</span>();
+iterator.<span class="pl-c1">next</span>();</pre></div>
 
 <p>Create an array of 100 parent objects, each holding an array of 10 children:</p>
 
 <div class="highlight highlight-js"><pre>Stream
     .range(<span class="pl-c1">0</span>, <span class="pl-c1">100</span>)
-    .map(<span class="pl-st">function</span> (<span class="pl-vpf">num</span>) {
+    .map(<span class="pl-k">function</span> (<span class="pl-smi">num</span>) {
         <span class="pl-k">return</span> {
             parentId<span class="pl-k">:</span> num,
-            type<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>parent<span class="pl-pds">'</span></span>,
+            type<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>parent<span class="pl-pds">'</span></span>,
             children<span class="pl-k">:</span> []
         };
     })
-    .peek(<span class="pl-st">function</span> (<span class="pl-vpf">parent</span>) {
+    .peek(<span class="pl-k">function</span> (<span class="pl-smi">parent</span>) {
         parent.children <span class="pl-k">=</span> Stream
             .range(<span class="pl-c1">0</span>, <span class="pl-c1">10</span>)
-            .map(<span class="pl-st">function</span> (<span class="pl-vpf">num</span>) {
+            .map(<span class="pl-k">function</span> (<span class="pl-smi">num</span>) {
                 <span class="pl-k">return</span> {
                     childId<span class="pl-k">:</span> num,
-                    type<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>child<span class="pl-pds">'</span></span>,
+                    type<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>child<span class="pl-pds">'</span></span>,
                     parent<span class="pl-k">:</span> parent
                 };
             })
@@ -147,11 +144,11 @@ Stream.range(<span class="pl-c1">1</span>, <span class="pl-c1">4</span>);</pre><
 
 <p>Streams are not limited to finite data sources like collections. You can also create <em>infinite</em> streams of elements by utilizing generator or iterator functions.</p>
 
-<div class="highlight highlight-js"><pre>Stream.generate(<span class="pl-st">function</span>() {
-   <span class="pl-k">return</span> <span class="pl-c1">1337</span> <span class="pl-k">*</span> <span class="pl-s3">Math</span>.<span class="pl-s3">random</span>();
+<div class="highlight highlight-js"><pre>Stream.generate(<span class="pl-k">function</span>() {
+   <span class="pl-k">return</span> <span class="pl-c1">1337</span> <span class="pl-k">*</span> <span class="pl-c1">Math</span>.<span class="pl-c1">random</span>();
 );</pre></div>
 
-<div class="highlight highlight-js"><pre>Stream.iterate(<span class="pl-c1">1</span>, <span class="pl-st">function</span> (<span class="pl-vpf">seed</span>) {
+<div class="highlight highlight-js"><pre>Stream.iterate(<span class="pl-c1">1</span>, <span class="pl-k">function</span> (<span class="pl-smi">seed</span>) {
    <span class="pl-k">return</span> seed <span class="pl-k">*</span> <span class="pl-c1">2</span>;
 });</pre></div>
 
@@ -165,11 +162,11 @@ Stream.range(<span class="pl-c1">1</span>, <span class="pl-c1">4</span>);</pre><
 <p>Stream operations are lazily evaluated to avoid examining all of the input data when it's not necessary. Streams always perform the minimal amount of operations to gain results. E.g. in a <code>filter - map - findFirst</code> stream you don't have to filter and map the whole data. Instead <code>map</code> and <code>findFirst</code> are executed just one time before returning the single result. This results in <strong>increased performance</strong> when operation upon large amounts of input elements.</p>
 
 <div class="highlight highlight-js"><pre>Stream([<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>, <span class="pl-c1">4</span>])
-   .filter(<span class="pl-st">function</span>(<span class="pl-vpf">num</span>) {   <span class="pl-c">// called twice</span>
+   .filter(<span class="pl-k">function</span>(<span class="pl-smi">num</span>) {   <span class="pl-c">// called twice</span>
       <span class="pl-k">return</span> num <span class="pl-k">%</span> <span class="pl-c1">2</span> <span class="pl-k">===</span> <span class="pl-c1">0</span>;
    })
-   .map(<span class="pl-st">function</span>(<span class="pl-vpf">even</span>) {     <span class="pl-c">// called once</span>
-      <span class="pl-k">return</span> <span class="pl-s1"><span class="pl-pds">"</span>even<span class="pl-pds">"</span></span> <span class="pl-k">+</span> even;
+   .map(<span class="pl-k">function</span>(<span class="pl-smi">even</span>) {     <span class="pl-c">// called once</span>
+      <span class="pl-k">return</span> <span class="pl-s"><span class="pl-pds">"</span>even<span class="pl-pds">"</span></span> <span class="pl-k">+</span> even;
    })
    .findFirst();             <span class="pl-c">// called once</span></pre></div>
 
@@ -178,6 +175,8 @@ Stream.range(<span class="pl-c1">1</span>, <span class="pl-c1">4</span>);</pre><
 </h1>
 
 <p>The Stream.js API is described in detail <a href="https://github.com/winterbe/streamjs/blob/master/APIDOC.md">here</a>. For more information about Java 8 Streams I recommend reading the official <a href="http://docs.oracle.com/javase/8/docs/api/java/util/stream/package-summary.html">Javadoc</a> and this <a href="http://winterbe.com/posts/2014/07/31/java8-stream-tutorial-examples/">blog post</a>.</p>
+
+<p>A type definition for using Stream.js with <strong>Typescript</strong> is available <a href="https://github.com/borisyankov/DefinitelyTyped/tree/master/streamjs">here</a>.</p>
 
 <h1>
 <a id="contributing" class="anchor" href="#contributing" aria-hidden="true"><span class="octicon octicon-link"></span></a>Contributing</h1>
@@ -190,14 +189,16 @@ Stream.range(<span class="pl-c1">1</span>, <span class="pl-c1">4</span>);</pre><
 <p>Created and copyright (c) 2014-2015 by Benjamin Winterberg.</p>
 
 <p>Stream.js may be freely distributed under the <a href="https://github.com/winterbe/streamjs/blob/master/LICENSE">MIT license</a>.</p>
-      </section>
-    </div>
-    <footer>
-      <p>Project maintained by <a href="https://github.com/winterbe">winterbe</a></p>
-      <p>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
-    </footer>
-    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
-              <script type="text/javascript">
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/winterbe/streamjs">Stream.js</a> is maintained by <a href="https://github.com/winterbe">winterbe</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+            <script type="text/javascript">
             var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
             document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
           </script>
@@ -210,3 +211,4 @@ Stream.range(<span class="pl-c1">1</span>, <span class="pl-c1">4</span>);</pre><
 
   </body>
 </html>
+
