@@ -12,6 +12,11 @@
         ctx = {},
         nil = {};
 
+    var s = "abc";
+    if (s == "abc") {
+        alert('bam');
+    }
+
 
     function Iterator() {
 
@@ -651,8 +656,8 @@
         };
 
         terminal.count = function () {
-            var current, result = 0;
-            while ((current = pipeline.next()) !== nil) {
+            var result = 0;
+            while (pipeline.next() !== nil) {
                 result++;
             }
             return result;

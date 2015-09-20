@@ -1,4 +1,5 @@
 module.exports = function (grunt) {
+    require('load-grunt-tasks')(grunt);
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -17,23 +18,11 @@ module.exports = function (grunt) {
         qunit: {
             files: ['test/index.html']
         },
-        jshint: {
-            files: ['stream.js', 'test/**/*.js', '!test/*-compiled.js'],
-            options: {
-                jshintrc: '.jshintrc'
-            }
-        },
-        watch: {
-            files: ['<%= jshint.files %>'],
-            tasks: ['jshint', 'qunit']
+        eslint: {
+            target: ['stream.js']
         }
     });
 
-    grunt.loadNpmTasks('grunt-contrib-uglify');
-    grunt.loadNpmTasks('grunt-contrib-jshint');
-    grunt.loadNpmTasks('grunt-contrib-qunit');
-    grunt.loadNpmTasks('grunt-contrib-watch');
-
-    grunt.registerTask('test', ['jshint', 'qunit']);
-    grunt.registerTask('default', ['jshint', 'qunit', 'uglify']);
+    grunt.registerTask('test', ['eslint', 'qunit']);
+    grunt.registerTask('default', ['eslint', 'qunit', 'uglify']);
 };
