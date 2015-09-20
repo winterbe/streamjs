@@ -1,5 +1,5 @@
 /**
- * Stream.js v1.6.2
+ * Stream.js v1.6.3
  * https://github.com/winterbe/streamjs
  * Copyright (c) 2014-2015 Benjamin Winterberg
  * Stream.js may be freely distributed under the MIT license.
@@ -8,7 +8,7 @@
     "use strict";
 
     var root = (typeof global == 'object' && global) || this,
-        version = "1.6.2",
+        version = "1.6.3",
         ctx = {},
         nil = {};
 
