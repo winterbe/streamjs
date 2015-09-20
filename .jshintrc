@@ -1,6 +1,0 @@
-{
-    "newcap"        : false,
-    "sub"           : true,
-    "browser"       : true,
-    "globals"       : { "QUnit": true, "Stream": true, "module": true, "define": true, "console": true }
-}
