@@ -12,11 +12,6 @@
         ctx = {},
         nil = {};
 
-    var s = "abc";
-    if (s == "abc") {
-        alert('bam');
-    }
-
 
     function Iterator() {
 
