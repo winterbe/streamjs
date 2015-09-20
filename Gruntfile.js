@@ -19,7 +19,7 @@ module.exports = function (grunt) {
             files: ['test/index.html']
         },
         eslint: {
-            target: ['stream.js']
+            target: ['stream.js', 'test']
         }
     });
 
