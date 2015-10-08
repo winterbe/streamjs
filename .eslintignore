@@ -1,2 +1,4 @@
+node_modules
 **/*-compiled.js
 **/*-nashorn.js
+stream-min.js

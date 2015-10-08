@@ -1,3 +1,5 @@
+/* global Stream, _ */
+
 (function () {
     "use strict";
 

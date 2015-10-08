@@ -1,5 +1,5 @@
 /**
- * Stream.js v1.6.3
+ * Stream.js v1.6.4
  * https://github.com/winterbe/streamjs
  * Copyright (c) 2014-2015 Benjamin Winterberg
  * Stream.js may be freely distributed under the MIT license.
@@ -7,8 +7,8 @@
 (function () {
     "use strict";
 
-    var root = (typeof global == 'object' && global) || this,
-        version = "1.6.3",
+    var root = (typeof global === 'object' && global) || this,
+        version = "1.6.4",
         ctx = {},
         nil = {};
 
@@ -1151,24 +1151,24 @@
     }
 
     var isArrayLike = function (obj) {
-        var length = obj['length'];
-        return typeof length == 'number' && length >= 0;
+        var length = obj.length;
+        return typeof length === 'number' && length >= 0;
     };
 
     function isSet(obj) {
-        return !!root.Set && obj instanceof Set && isFunction(obj.values);
+        return Boolean(root.Set) && obj instanceof Set && isFunction(obj.values);
     }
 
     function isMap(obj) {
-        return !!root.Map && obj instanceof Map && isFunction(obj.values);
+        return Boolean(root.Map) && obj instanceof Map && isFunction(obj.values);
     }
 
     function isIterator(obj) {
-        return !!obj && isFunction(obj.next);
+        return Boolean(obj) && isFunction(obj.next);
     }
 
     function isObject(obj) {
-        return typeof obj === 'object' && !!obj;
+        return Boolean(obj) && typeof obj === 'object';
     }
 
     function isRegExp(obj) {
@@ -1236,7 +1236,7 @@
     Stream.Optional = Optional;
 
     var previousStream;
-    if (!!root.Stream && root.Stream.NAME !== Stream.NAME) {
+    if (Boolean(root.Stream) && root.Stream.NAME !== Stream.NAME) {
         previousStream = root.Stream;
     }
 
