@@ -44,7 +44,7 @@ Filter and sort a collection of persons, then group everything by age.
 ```js
 Stream(people)
    .filter({married: true, gender: 'male'})
-   .sorted("lastName");
+   .sorted("lastName")
    .groupBy("age");
 ```
 
