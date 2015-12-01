@@ -28,7 +28,7 @@
     "babel-core": "6.2.1",
     "babel-polyfill": "6.2.0",
     "blanket": "1.1.7",
-    "eslint": "1.6.0",
+    "eslint": "1.10.2",
     "grunt": "0.4.5",
     "grunt-contrib-jshint": "0.11.3",
     "grunt-contrib-qunit": "0.7.0",
