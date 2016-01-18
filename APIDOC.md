@@ -272,6 +272,29 @@ Stream(data)
 // => {a: 1, b: 1}, {a: 1, b: 3}
 ```
 
+> ##### filterNull()
+
+Filters (removes) the `null` values of the stream. It performs a strongly typed check, so it keeps every other
+[falsy](https://developer.mozilla.org/en-US/docs/Glossary/Falsy) values.
+
+```js
+Stream([1, null, false, NaN, undefined, 0, ""])
+  .filterNull()
+// => 1, false, NaN, undefined, 0, ""
+
+```
+
+> ##### filterFalsy()
+
+Filters (removes) the [falsy](https://developer.mozilla.org/en-US/docs/Glossary/Falsy) values of the stream.
+
+```js
+Stream([1, false, 2, null, NaN, undefined, 0, ""])
+  .filterFalsy()
+// => 1, 2
+```
+
+
 > ##### map(mappingFn)
 
 Applies the given mapping function to each element of the stream and returns the stream.

@@ -425,6 +425,20 @@
             }
             return this;
         };
+        
+        this.filterNull = function() {
+          this.add(new FilterOp(function (obj) {
+              return obj !== null;
+          }));
+          return this;
+        };
+        
+        this.filterFalsy = function() {
+          this.add(new FilterOp(function (obj) {
+            return Boolean(obj).valueOf();
+          }));
+          return this;
+        };
 
         this.map = function () {
             var arg = arguments[0];
