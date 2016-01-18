@@ -158,3 +158,18 @@ QUnit.test("filter via sample object (depth=2)", function (assert) {
     assert.equal(result[1].b, 4);
     assert.equal(result[1].c.x, "x1");
 });
+
+QUnit.test("filterNull", function(assert) {
+    var actual = Stream([1, null, 2]).filterNull().toArray();
+    assert.deepEqual(actual, [1, 2]);
+});
+
+QUnit.test("filterNull performs a strict type-safe check (keeps other falsy values)", function(assert) {
+    var actual = Stream([1, null, false, NaN, undefined, 0, ""]).filterNull().toArray();
+    assert.deepEqual(actual, [1, false, NaN, undefined, 0, ""]);
+});
+
+QUnit.test("filterFalsy performs an weakly typed check", function(assert) {
+    var actual = Stream([1, false, 2, null, NaN, undefined, 0, ""]).filterFalsy().toArray();
+    assert.deepEqual(actual, [1, 2]);
+});
