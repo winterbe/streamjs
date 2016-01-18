@@ -169,7 +169,7 @@ QUnit.test("filterNull performs a strict type-safe check (keeps other falsy valu
     assert.deepEqual(actual, [1, false, NaN, undefined, 0, ""]);
 });
 
-QUnit.test("filterFalsy performs an weekly typed check", function(assert) {
+QUnit.test("filterFalsy performs an weakly typed check", function(assert) {
     var actual = Stream([1, false, 2, null, NaN, undefined, 0, ""]).filterFalsy().toArray();
     assert.deepEqual(actual, [1, 2]);
 });
