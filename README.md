@@ -176,6 +176,6 @@ Found a bug or missing feature? Please open an [issue](https://github.com/winter
 
 # Copyright and license
 
-Created and copyright (c) 2014-2015 by Benjamin Winterberg.
+Created and copyright (c) 2014-2016 by Benjamin Winterberg.
 
 Stream.js may be freely distributed under the [MIT license](https://github.com/winterbe/streamjs/blob/master/LICENSE).
