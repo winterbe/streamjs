@@ -84,6 +84,32 @@ QUnit.test("input string", function (assert) {
     assert.equal(result, "ACD");
 });
 
+QUnit.test("input string with separator", function(assert) {
+    var result = Stream("a,b,c,d", ",").toArray();
+    assert.equal(result.length, 4);
+});
+
+QUnit.test("Stream.from input string with separator", function(assert) {
+    var result = Stream.from("a,b,c,d", ",").toArray();
+    assert.equal(result.length, 4);
+});
+
+
+QUnit.test("input string with falsy separator", function(assert) {
+  var result = Stream("abcd", undefined).toArray();
+  assert.equal(result.length, 4);
+});
+
+QUnit.test("input string with trailing separator", function(assert) {
+  var result = Stream("a,b,c,d,", ",").toArray();
+  assert.equal(result.length, 4);
+});
+
+QUnit.test("input string with multi-char trailing separator", function(assert) {
+  var result = Stream("a||b||c||d||", "||").toArray();
+  assert.equal(result.length, 4);
+});
+
 QUnit.test("from array", function (assert) {
     var input = [1, 2, 3];
     var result = Stream.from(input).toArray();

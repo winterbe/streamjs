@@ -376,7 +376,7 @@
     // Internal Pipeline (doing all the work)
     //
 
-    function Pipeline(input) {
+    function Pipeline(input, separator) {
         var pipeline = this, lastOp;
 
         // default op iterates over input elements
@@ -386,7 +386,11 @@
                 return input.call(ctx);
             });
         } else if (isString(input)) {
-            lastOp = new IteratorOp(input.split(''));
+            separator = separator || '';
+            if (input.endsWith(separator)) {
+              input = input.substring(0, input.length - separator.length);
+            }
+            lastOp = new IteratorOp(input.split(separator));
         } else {
             lastOp = new IteratorOp(input);
         }
@@ -425,14 +429,14 @@
             }
             return this;
         };
-        
+
         this.filterNull = function() {
           this.add(new FilterOp(function (obj) {
               return obj !== null;
           }));
           return this;
         };
-        
+
         this.filterFalsy = function() {
           this.add(new FilterOp(function (obj) {
             return Boolean(obj).valueOf();
@@ -1201,12 +1205,12 @@
     // Stream function grants access to pipeline
     //
 
-    function Stream(input) {
-        return new Pipeline(input);
+    function Stream(input, separator) {
+        return new Pipeline(input, separator);
     }
 
-    Stream.from = function (input) {
-        return Stream(input);
+    Stream.from = function (input, separator) {
+        return Stream(input, separator);
     };
 
     Stream.range = function (startInclusive, endExclusive) {

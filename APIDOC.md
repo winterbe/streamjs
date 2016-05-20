@@ -176,6 +176,20 @@ var stream = Stream("ABCDEFG");
 
 Alias: `Stream.from`
 
+> ##### Stream(string, separator)
+
+Returns a new stream for the given string. The string will be split by the `separator` string.
+
+```js
+var stream = Stream("a,b,c,d", ","); // creates a stream with 4 items
+
+// creates a stream with 4 items - the trailing comma is not taken into account
+stream = Stream("a,b,c,d,", ",");
+```
+
+Alias: `Stream.from`
+
+
 > ##### Stream.of(args...)
 
 Returns a new stream for the given arguments.
