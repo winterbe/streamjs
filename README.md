@@ -14,7 +14,7 @@ Stream(people)
 ```
 
 <p align="center">
-   <i>Follow on <a href="https://twitter.com/benontherun">Twitter</a> for Updates</i>
+   <i>Follow on <a href="https://twitter.com/winterbe_">Twitter</a> for Updates</i>
 </p>
 
 # Getting started
