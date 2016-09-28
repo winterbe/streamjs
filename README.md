@@ -71,7 +71,7 @@ Stream
    .filter(function (num) {
       return num % 2 === 1;
    })
-   .limit(100);
+   .limit(100)
    .toArray();
 ```
 
