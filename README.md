@@ -1,6 +1,8 @@
 Stream.js [![Travic CI](https://travis-ci.org/winterbe/streamjs.svg?branch=master)](https://travis-ci.org/winterbe/streamjs)
 ========================
 
+**ATTENTION: Stream.js is no longer maintained in favor of it's successor library [Sequency](https://github.com/winterbe/sequency). If you already use Stream.js in your project I recommend switching to [Sequency](https://github.com/winterbe/sequency). But don't worry, Stream.js still works fine so no hurry. 😉**
+
 > Lazy Object Streaming Pipeline for JavaScript - inspired by the [Java 8 Streams API](http://winterbe.com/posts/2014/07/31/java8-stream-tutorial-examples/)
 
 ```js
